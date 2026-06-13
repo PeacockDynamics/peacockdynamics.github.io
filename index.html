@@ -146,39 +146,13 @@
                             </span>
                         </a>
 
-                        <a
-                            class="nav-link"
-                            href="#log"
-                            data-nav-link
-                        >
-                            <span class="nav-symbol" aria-hidden="true">
-                                <img src="assets/icons/log.svg" alt="">
-                            </span>
-
-                            <span class="nav-copy">
-                                <strong>Venture Log</strong>
-                                <small>Meetings and decisions</small>
-                            </span>
-                        </a>
+                        
                     </div>
 
                     <div class="nav-divider"></div>
 
                     <div class="nav-group">
-                        <a
-                            class="nav-link"
-                            href="#roadmap"
-                            data-nav-link
-                        >
-                            <span class="nav-symbol" aria-hidden="true">
-                                <img src="assets/icons/roadmap.svg" alt="">
-                            </span>
-
-                            <span class="nav-copy">
-                                <strong>Roadmap</strong>
-                                <small>Development phases</small>
-                            </span>
-                        </a>
+                        
 
                         <a
                             class="nav-link"
@@ -195,7 +169,7 @@
                             </span>
                         </a>
 
-                        <a
+<a
                             class="nav-link"
                             href="#questions"
                             data-nav-link
@@ -204,11 +178,13 @@
                                 <img src="assets/icons/questions.svg" alt="">
                             </span>
 
-                            <span class="nav-copy">
-                                <strong>Open Questions</strong>
-                                <small>Unresolved decisions</small>
-                            </span>
+<span class="nav-copy">
+    <strong>The Technical Challenges</strong>
+    <small>Problems we are tackling</small>
+</span>
+
                         </a>
+                       
                     </div>
 
                     <div class="nav-divider"></div>
@@ -699,282 +675,6 @@
 
 
 <!-- =================================================
-     VENTURE LOG
-     ================================================= -->
-
-<section
-    class="content-section reveal"
-    id="log"
-    data-section
->
-    <header class="section-header">
-
-        <div>
-            <p class="section-kicker">
-                VENTURE LOG
-            </p>
-
-            <h2>
-                Development recorded over time
-            </h2>
-        </div>
-
-        <p class="section-index">
-            CHRONOLOGICAL RECORD
-        </p>
-
-    </header>
-
-    <p class="section-introduction">
-        Key meetings, technical decisions, and changes in direction are
-        documented here to preserve a transparent record of how Peacock
-        Dynamics is translating its existing robotics work into a focused
-        marine autonomy program.
-    </p>
-
-    <div class="log-list">
-
-        <article class="log-entry">
-
-            <div class="log-date">
-                <span>11 JUN 2026</span>
-                <strong>LOG 001</strong>
-            </div>
-
-            <div class="log-content">
-
-                <div class="log-title-row">
-                    <h3>
-                        Translating the Capability Stack into Marine Swarm Autonomy
-                    </h3>
-
-                    <span class="log-tag">
-                        FOUNDATIONAL
-                    </span>
-                </div>
-
-                <p>
-                    Ayushman and Pritam reviewed the existing control,
-                    perception, mapping, simulation, and swarm-coordination
-                    projects as a shared technical foundation for developing
-                    marine-deployable swarm algorithms. The immediate priority
-                    is to produce a credible algorithmic product before
-                    considering later hardware integration.
-                </p>
-
-                <div class="log-columns">
-
-                    <div>
-                        <h4>Discussed</h4>
-
-                        <ul>
-                            <li>
-                                Translating existing aerial, terrestrial,
-                                planetary, and simulated methods into marine
-                                swarm autonomy.
-                            </li>
-
-                            <li>
-                                Potential applications, business prospects,
-                                and the long-term path toward deployable systems.
-                            </li>
-
-                            <li>
-                                Using the documented technical lineage as the
-                                required onboarding foundation for new contributors.
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h4>Decided</h4>
-
-                        <ul>
-                            <li>
-                                Focus first on simulation-tested marine swarm
-                                algorithms and a clearly defined initial product.
-                            </li>
-
-                            <li>
-                                Defer hardware development until the autonomy
-                                stack has reached a meaningful level of maturity.
-                            </li>
-
-                            <li>
-                                Treat future hardware work as a separate phase
-                                involving hydrodynamics, sensing, actuation,
-                                communication, and vehicle integration.
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h4>Next</h4>
-
-                        <ul>
-                            <li>
-                                Conduct a surface-level controls primer for the
-                                broader team.
-                            </li>
-
-                            <li>
-                                Cover linear and nonlinear models, state-space
-                                representation, and linearization.
-                            </li>
-
-                            <li>
-                                Introduce controllability and observability so
-                                contributors can follow the terminology used in
-                                later autonomy discussions.
-                            </li>
-                        </ul>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </article>
-
-        <!--
-            Duplicate the <article class="log-entry">
-            block whenever a new meeting or development
-            milestone is added.
-        -->
-
-    </div>
-</section>
-
-
-<!-- =================================================
-     ROADMAP
-     ================================================= -->
-
-<section
-    class="content-section reveal"
-    id="roadmap"
-    data-section
->
-    <header class="section-header">
-
-        <div>
-            <p class="section-kicker">
-                ROADMAP
-            </p>
-
-            <h2>
-                From algorithmic foundations to marine deployment
-            </h2>
-        </div>
-
-        <p class="section-index">
-            DEVELOPMENT PHASES
-        </p>
-
-    </header>
-
-    <div class="roadmap-grid">
-
-        <article class="roadmap-card roadmap-card-active">
-
-            <span class="roadmap-phase">
-                PHASE 01
-            </span>
-
-            <h3>
-                Algorithm Foundation
-            </h3>
-
-            <p>
-                Consolidate the existing work in coverage, guidance,
-                perception, mapping, control, and swarm coordination
-                into a reusable marine autonomy architecture. Define
-                the first algorithmic product, evaluation metrics,
-                interfaces, and simulation assumptions.
-            </p>
-
-            <span class="roadmap-state">
-                CURRENT
-            </span>
-
-        </article>
-
-        <article class="roadmap-card">
-
-            <span class="roadmap-phase">
-                PHASE 02
-            </span>
-
-            <h3>
-                Marine Swarm Simulation
-            </h3>
-
-            <p>
-                Adapt the autonomy stack to underwater and surface
-                vehicle scenarios with marine motion models, limited
-                communication, environmental disturbances, distributed
-                sensing, seabed coverage, and multi-vehicle mission
-                coordination.
-            </p>
-
-            <span class="roadmap-state">
-                PLANNED
-            </span>
-
-        </article>
-
-        <article class="roadmap-card">
-
-            <span class="roadmap-phase">
-                PHASE 03
-            </span>
-
-            <h3>
-                Robotic Systems Integration
-            </h3>
-
-            <p>
-                Translate validated algorithms into ROS2-based modules
-                connected to representative marine vehicle models,
-                navigation sensors, mission planners, communication
-                layers, and hardware-in-the-loop test environments.
-            </p>
-
-            <span class="roadmap-state">
-                PLANNED
-            </span>
-
-        </article>
-
-        <article class="roadmap-card">
-
-            <span class="roadmap-phase">
-                PHASE 04
-            </span>
-
-            <h3>
-                Prototype and Field Validation
-            </h3>
-
-            <p>
-                Progress toward physical platforms only after the
-                software stack is mature, incorporating hydrodynamics,
-                propulsion, sensing, waterproofing, energy constraints,
-                onboard computation, and staged testing in controlled
-                aquatic environments.
-            </p>
-
-            <span class="roadmap-state">
-                FUTURE
-            </span>
-
-        </article>
-
-    </div>
-</section>
-
- 
-<!-- =================================================
      TEAM
      ================================================= -->
 
@@ -1135,7 +835,7 @@
 
 
 <!-- =================================================
-     OPEN QUESTIONS
+     CHALLENGES WE ARE TACKLING
      ================================================= -->
 
 <section
@@ -1147,14 +847,13 @@
 
         <div>
             <p class="section-kicker">
-                OPEN QUESTIONS
+                CHALLENGES WE ARE TACKLING
             </p>
 
             <h2>
-                Problems still under active discussion
+                Engineering autonomy for difficult marine environments
             </h2>
         </div>
-
 
     </header>
 
@@ -1165,14 +864,14 @@
 
             <div>
                 <h3>
-                    Which marine mission should define the first product?
+                    Mission-aware swarm coordination
                 </h3>
 
                 <p>
-                    The autonomy stack could support seabed mapping,
-                    environmental monitoring, resource prospecting, or
-                    distributed search. The first product must target one
-                    clearly bounded mission with measurable operational value.
+                    Marine robotic teams must coordinate across mapping,
+                    monitoring, inspection, and distributed search tasks
+                    while avoiding redundant motion and preserving mission
+                    coverage.
                 </p>
             </div>
         </li>
@@ -1182,15 +881,14 @@
 
             <div>
                 <h3>
-                    What is the minimum credible marine simulation model?
+                    Autonomy under uncertain dynamics
                 </h3>
 
                 <p>
-                    The team must determine which vehicle dynamics,
-                    disturbances, sensing limits, communication constraints,
-                    localization errors, and energy costs are necessary for
-                    meaningful evaluation without building an unnecessarily
-                    complex simulator.
+                    Currents, drag, sensing noise, localization drift, and
+                    changing environmental conditions make marine motion
+                    difficult to model and control. Robust algorithms must
+                    remain useful when the model is incomplete.
                 </p>
             </div>
         </li>
@@ -1200,15 +898,14 @@
 
             <div>
                 <h3>
-                    How should the first algorithmic product be packaged?
+                    Communication-constrained cooperation
                 </h3>
 
                 <p>
-                    Possible forms include a reusable autonomy library,
-                    mission-specific coordination module, simulation and
-                    evaluation toolkit, or custom algorithm-development
-                    service. The product boundary and customer interface
-                    remain to be defined.
+                    Underwater communication is limited, delayed, and
+                    intermittent. Swarm behavior must therefore rely on
+                    decentralized decision-making rather than continuous
+                    centralized supervision.
                 </p>
             </div>
         </li>
@@ -1218,15 +915,14 @@
 
             <div>
                 <h3>
-                    What evidence is required before hardware integration?
+                    From simulation to deployable systems
                 </h3>
 
                 <p>
-                    Clear simulation benchmarks, robustness tests, interface
-                    specifications, and failure-case analysis must be defined
-                    before committing resources to marine vehicle design,
-                    onboard sensing, propulsion, communication, and controlled
-                    aquatic trials.
+                    Algorithms must eventually translate across simulation,
+                    robotic middleware, onboard computation, sensing,
+                    propulsion, and controlled field testing without losing
+                    stability, safety, or interpretability.
                 </p>
             </div>
         </li>
@@ -1272,19 +968,6 @@
                             Technology
                         </a>
 
-                        <a href="#log">
-                            <span class="footer-icon-slot" aria-hidden="true">
-                                <img src="assets/icons/log.svg" alt="">
-                            </span>
-                            Log
-                        </a>
-
-                        <a href="#roadmap">
-                            <span class="footer-icon-slot" aria-hidden="true">
-                                <img src="assets/icons/roadmap.svg" alt="">
-                            </span>
-                            Roadmap
-                        </a>
 
                         <a href="#team">
                             <span class="footer-icon-slot" aria-hidden="true">
@@ -1297,7 +980,7 @@
                             <span class="footer-icon-slot" aria-hidden="true">
                                 <img src="assets/icons/questions.svg" alt="">
                             </span>
-                            Questions
+                            Challenges
                         </a>
                     </nav>
 
