@@ -1,0 +1,983 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Peacock Dynamics develops algorithmic foundations for coordinated marine robotic exploration."
+    >
+
+    <meta name="theme-color" content="#050505">
+
+    <title>Peacock Dynamics | Marine Swarm Autonomy</title>
+
+    <link rel="icon" type="image/png" href="assets/logo/icon_dark.png">
+    <link rel="stylesheet" href="style.css">
+
+    <script src="script.js" defer></script>
+
+    <style>
+        /* Founder card layout: portrait on the left, details on the right. */
+        .founder-card {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: minmax(220px, 0.42fr) minmax(0, 1fr);
+            align-items: stretch;
+        }
+
+        .founder-card .portrait-slot {
+            aspect-ratio: 3 / 4;
+            height: auto;
+            border-right: 1px solid var(--line);
+            border-bottom: 0;
+        }
+
+        .founder-card .portrait-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .founder-card .team-card-copy {
+            display: grid;
+            align-content: center;
+        }
+
+        @media (max-width: 650px) {
+            .founder-card {
+                display: block;
+            }
+
+            .founder-card .portrait-slot {
+                aspect-ratio: 3 / 4;
+                border-right: 0;
+                border-bottom: 1px solid var(--line);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a class="skip-link" href="#main-content">
+        Skip to main content
+    </a>
+
+    <div class="site-frame">
+
+        <!-- =========================================================
+             HEADER
+             ========================================================= -->
+
+        <header class="site-header" id="top">
+
+            <div class="header-backdrop" aria-hidden="true">
+                <span class="header-glow header-glow-left"></span>
+                <span class="header-glow header-glow-center"></span>
+                <span class="header-glow header-glow-right"></span>
+            </div>
+
+            <div class="brand-lockup">
+
+                <div class="brand-primary-row">
+
+                    <div class="brand-logo-shell">
+                        <!--
+                            Replace or retain:
+                            assets/logo/dark_full.png
+                        -->
+                        <img
+                            class="brand-logo"
+                            src="assets/logo/dark_full.png"
+                            alt="Peacock Dynamics emblem"
+                            data-fallback-image
+                        >
+
+                        <span class="brand-logo-fallback" aria-hidden="true">
+                            PD
+                        </span>
+                    </div>
+
+                    <p class="brand-wordmark">
+                        <span>PEACOCK</span>
+                        <strong>DYNAMICS</strong>
+                    </p>
+
+                </div>
+
+                <p class="brand-subtitle">
+                    MARINE AUTONOMY · SWARM CONTROL · ROBOTIC EXPLORATION
+                </p>
+            </div>
+
+            <button
+                class="menu-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="site-navigation"
+            >
+                <span class="menu-toggle-label">MENU</span>
+
+                <span class="menu-toggle-lines" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </button>
+
+        </header>
+
+
+        <!-- =========================================================
+             MAIN PAGE GRID
+             ========================================================= -->
+
+        <div class="page-grid">
+
+            <!-- =====================================================
+                 SIDEBAR NAVIGATION
+                 ===================================================== -->
+
+            <aside
+                class="sidebar"
+                id="site-navigation"
+                aria-label="Primary navigation"
+            >
+                <div class="sidebar-heading">
+                    MENU
+                </div>
+
+                <nav class="sidebar-nav">
+
+                    <div class="nav-group">
+                        <a
+                            class="nav-link is-active"
+                            href="#mission"
+                            data-nav-link
+                        >
+                            <span class="nav-symbol" aria-hidden="true">
+                                <img src="assets/icons/mission.svg" alt="">
+                            </span>
+
+                            <span class="nav-copy">
+                                <strong>Current Mission</strong>
+                                <small>What we are building</small>
+                            </span>
+                        </a>
+
+                        <a
+                            class="nav-link"
+                            href="#lineage"
+                            data-nav-link
+                        >
+                            <span class="nav-symbol" aria-hidden="true">
+                                <img src="assets/icons/technology.svg" alt="">
+                            </span>
+
+                            <span class="nav-copy">
+                                <strong>Technological Lineage</strong>
+                                <small>Prior capability stack</small>
+                            </span>
+                        </a>
+
+                        
+                    </div>
+
+                    <div class="nav-divider"></div>
+
+                    <div class="nav-group">
+                        
+
+                        <a
+                            class="nav-link"
+                            href="#team"
+                            data-nav-link
+                        >
+                            <span class="nav-symbol" aria-hidden="true">
+                                <img src="assets/icons/team.svg" alt="">
+                            </span>
+
+                            <span class="nav-copy">
+                                <strong>The Founder</strong>
+                            </span>
+                        </a>
+
+<a
+                            class="nav-link"
+                            href="#questions"
+                            data-nav-link
+                        >
+                            <span class="nav-symbol" aria-hidden="true">
+                                <img src="assets/icons/questions.svg" alt="">
+                            </span>
+
+<span class="nav-copy">
+    <strong>The Technical Challenges</strong>
+    <small>Problems we are tackling</small>
+</span>
+
+                        </a>
+                       
+                    </div>
+
+                    <div class="nav-divider"></div>
+
+                    <div class="nav-group nav-group-compact">
+                        <a class="small-nav-link" href="#contact">
+                            Contact
+                        </a>
+
+                        <a
+                            class="small-nav-link small-nav-link-icon"
+                            href="https://github.com/peacockdynamics"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <img
+                                class="small-nav-leading-icon"
+                                src="assets/icons/github.svg"
+                                alt=""
+                                aria-hidden="true"
+                            >
+
+                            <span>GitHub Organization</span>
+
+                            <img
+                                class="small-nav-external-icon"
+                                src="assets/icons/external-link.svg"
+                                alt=""
+                                aria-hidden="true"
+                            >
+                        </a>
+
+                        <a class="small-nav-link" href="#top">
+                            Return to Top
+                        </a>
+                    </div>
+
+                </nav>
+
+                <div class="sidebar-status">
+                    <span class="status-light" aria-hidden="true"></span>
+
+                    <div>
+                        <strong>CURRENT STATUS</strong>
+                        <span>CONCEPT DEVELOPMENT</span>
+                    </div>
+                </div>
+            </aside>
+
+
+            <!-- =====================================================
+                 MAIN CONTENT
+                 ===================================================== -->
+
+            <main id="main-content">
+
+                <!-- =================================================
+                     CURRENT MISSION
+                     ================================================= -->
+
+                <section
+                    class="content-section hero-section reveal"
+                    id="mission"
+                    data-section
+                >
+                    <div class="section-rule"></div>
+
+                    <div class="hero-heading-row">
+                        <div>
+                            <p class="section-kicker">
+                                CURRENT MISSION
+                            </p>
+
+                            <h1>
+                                Commanding Swarms Beneath the Abyss.
+                            </h1>
+                        </div>
+
+                        <div class="mission-status">
+                            <span class="mission-status-label">
+                                ACTIVE TRACK
+                            </span>
+
+                            <strong>
+                                ALGORITHM-FIRST
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="hero-grid">
+
+                        <div class="hero-copy">
+
+                            <p class="lead-copy">
+                                Peacock Dynamics develops simulation-tested algorithms for coordinated marine robot swarms. The present focus is coverage, guidance, perception, and decision-making under limited communication, where multiple low-cost vehicles can explore wider areas more resiliently than a single platform.
+                            </p>
+
+                            <p>
+                                The same algorithmic stack is being shaped toward seabed mapping, distributed environmental sensing, resource prospecting, and long-duration multi-vehicle exploration. By coordinating motion, local perception, task allocation, and communication-aware behavior in simulation first, Peacock Dynamics is building the control logic needed for future marine systems operating beyond continuous human oversight.
+                            </p>
+
+                            <div class="hero-actions">
+                                <a class="primary-button" href="#lineage">
+                                    Explore Technical Lineage
+                                </a>
+                            </div>
+
+                        </div>
+
+                        <div class="hero-media-frame">
+
+                            <!--
+                                Replace this slot with an image later.
+
+                                Example:
+
+                                <img
+                                    src="assets/images/hero/marine-swarm.jpg"
+                                    alt="Conceptual marine robot swarm"
+                                >
+                            -->
+
+                            <img
+    src="assets/images/hero/marine-swarm-hero.png"
+    alt="Concept visualization of a coordinated marine robotic swarm exploring the deep ocean"
+>
+
+                        </div>
+
+                    </div>
+
+                    <div class="mission-facts">
+
+    <article class="fact-cell">
+        <span class="fact-number">01</span>
+        <strong>MARINE EXPLORATION</strong>
+        <p>
+            Coordinated robotic swarms for seabed mapping,
+            environmental sensing, and distributed ocean surveys.
+        </p>
+    </article>
+
+    <article class="fact-cell">
+        <span class="fact-number">02</span>
+        <strong>COLLECTIVE AUTONOMY</strong>
+        <p>
+            Algorithms for coverage, guidance, perception, task allocation,
+            and coordination under limited communication.
+        </p>
+    </article>
+
+    <article class="fact-cell">
+        <span class="fact-number">03</span>
+        <strong>SIMULATION FIRST</strong>
+        <p>
+            Develop and evaluate the autonomy stack in controlled simulations
+            before progressing toward marine robotic integration.
+        </p>
+    </article>
+
+</div>
+
+                    <div class="section-rule section-rule-bottom"></div>
+                </section>
+
+
+                <!-- =================================================
+                     TECHNICAL LINEAGE
+                     ================================================= -->
+
+                <section
+                    class="content-section reveal"
+                    id="lineage"
+                    data-section
+                >
+                    <header class="section-header">
+
+                        <div>
+                            <p class="section-kicker">
+                                TECHNICAL LINEAGE
+                            </p>
+
+                            <h2>
+                                From prior experiments to marine autonomy
+                            </h2>
+                        </div>
+
+                        <p class="section-index">
+                            10 PRIOR WORKS · 05 CAPABILITY LAYERS
+                        </p>
+
+                    </header>
+
+                    <p class="section-introduction">
+                        Developed across aerial, terrestrial, planetary, and simulation-based robotics, these projects established core methods in control, perception, mapping, guidance, and multi-agent coordination. Their underlying architectures now form the technical foundation for Peacock Dynamics’ marine autonomy direction.
+                    </p>
+
+
+<!-- Capability Layer 01 -->
+
+<article class="capability-row reveal">
+
+    <div class="capability-media">
+        <img
+            src="assets/images/animations/ppo_trajectory.gif"
+            alt="PPO-controlled drone navigating a vegetation utility field using local visual observations"
+            loading="lazy"
+        >
+    </div>
+
+    <div class="capability-copy">
+
+        <span class="capability-number">
+            CAPABILITY LAYER 01
+        </span>
+
+        <h3>
+            Simulation and Local Navigation.
+        </h3>
+
+        <p>
+            MicroUAV-2D established a lightweight, CPU-only sandbox for
+            local visual observations and discrete XY motion. AgriDroneRL
+            extended this foundation with PPO-based, first-visit coverage
+            over a vegetation utility field. Together, they provide the
+            simulation and local-navigation primitive now being adapted
+            toward marine survey and seabed-coverage algorithms.
+        </p>
+
+        <div class="project-links">
+            <a
+                href="https://github.com/aymisxx/MicroUAV-2D"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Open the MicroUAV-2D project on GitHub"
+            >
+                MicroUAV-2D
+            </a>
+
+            <a
+                href="https://github.com/aymisxx/AgriDroneRL"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Open the AgriDroneRL project on GitHub"
+            >
+                AgriDroneRL
+            </a>
+        </div>
+
+    </div>
+
+</article>
+
+
+<!-- Capability Layer 02 -->
+
+<article class="capability-row capability-row-reverse reveal">
+
+    <div class="capability-media">
+        <img
+            src="assets/images/animations/final_hybrid_swarm.gif"
+            alt="Hybrid multi-agent swarm coordinating coverage through learned navigation, repulsion, graph consensus, and adaptive roles"
+            loading="lazy"
+        >
+    </div>
+
+    <div class="capability-copy">
+
+        <span class="capability-number">
+            CAPABILITY LAYER 02
+        </span>
+
+        <h3>
+            Swarm Coordination and Coverage.
+        </h3>
+
+        <p>
+            PPO-Driven Swarm Control combined learned local motion with
+            repulsion, directional graph consensus, and stochastic roles,
+            eliminating 138 close encounters while preserving coordinated
+            coverage. The Boustrophedon Navigator added a deterministic
+            survey primitive with complete lane coverage and 0.0518 average
+            cross-track error. Together, these methods inform structured,
+            communication-aware coverage for future marine robot swarms.
+        </p>
+
+        <div class="project-links">
+            <a
+                href="https://github.com/aymisxx/PPO-driven-Swarm-Control"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Open the PPO-Driven Swarm Control project on GitHub"
+            >
+                PPO-Driven Swarm Control
+            </a>
+
+            <a
+                href="https://github.com/aymisxx/first_order_boustrophedon_navigator"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Open the First-Order Boustrophedon Navigator project on GitHub"
+            >
+                Boustrophedon Navigator
+            </a>
+        </div>
+
+    </div>
+
+</article>
+
+
+<!-- Capability Layer 03 -->
+
+<article class="capability-row reveal">
+
+    <div class="capability-media">
+        <img
+            src="assets/images/animations/cart_pole_lqr.gif"
+            alt="Planar interception simulation comparing constrained MPC with classical PD guidance"
+            loading="lazy"
+        >
+    </div>
+
+    <div class="capability-copy">
+
+        <span class="capability-number">
+            CAPABILITY LAYER 03
+        </span>
+
+        <h3>
+            Stability, Guidance, and Optimal Control.
+        </h3>
+
+        <p>
+            InterceptDynamics-Py compared classical PD guidance with
+            constrained MPC using relative-state dynamics, acceleration
+            limits, and slew-rate bounds. Cart-Pole LQR demonstrated
+            state-space stabilization under continuous stochastic
+            disturbance. These control primitives transfer naturally to
+            trajectory regulation, target-relative navigation, and
+            disturbance-aware guidance for future marine vehicles.
+        </p>
+
+        <div class="project-links">
+            <a
+                href="https://github.com/aymisxx/cart_pole_optimal_control"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Open the Cart-Pole Optimal Control project on GitHub"
+            >
+                Cart-Pole LQR
+            </a>
+
+            <a
+                href="https://github.com/aymisxx/interceptDynamics-Py"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Open the InterceptDynamics-Py project on GitHub"
+            >
+                InterceptDynamics-Py
+            </a>
+        </div>
+
+    </div>
+
+</article>
+
+
+                    <!-- Capability Layer 04 -->
+
+<article class="capability-row capability-row-reverse reveal">
+
+    <div class="capability-media">
+        <img
+            src="assets/images/animations/reflectivity.gif"
+            alt="Perception visualization showing range-aware sensor interpretation and semantic mapping"
+            loading="lazy"
+        >
+    </div>
+
+    <div class="capability-copy">
+
+        <span class="capability-number">
+            CAPABILITY LAYER 04
+        </span>
+
+        <h3>
+            Sensor Interpretation and Semantic Mapping.
+        </h3>
+
+        <p>
+            Reflect-Aug-Seg studied range-aware signal augmentation for LiDAR,
+            showing measurable semantic improvement from lightweight reflectivity
+            proxies. VLMaps added persistent semantic spatial memory through
+            visual-language embeddings and open-vocabulary map queries. Originally
+            developed for ground and indoor settings, these methods now inform how
+            Peacock Dynamics approaches marine perception, environmental mapping,
+            and meaning-aware autonomy under uncertain sensing.
+        </p>
+
+        <div class="project-links">
+            <a
+                href="https://github.com/aymisxx/reflect-aug-seg"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Open the Reflect-Aug-Seg project on GitHub"
+            >
+                Reflect-Aug-Seg
+            </a>
+
+            <a
+                href="https://github.com/aymisxx/vlmaps-reimplementation"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Open the VLMaps Reimplementation project on GitHub"
+            >
+                VLMaps Reimplementation
+            </a>
+        </div>
+
+    </div>
+
+</article>
+
+
+<!-- Capability Layer 05 -->
+
+<article class="capability-row reveal">
+
+    <div class="capability-media">
+        <img
+            src="assets/images/animations/px4_autopilot.gif"
+            alt="PX4 autonomous drone simulation demonstrating vision-guided alignment and controlled landing"
+            loading="lazy"
+        >
+    </div>
+
+    <div class="capability-copy">
+
+        <span class="capability-number">
+            CAPABILITY LAYER 05
+        </span>
+
+        <h3>
+            3D Reconstruction and Robotics Translation.
+        </h3>
+
+        <p>
+            ApolloSplat-Py reconstructed a lunar terrain patch from 15
+            historical images, producing a 580,552-point cloud and
+            ROS2-ready mesh assets. TerraDrop-PX4 connected perception
+            to simulated deployment through ROS2, Gazebo, PX4 offboard
+            control, camera geometry, and visual servoing. Together,
+            these projects establish a pipeline from environment
+            reconstruction to closed-loop robotic interaction, now
+            informing marine terrain modeling and autonomy integration.
+        </p>
+
+        <div class="project-links">
+            <a
+                href="https://github.com/aymisxx/ApolloSplat-Py"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Open the ApolloSplat-Py project on GitHub"
+            >
+                ApolloSplat-Py
+            </a>
+
+            <a
+                href="https://github.com/aymisxx/TerraDrop-PX4"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Open the TerraDrop-PX4 project on GitHub"
+            >
+                TerraDrop-PX4
+            </a>
+        </div>
+
+    </div>
+
+</article>
+
+                </section>
+
+
+<!-- =================================================
+     FOUNDER
+     ================================================= -->
+
+<section
+    class="content-section reveal"
+    id="team"
+    data-section
+>
+    <header class="section-header">
+
+        <div>
+
+            <h2>
+                Founder
+            </h2>
+        </div>
+
+    </header>
+
+    <div class="team-grid">
+
+        <!-- Ayushman Mishra -->
+
+        <article class="team-card founder-card">
+
+            <div class="portrait-slot">
+
+                    <img
+                        src="assets/images/team/ayushman.png"
+                        alt="Ayushman Mishra portrait"
+                    >
+                    
+            </div>
+
+            <div class="team-card-copy">
+
+                <span class="team-role">
+                    FOUNDER · MODELING · CONTROL · SWARM AUTONOMY
+                </span>
+
+                <h3>
+                    Ayushman Mishra
+                </h3>
+
+                <p>
+                    Founder of Peacock Dynamics. Robotics engineer focused on
+                    physics-based modeling, control systems, simulation,
+                    reinforcement learning, perception, and multi-agent autonomy.
+                    His work connects algorithm-first research with practical
+                    robotic systems for coordinated exploration in difficult
+                    environments.
+                </p>
+
+                <div class="project-links">
+                    <a
+                        href="https://www.linkedin.com/in/aymisxx/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Open Ayushman Mishra's LinkedIn profile"
+                    >
+                        LinkedIn
+                    </a>
+
+                    <a
+                        href="https://github.com/aymisxx"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Open Ayushman Mishra's GitHub profile"
+                    >
+                        GitHub
+                    </a>
+
+                    <a
+                        href="https://aymisxx.github.io"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Open Ayushman Mishra's personal website"
+                    >
+                        Website
+                    </a>
+
+                    <a
+                        href="mailto:aymisxx@proton.me"
+                        aria-label="Email Ayushman Mishra"
+                    >
+                        Email
+                    </a>
+                </div>
+
+            </div>
+
+        </article>
+
+    </div>
+</section>
+
+
+<!-- =================================================
+     CHALLENGES WE ARE TACKLING
+     ================================================= -->
+
+<section
+    class="content-section reveal"
+    id="questions"
+    data-section
+>
+    <header class="section-header">
+
+        <div>
+            <p class="section-kicker">
+                CHALLENGES WE ARE TACKLING
+            </p>
+
+            <h2>
+                Engineering autonomy for difficult marine environments
+            </h2>
+        </div>
+
+    </header>
+
+    <ol class="question-list">
+
+        <li>
+            <span class="question-number">01</span>
+
+            <div>
+                <h3>
+                    Mission-aware swarm coordination
+                </h3>
+
+                <p>
+                    Marine robotic teams must coordinate across mapping,
+                    monitoring, inspection, and distributed search tasks
+                    while avoiding redundant motion and preserving mission
+                    coverage.
+                </p>
+            </div>
+        </li>
+
+        <li>
+            <span class="question-number">02</span>
+
+            <div>
+                <h3>
+                    Autonomy under uncertain dynamics
+                </h3>
+
+                <p>
+                    Currents, drag, sensing noise, localization drift, and
+                    changing environmental conditions make marine motion
+                    difficult to model and control. Robust algorithms must
+                    remain useful when the model is incomplete.
+                </p>
+            </div>
+        </li>
+
+        <li>
+            <span class="question-number">03</span>
+
+            <div>
+                <h3>
+                    Communication-constrained cooperation
+                </h3>
+
+                <p>
+                    Underwater communication is limited, delayed, and
+                    intermittent. Swarm behavior must therefore rely on
+                    decentralized decision-making rather than continuous
+                    centralized supervision.
+                </p>
+            </div>
+        </li>
+
+        <li>
+            <span class="question-number">04</span>
+
+            <div>
+                <h3>
+                    From simulation to deployable systems
+                </h3>
+
+                <p>
+                    Algorithms must eventually translate across simulation,
+                    robotic middleware, onboard computation, sensing,
+                    propulsion, and controlled field testing without losing
+                    stability, safety, or interpretability.
+                </p>
+            </div>
+        </li>
+
+    </ol>
+</section>
+
+
+
+<!-- =================================================
+     CONTACT / FOOTER
+     ================================================= -->
+
+<footer
+    class="site-footer reveal"
+    id="contact"
+>
+    <div class="footer-announcement">
+        <strong>
+            For collaboration, technical discussions, or early partnership inquiries:
+        </strong>
+
+        <a href="mailto:aymisxx@proton.me">
+            aymisxx@proton.me
+        </a>
+    </div>
+
+                    <nav
+                        class="footer-navigation"
+                        aria-label="Footer navigation"
+                    >
+                        <a href="#mission">
+                            <span class="footer-icon-slot" aria-hidden="true">
+                                <img src="assets/icons/mission.svg" alt="">
+                            </span>
+                            Mission
+                        </a>
+
+                        <a href="#lineage">
+                            <span class="footer-icon-slot" aria-hidden="true">
+                                <img src="assets/icons/technology.svg" alt="">
+                            </span>
+                            Technology
+                        </a>
+
+
+                        <a href="#team">
+                            <span class="footer-icon-slot" aria-hidden="true">
+                                <img src="assets/icons/team.svg" alt="">
+                            </span>
+                            Founder
+                        </a>
+
+                        <a href="#questions">
+                            <span class="footer-icon-slot" aria-hidden="true">
+                                <img src="assets/icons/questions.svg" alt="">
+                            </span>
+                            Challenges
+                        </a>
+                    </nav>
+
+                    <div class="footer-meta">
+                        <p>
+                            © <span id="current-year"></span>
+                            Peacock Dynamics.
+                        </p>
+
+                        <p>
+                            Last updated:
+                            <time datetime="[YYYY-MM-DD]">
+                                [2026-06-12]
+                            </time>
+                        </p>
+
+                        <a href="#top">
+                            Back to top ↑
+                        </a>
+                    </div>
+                </footer>
+
+            </main>
+        </div>
+    </div>
+</body>
+</html>
