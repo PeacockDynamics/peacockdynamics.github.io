@@ -21,11 +21,11 @@ Peacock Dynamics develops **simulation-tested algorithms for coordinated marine 
   - [Simulation First](#3-simulation-first)
 - [Target Marine Applications](#target-marine-applications)
 - [Technical Lineage](#technical-lineage)
-  - [Capability Layer 01 — Simulation and Local Navigation](#capability-layer-01--simulation-and-local-navigation)
-  - [Capability Layer 02 — Swarm Coordination and Coverage](#capability-layer-02--swarm-coordination-and-coverage)
-  - [Capability Layer 03 — Stability, Guidance, and Optimal Control](#capability-layer-03--stability-guidance-and-optimal-control)
-  - [Capability Layer 04 — Sensor Interpretation and Semantic Mapping](#capability-layer-04--sensor-interpretation-and-semantic-mapping)
-  - [Capability Layer 05 — 3D Reconstruction and Robotics Translation](#capability-layer-05--3d-reconstruction-and-robotics-translation)
+  - [Capability Layer 01 - Simulation and Local Navigation](#capability-layer-01--simulation-and-local-navigation)
+  - [Capability Layer 02 - Swarm Coordination and Coverage](#capability-layer-02--swarm-coordination-and-coverage)
+  - [Capability Layer 03 - Stability, Guidance, and Optimal Control](#capability-layer-03--stability-guidance-and-optimal-control)
+  - [Capability Layer 04 - Sensor Interpretation and Semantic Mapping](#capability-layer-04--sensor-interpretation-and-semantic-mapping)
+  - [Capability Layer 05 - 3D Reconstruction and Robotics Translation](#capability-layer-05--3d-reconstruction-and-robotics-translation)
 - [The Technical Challenges](#the-technical-challenges)
 - [Founder & Technical Direction](#founder--technical-direction)
 - [Engineering Philosophy](#engineering-philosophy)
@@ -139,7 +139,7 @@ Their underlying architectures now form the technical foundation for Peacock Dyn
 
 ---
 
-## Capability Layer 01 — Simulation and Local Navigation
+## Capability Layer 01: Simulation and Local Navigation
 
 ### MicroUAV-2D
 
@@ -172,7 +172,7 @@ Together, MicroUAV-2D and AgriDroneRL provide the **simulation and local-navigat
 
 ---
 
-## Capability Layer 02 — Swarm Coordination and Coverage
+## Capability Layer 02: Swarm Coordination and Coverage
 
 ### PPO-Driven Swarm Control
 
@@ -201,7 +201,7 @@ Together, these methods inform **structured, communication-aware coverage for fu
 
 ---
 
-## Capability Layer 03 — Stability, Guidance, and Optimal Control
+## Capability Layer 03: Stability, Guidance, and Optimal Control
 
 ### InterceptDynamics-Py
 
@@ -237,7 +237,7 @@ These control primitives transfer naturally to:
 
 ---
 
-## Capability Layer 04 — Sensor Interpretation and Semantic Mapping
+## Capability Layer 04: Sensor Interpretation and Semantic Mapping
 
 ### Reflect-Aug-Seg
 
@@ -265,7 +265,7 @@ Originally developed for ground and indoor settings, these methods now inform ho
 
 ---
 
-## Capability Layer 05 — 3D Reconstruction and Robotics Translation
+## Capability Layer 05: 3D Reconstruction and Robotics Translation
 
 ### ApolloSplat-Py
 
@@ -311,7 +311,7 @@ This pipeline is now informing:
 
 Peacock Dynamics is explicitly tackling four technical problems.
 
-### 01 — Mission-aware swarm coordination
+### (01) Mission-aware swarm coordination
 
 Marine robotic teams must coordinate across:
 
@@ -325,7 +325,7 @@ The swarm must do this while:
 - avoiding redundant motion;
 - preserving mission coverage.
 
-### 02 — Autonomy under uncertain dynamics
+### (02) Autonomy under uncertain dynamics
 
 Marine motion is difficult to model and control because of:
 
@@ -337,7 +337,7 @@ Marine motion is difficult to model and control because of:
 
 Robust algorithms must remain useful **when the model is incomplete**.
 
-### 03 — Communication-constrained cooperation
+### (03) Communication-constrained cooperation
 
 Underwater communication is:
 
@@ -347,7 +347,7 @@ Underwater communication is:
 
 Swarm behavior must therefore rely on **decentralized decision-making rather than continuous centralized supervision**.
 
-### 04 — From simulation to deployable systems
+### (04) From simulation to deployable systems
 
 Algorithms must eventually translate across:
 
@@ -511,7 +511,7 @@ These media references are preserved from the source page so the README can rema
 
 | Purpose | Asset | Source alt text |
 |---|---|---|
-| Favicon | `assets/logo/icon_dark.png` | — |
+| Favicon | `assets/logo/icon_dark.png` | - |
 | Main logo | `assets/logo/dark_full.png` | `Peacock Dynamics emblem` |
 
 ## Mission visual
