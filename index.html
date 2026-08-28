@@ -11,7 +11,7 @@
 
     <meta
         name="description"
-        content="Peacock Dynamics develops algorithmic foundations for coordinated marine robotic exploration."
+        content="Peacock Dynamics is an independent robotics research group developing algorithmic foundations for coordinated marine robotic exploration."
     >
 
     <meta name="theme-color" content="#050505">
@@ -173,6 +173,21 @@
 
                         <a
                             class="nav-link"
+                            href="#latest-work"
+                            data-nav-link
+                        >
+                            <span class="nav-symbol" aria-hidden="true">
+                                <img src="assets/icons/latest-work.svg" alt="">
+                            </span>
+
+                            <span class="nav-copy">
+                                <strong>Latest Work</strong>
+                                <small>Current research projects</small>
+                            </span>
+                        </a>
+
+                        <a
+                            class="nav-link"
                             href="#lineage"
                             data-nav-link
                         >
@@ -228,6 +243,37 @@
 
                     <div class="nav-divider"></div>
 
+                    <div class="sidebar-research-details">
+                        <div class="sidebar-status">
+                            <div>
+                                <strong>RESEARCH FOCUS</strong>
+                                <span>MARINE AUTONOMY</span>
+                                <span>SWARM ROBOTICS</span>
+                                <span>DISTRIBUTED EXPLORATION</span>
+                                <span>COMMUNICATION-AWARE AUTONOMY</span>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-status">
+                            <div>
+                                <strong>ACTIVE SYSTEMS</strong>
+                                <span>01 — MICROTRENCH-2D</span>
+                                <span>02 — MULTIUUV-LINK</span>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-status">
+                            <div>
+                                <strong>RESEARCH MODE</strong>
+                                <span>ALGORITHM-FIRST</span>
+                                <span>SIMULATION-FIRST</span>
+                                <span>PROTOTYPE-DRIVEN</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav-divider"></div>
+
                     <div class="nav-group nav-group-compact">
                         <a class="small-nav-link" href="#contact">
                             Contact
@@ -268,7 +314,8 @@
 
                     <div>
                         <strong>CURRENT STATUS</strong>
-                        <span>CONCEPT DEVELOPMENT</span>
+                        <span>ACTIVE RESEARCH</span>
+                        <span>INDEPENDENT ROBOTICS RESEARCH GROUP</span>
                     </div>
                 </div>
             </aside>
@@ -310,6 +357,14 @@
                             <strong>
                                 ALGORITHM-FIRST
                             </strong>
+
+                            <span class="mission-status-label">
+                                CURRENT PHASE
+                            </span>
+
+                            <strong>
+                                PROTOTYPING
+                            </strong>
                         </div>
                     </div>
 
@@ -318,7 +373,7 @@
                         <div class="hero-copy">
 
                             <p class="lead-copy">
-                                Peacock Dynamics develops simulation-tested algorithms for coordinated marine robot swarms. The present focus is coverage, guidance, perception, and decision-making under limited communication, where multiple low-cost vehicles can explore wider areas more resiliently than a single platform.
+                                Peacock Dynamics is an independent robotics research group developing simulation-tested algorithms for coordinated marine robot swarms. The present focus is coverage, guidance, perception, and decision-making under limited communication, where multiple low-cost vehicles can explore wider areas more resiliently than a single platform.
                             </p>
 
                             <p>
@@ -387,6 +442,120 @@
 </div>
 
                     <div class="section-rule section-rule-bottom"></div>
+                </section>
+
+
+                <!-- =================================================
+                     LATEST WORK
+                     ================================================= -->
+
+                <section
+                    class="content-section reveal"
+                    id="latest-work"
+                    data-section
+                >
+                    <header class="section-header">
+
+                        <div>
+                            <p class="section-kicker">
+                                LATEST WORK
+                            </p>
+
+                            <h2>
+                                From lightweight exploration to resilient multi-UUV autonomy
+                            </h2>
+                        </div>
+
+                    </header>
+
+                    <p class="section-introduction">
+                        MicroTrench-2D establishes a lightweight simulation and prototyping foundation for marine exploration autonomy. MultiUUV-Link extends that foundation toward communication-aware, decentralized, and failure-resilient multi-UUV missions.
+                    </p>
+
+
+                    <!-- MicroTrench-2D -->
+
+                    <article class="capability-row reveal">
+
+                        <div class="capability-media">
+                            <img
+                                src="assets/images/animations/microtrench_2d_demo.png"
+                                alt="MicroTrench-2D global seabed view and local UUV field-of-view simulation"
+                                loading="lazy"
+                            >
+                        </div>
+
+                        <div class="capability-copy">
+
+                            <span class="capability-number">
+                                MICROTRENCH-2D
+                            </span>
+
+                            <h3>
+                                Lightweight marine-autonomy prototyping.
+                            </h3>
+
+                            <p>
+                                A CPU-only 2D sandbox for rapidly developing and debugging underwater exploration and resource-discovery algorithms. MicroTrench-2D preserves local perception, hidden world information, discrete motion, and persistent discovery memory while deliberately abstracting hydrodynamics, vehicle dynamics, and sensor physics, creating a focused simulation-first foundation for subsequent multi-UUV autonomy research.
+                            </p>
+
+                            <div class="project-links">
+                                <a
+                                    href="https://github.com/peacockdynamics/MicroTrench-2D"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label="Open the MicroTrench-2D repository on GitHub"
+                                >
+                                    View Repository
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- MultiUUV-Link -->
+
+                    <article class="capability-row capability-row-reverse reveal">
+
+                        <div class="capability-media">
+                            <img
+                                src="assets/images/animations/multiuuv_hybrid_mission_prototype.gif"
+                                alt="MultiUUV-Link hybrid mission with four decentralized UUV agents exploring under constrained communication"
+                                loading="lazy"
+                            >
+                        </div>
+
+                        <div class="capability-copy">
+
+                            <span class="capability-number">
+                                MULTIUUV-LINK
+                            </span>
+
+                            <h3>
+                                Decentralized, communication-aware mission autonomy.
+                            </h3>
+
+                            <p>
+                                A validated research prototype in which four UUV agents operate through bounded local perception, persistent private knowledge, explicit range-limited communication, distributed frontier-task allocation, adaptive replanning, predictive safety, and heartbeat-based fault recovery. The canonical Hybrid benchmark achieved 98.63% mean final coverage with 0.2337 mean redundancy; its fault-recovery showcase reassigned orphaned work, discovered all 10/10 resources, and maintained 131.52 px minimum separation above the required 128 px threshold.
+                            </p>
+
+                            <div class="project-links">
+                                <a
+                                    href="https://github.com/peacockdynamics/MultiUUV-Link"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label="Open the MultiUUV-Link repository on GitHub"
+                                >
+                                    View Repository
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </article>
+
                 </section>
 
 
@@ -787,7 +956,7 @@
                     At Peacock Dynamics, Ayushman leads the technical direction
                     while working with collaborators across robotics,
                     mechanical systems, aerospace, and data science. The
-                    company is adapting prior autonomy research toward marine
+                    research group is adapting prior autonomy research toward marine
                     robotic exploration, where communication is limited,
                     dynamics are uncertain, sensing is imperfect, and
                     distributed robotic teams must operate beyond continuous
@@ -998,8 +1167,8 @@
 
                         <p>
                             Last updated:
-                            <time datetime="[YYYY-MM-DD]">
-                                [2026-06-19]
+                            <time datetime="2026-08-28">
+                                [2026-08-28]
                             </time>
                         </p>
 

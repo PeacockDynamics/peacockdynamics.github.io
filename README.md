@@ -2,7 +2,7 @@
 
 > **Marine Autonomy · Swarm Control · Robotic Exploration**
 
-**Peacock Dynamics develops algorithmic foundations for coordinated marine robotic exploration.**
+**Peacock Dynamics is an independent robotics research group developing algorithmic foundations for coordinated marine robotic exploration.**
 
 Peacock Dynamics develops **simulation-tested algorithms for coordinated marine robot swarms**, with an **algorithm-first** engineering approach centered on coverage, guidance, perception, decision-making, task allocation, and coordination under limited communication.
 
@@ -38,9 +38,9 @@ Peacock Dynamics develops **simulation-tested algorithms for coordinated marine 
 
 ## What Peacock Dynamics Is
 
-Peacock Dynamics is focused on the algorithmic foundations of **marine swarm autonomy**.
+Peacock Dynamics is an **independent robotics research group** focused on the algorithmic foundations of **marine swarm autonomy**.
 
-The company develops and evaluates autonomy methods for teams of marine robots that must operate in difficult environments where:
+The research group develops and evaluates autonomy methods for teams of marine robots that must operate in difficult environments where:
 
 - communication is limited, delayed, or intermittent;
 - dynamics are uncertain;
@@ -408,7 +408,7 @@ At Peacock Dynamics, Ayushman leads the technical direction while working with c
 - aerospace;
 - data science.
 
-The company is adapting prior autonomy research toward marine robotic exploration, where:
+The research group is adapting prior autonomy research toward marine robotic exploration, where:
 
 - communication is limited;
 - dynamics are uncertain;
@@ -488,7 +488,7 @@ The source `index.html` declares the following identity and metadata:
 | Field | Value |
 |---|---|
 | **Page title** | `Peacock Dynamics \| Marine Swarm Autonomy` |
-| **Meta description** | `Peacock Dynamics develops algorithmic foundations for coordinated marine robotic exploration.` |
+| **Meta description** | `Peacock Dynamics is an independent robotics research group developing algorithmic foundations for coordinated marine robotic exploration.` |
 | **Brand** | `PEACOCK DYNAMICS` |
 | **Brand subtitle** | `MARINE AUTONOMY · SWARM CONTROL · ROBOTIC EXPLORATION` |
 | **Current status** | `CONCEPT DEVELOPMENT` |
@@ -496,7 +496,7 @@ The source `index.html` declares the following identity and metadata:
 | **Active track** | `ALGORITHM-FIRST` |
 | **Technical lineage** | `10 PRIOR WORKS · 05 CAPABILITY LAYERS` |
 | **Theme color** | `#050505` |
-| **Last updated in source** | `[2026-06-19]` |
+| **Last updated in source** | `[2026-08-28]` |
 | **Copyright text** | `© [current year] Peacock Dynamics.` |
 
 The source page uses a dynamically populated current year in the copyright line.

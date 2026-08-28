@@ -469,7 +469,12 @@ main {
     position: sticky;
     top: 1rem;
 
-    overflow: hidden;
+    max-height: calc(100vh - 2rem);
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    scrollbar-color: var(--gold-dark) rgba(0, 0, 0, 0.23);
+    scrollbar-width: thin;
 
     border-left: 4px solid var(--purple-bright);
     border-right: 1px solid #6413aa;
@@ -481,6 +486,18 @@ main {
             #300066 70%,
             #23004d
         );
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.23);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: var(--gold-dark);
 }
 
 .sidebar-heading {
@@ -1640,6 +1657,9 @@ main {
 
         display: none;
 
+        max-height: none;
+        overflow: hidden;
+
         margin-bottom: 1rem;
 
         border-right: 1px solid var(--purple-bright);
@@ -1656,6 +1676,10 @@ main {
     }
 
     .nav-divider {
+        display: none;
+    }
+
+    .sidebar-research-details {
         display: none;
     }
 
