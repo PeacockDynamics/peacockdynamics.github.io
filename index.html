@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
 
@@ -19,6 +19,16 @@
     <title>Peacock Dynamics | Marine Swarm Autonomy</title>
 
     <link rel="icon" type="image/png" href="assets/logo/icon_dark.png">
+    <!-- Apply only an explicit saved choice before the stylesheet paints. -->
+    <script>
+        try {
+            if (localStorage.getItem("peacock-theme") === "light") {
+                document.documentElement.dataset.theme = "light";
+            }
+        } catch {
+            /* Storage may be unavailable; dark remains the default. */
+        }
+    </script>
     <link rel="stylesheet" href="style.css">
 
     <script src="script.js" defer></script>
@@ -69,6 +79,24 @@
         Skip to main content
     </a>
 
+    <button
+        class="theme-toggle"
+        type="button"
+        role="switch"
+        aria-label="Light theme"
+        aria-checked="false"
+        title="Switch to light theme"
+        hidden
+    >
+        <svg class="theme-toggle-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"></path>
+        </svg>
+        <svg class="theme-toggle-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"></path>
+        </svg>
+    </button>
+
     <div class="site-frame">
 
         <!-- =========================================================
@@ -95,6 +123,8 @@
                         <img
                             class="brand-logo"
                             src="assets/logo/dark_full.png"
+                            data-theme-dark="assets/logo/dark_full.png"
+                            data-theme-light="assets/logo/light_full.png"
                             alt="Peacock Dynamics emblem"
                             data-fallback-image
                         >
@@ -402,6 +432,8 @@
 
                             <img
     src="assets/images/hero/marine-swarm-hero.png"
+    data-theme-dark="assets/images/hero/marine-swarm-hero.png"
+    data-theme-light="assets/images/hero/marine-swarm-hero-light.png"
     alt="Concept visualization of a coordinated marine robotic swarm exploring the deep ocean"
 >
 

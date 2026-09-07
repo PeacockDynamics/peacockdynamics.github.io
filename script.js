@@ -13,6 +13,59 @@ document.documentElement.classList.add("js");
 
 document.addEventListener("DOMContentLoaded", () => {
 
+    /* Theme support is independent of the existing page interactions. */
+    const themeToggle = document.querySelector(".theme-toggle");
+    const themeImages = document.querySelectorAll("[data-theme-dark]");
+    const themeMeta = document.querySelector('meta[name="theme-color"]');
+
+    const applyTheme = (theme) => {
+        const isLight = theme === "light";
+        document.documentElement.dataset.theme = isLight ? "light" : "dark";
+
+        if (themeToggle) {
+            themeToggle.setAttribute("aria-checked", String(isLight));
+            themeToggle.title = isLight
+                ? "Switch to dark theme"
+                : "Switch to light theme";
+        }
+
+        if (themeMeta) {
+            themeMeta.content = isLight ? "#f8f7fa" : "#050505";
+        }
+
+        themeImages.forEach((image) => {
+            const source = isLight ? image.dataset.themeLight : image.dataset.themeDark;
+            if (image.getAttribute("src") !== source) {
+                image.setAttribute("src", source);
+            }
+        });
+    };
+
+    // A successful replacement logo should clear a previous image fallback.
+    themeImages.forEach((image) => {
+        image.addEventListener("load", () => {
+            image.parentElement.classList.remove("has-missing-image");
+        });
+    });
+
+    applyTheme(document.documentElement.dataset.theme);
+
+    if (themeToggle) {
+        themeToggle.hidden = false;
+        themeToggle.addEventListener("click", () => {
+            const theme = document.documentElement.dataset.theme === "light"
+                ? "dark"
+                : "light";
+            applyTheme(theme);
+            try {
+                localStorage.setItem("peacock-theme", theme);
+            } catch {
+                // Switching still works when persistence is unavailable.
+            }
+        });
+    }
+
+
     /* ============================================================
        1. ELEMENT REFERENCES
        ============================================================ */

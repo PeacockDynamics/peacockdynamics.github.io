@@ -9,6 +9,61 @@
    ================================================================ */
 
 :root {
+    /* Semantic theme roles. Dark remains the default. */
+    --canvas: var(--black);
+    --header-surface: var(--black);
+    --surface: var(--black-soft);
+    --surface-raised: var(--black-raised);
+    --heading: var(--white);
+    --accent: var(--purple-bright);
+    --accent-text: var(--violet);
+    --gold-text: var(--gold);
+    --link: #c8a8ff;
+    --link-hover: var(--gold-bright);
+    --focus: var(--gold);
+    --selection-fg: var(--black);
+    --selection-bg: var(--gold);
+    --button-fg: var(--black);
+    --button-bg: var(--gold);
+    --button-border: var(--gold-bright);
+    --button-hover-fg: var(--white);
+    --button-hover-bg: var(--purple-bright);
+    --button-hover-border: var(--violet);
+    --nav-bg: linear-gradient(180deg, #47008f, #300066 70%, #23004d);
+    --nav-border: #6413aa;
+    --nav-text: #d8c4ff;
+    --nav-secondary: var(--white);
+    --nav-active-text: var(--white);
+    --nav-active-bg: rgba(0, 0, 0, 0.22);
+    --nav-indicator: var(--gold);
+    --nav-heading-bg: rgba(255, 255, 255, 0.05);
+    --nav-panel-bg: rgba(0, 0, 0, 0.23);
+    --nav-panel-border: rgba(255, 255, 255, 0.13);
+    --nav-divider: rgba(0, 0, 0, 0.72);
+    --nav-divider-shadow: rgba(255, 255, 255, 0.1);
+    --scrollbar-thumb: var(--gold-dark);
+    --scrollbar-track: rgba(0, 0, 0, 0.23);
+    --status: var(--success);
+    --status-glow: rgba(52, 219, 106, 0.8);
+    --badge-bg: rgba(242, 182, 0, 0.04);
+    --gold-border: var(--gold-dark);
+    --media-surface: #050505;
+    --media-shadow: rgba(67, 0, 140, 0.22);
+    --project-fg: var(--white);
+    --project-bg: rgba(67, 0, 140, 0.3);
+    --project-border: #531099;
+    --project-hover-fg: var(--black);
+    --project-hover-bg: var(--gold);
+    --portrait-bg: linear-gradient(135deg, rgba(67, 0, 140, 0.6), rgba(0, 0, 0, 0.1)), var(--black-raised);
+    --announcement-bg: rgba(242, 182, 0, 0.035);
+    --icon-accent: brightness(0) saturate(100%) invert(78%) sepia(96%) saturate(1475%) hue-rotate(356deg) brightness(102%) contrast(101%);
+    --icon-nav-active: brightness(0) saturate(100%) invert(100%);
+    --icon-secondary: brightness(0) saturate(100%) invert(100%);
+    --icon-hover: var(--icon-accent);
+    --icon-footer-hover: brightness(0) saturate(100%) invert(0%);
+    --toggle-fg: var(--gold);
+    --toggle-bg: var(--black-soft);
+
     --black: #000000;
     --black-soft: #050505;
     --black-raised: #0a0a0d;
@@ -65,6 +120,124 @@
 }
 
 
+
+/* A light canvas with purple interaction colors and readable amber labels. */
+:root[data-theme="light"] {
+    color-scheme: light;
+    --canvas: #f8f7fa;
+    --header-surface: #ffffff;
+    --surface: #ffffff;
+    --surface-raised: #f0edf5;
+    --heading: #211b2b;
+    --text: #302939;
+    --text-muted: #51495e;
+    --text-dim: #645b70;
+    --line: #d5cfde;
+    --line-bright: #aaa0b7;
+    --accent: #6425a6;
+    --accent-text: #6425a6;
+    --gold-text: #754d00;
+    --link: #6425a6;
+    --link-hover: #461773;
+    --focus: #6425a6;
+    --selection-fg: #ffffff;
+    --selection-bg: #6425a6;
+    --button-fg: #ffffff;
+    --button-bg: #6425a6;
+    --button-border: #6425a6;
+    --button-hover-fg: #ffffff;
+    --button-hover-bg: #461773;
+    --button-hover-border: #461773;
+    --nav-bg: linear-gradient(180deg, #f0e9f8, #eae1f3 70%, #e5dbee);
+    --nav-border: #bca7d1;
+    --nav-text: #4c2474;
+    --nav-secondary: #4f415f;
+    --nav-active-text: #381456;
+    --nav-active-bg: rgba(100, 37, 166, 0.1);
+    --nav-indicator: #6425a6;
+    --nav-heading-bg: rgba(255, 255, 255, 0.45);
+    --nav-panel-bg: rgba(100, 37, 166, 0.035);
+    --nav-panel-border: rgba(100, 37, 166, 0.18);
+    --nav-divider: rgba(100, 37, 166, 0.2);
+    --nav-divider-shadow: rgba(255, 255, 255, 0.6);
+    --scrollbar-thumb: #85649f;
+    --scrollbar-track: rgba(100, 37, 166, 0.06);
+    --status: #18743b;
+    --status-glow: rgba(24, 116, 59, 0.2);
+    --badge-bg: #fff5db;
+    --gold-border: #a07825;
+    --media-surface: #ffffff;
+    --media-shadow: rgba(100, 37, 166, 0.12);
+    --project-fg: #542080;
+    --project-bg: #eee5f7;
+    --project-border: #b9a0ce;
+    --project-hover-fg: #ffffff;
+    --project-hover-bg: #6425a6;
+    --portrait-bg: linear-gradient(135deg, #eee5f7, #f8f7fa);
+    --announcement-bg: #fff5db;
+    --icon-accent: brightness(0) saturate(100%) invert(19%) sepia(51%) saturate(3573%) hue-rotate(260deg) brightness(84%) contrast(96%);
+    --icon-nav-active: var(--icon-accent);
+    --icon-secondary: var(--icon-accent);
+    --icon-hover: brightness(0) saturate(100%) invert(10%) sepia(39%) saturate(3222%) hue-rotate(254deg) brightness(93%) contrast(104%);
+    --icon-footer-hover: brightness(0) saturate(100%) invert(100%);
+    --toggle-fg: #6425a6;
+    --toggle-bg: #ffffff;
+}
+
+/* Fixed control adds no space to the existing page or mobile navigation. */
+.theme-toggle {
+    position: fixed;
+    z-index: 100;
+    right: max(0.75rem, env(safe-area-inset-right));
+    bottom: max(4.5rem, env(safe-area-inset-bottom));
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    color: var(--toggle-fg);
+    background: var(--toggle-bg);
+    border: 1px solid var(--gold-border);
+    border-radius: 50%;
+    box-shadow: 0 2px 10px var(--media-shadow);
+    cursor: pointer;
+}
+
+.theme-toggle[hidden] {
+    display: none;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+    color: var(--button-hover-fg);
+    background: var(--button-hover-bg);
+    border-color: var(--button-hover-border);
+}
+
+.theme-toggle svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.theme-toggle-moon,
+[data-theme="light"] .theme-toggle-sun {
+    display: none;
+}
+
+[data-theme="light"] .theme-toggle-moon {
+    display: block;
+}
+
+/* Both hero files share the original image's displayed proportions. */
+.hero-media-frame img {
+    aspect-ratio: 1586 / 992;
+}
+
 /* ================================================================
    2. RESET AND BASE
    ================================================================ */
@@ -85,7 +258,7 @@ body {
     margin: 0;
 
     color: var(--text);
-    background: #000000;
+    background: var(--canvas);
 
     font-family: var(--font-ui);
     font-size: 15px;
@@ -104,7 +277,7 @@ img {
 }
 
 a {
-    color: #c8a8ff;
+    color: var(--link);
     text-decoration-thickness: 1px;
     text-underline-offset: 0.16em;
 
@@ -116,7 +289,7 @@ a {
 
 a:hover,
 a:focus-visible {
-    color: var(--gold-bright);
+    color: var(--link-hover);
 }
 
 button,
@@ -149,7 +322,7 @@ h1 {
     max-width: 820px;
     margin-bottom: 0;
 
-    color: var(--white);
+    color: var(--heading);
 
     font-size: clamp(2rem, 5vw, 4.35rem);
     line-height: 0.98;
@@ -160,7 +333,7 @@ h1 {
 h2 {
     margin-bottom: 0;
 
-    color: var(--white);
+    color: var(--heading);
 
     font-size: clamp(1.7rem, 3vw, 2.8rem);
     line-height: 1.04;
@@ -168,7 +341,7 @@ h2 {
 }
 
 h3 {
-    color: var(--white);
+    color: var(--heading);
 }
 
 p {
@@ -181,8 +354,8 @@ ol {
 }
 
 ::selection {
-    color: var(--black);
-    background: var(--gold);
+    color: var(--selection-fg);
+    background: var(--selection-bg);
 }
 
 
@@ -198,8 +371,8 @@ ol {
 
     padding: 0.7rem 1rem;
 
-    color: var(--black);
-    background: var(--gold);
+    color: var(--selection-fg);
+    background: var(--selection-bg);
 
     font-weight: 700;
 
@@ -211,7 +384,7 @@ ol {
 }
 
 :focus-visible {
-    outline: 2px solid var(--gold);
+    outline: 2px solid var(--focus);
     outline-offset: 3px;
 }
 
@@ -262,7 +435,7 @@ main {
     overflow: hidden;
 
     border-bottom: 1px solid var(--line-bright);
-    background: var(--black);
+    background: var(--header-surface);
 }
 
 .header-backdrop {
@@ -366,7 +539,7 @@ main {
 .brand-logo-fallback {
     display: none;
 
-    color: var(--gold);
+    color: var(--gold-text);
 
     font-family: var(--font-display);
     font-size: 2.4rem;
@@ -388,7 +561,7 @@ main {
 
     margin: 0;
 
-    color: var(--white);
+    color: var(--heading);
 
     font-family: var(--font-display);
     font-size: clamp(2rem, 4vw, 3.25rem);
@@ -404,18 +577,18 @@ main {
 }
 
 .brand-wordmark span {
-    color: var(--violet);
+    color: var(--accent-text);
 }
 
 .brand-wordmark strong {
-    color: var(--gold);
+    color: var(--gold-text);
     font: inherit;
 }
 
 .brand-subtitle {
     margin: 0.45rem 0 0 0.15rem;
 
-    color: var(--violet);
+    color: var(--accent-text);
 
     font-family: var(--font-mono);
     font-size: 0.75rem;
@@ -432,14 +605,14 @@ main {
 
     padding: 0.7rem 0.85rem;
 
-    border: 1px solid var(--gold-dark);
-    background: var(--black);
+    border: 1px solid var(--gold-border);
+    background: var(--canvas);
 
     cursor: pointer;
 }
 
 .menu-toggle-label {
-    color: var(--gold);
+    color: var(--gold-text);
 
     font-family: var(--font-mono);
     font-size: 0.75rem;
@@ -457,7 +630,7 @@ main {
     width: 19px;
     height: 1px;
 
-    background: var(--gold);
+    background: var(--gold-text);
 }
 
 
@@ -473,19 +646,14 @@ main {
     overflow-x: hidden;
     overflow-y: auto;
 
-    scrollbar-color: var(--gold-dark) rgba(0, 0, 0, 0.23);
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
     scrollbar-width: thin;
 
-    border-left: 4px solid var(--purple-bright);
-    border-right: 1px solid #6413aa;
+    border-left: 4px solid var(--accent);
+    border-right: 1px solid var(--nav-border);
 
     background:
-        linear-gradient(
-            180deg,
-            #47008f,
-            #300066 70%,
-            #23004d
-        );
+        var(--nav-bg);
 }
 
 .sidebar::-webkit-scrollbar {
@@ -493,18 +661,18 @@ main {
 }
 
 .sidebar::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.23);
+    background: var(--scrollbar-track);
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-    background: var(--gold-dark);
+    background: var(--scrollbar-thumb);
 }
 
 .sidebar-heading {
     padding: 0.45rem 0.75rem;
 
-    color: var(--white);
-    background: rgba(255, 255, 255, 0.05);
+    color: var(--nav-secondary);
+    background: var(--nav-heading-bg);
 
     font-size: 0.68rem;
     font-weight: 900;
@@ -527,7 +695,7 @@ main {
 
     padding: 0.65rem 0.35rem;
 
-    color: #d8c4ff;
+    color: var(--nav-text);
 
     text-decoration: none;
 
@@ -537,9 +705,9 @@ main {
 .nav-link:hover,
 .nav-link:focus-visible,
 .nav-link.is-active {
-    color: var(--white);
-    background: rgba(0, 0, 0, 0.22);
-    border-left-color: var(--gold);
+    color: var(--nav-active-text);
+    background: var(--nav-active-bg);
+    border-left-color: var(--nav-indicator);
 }
 
 .nav-symbol {
@@ -564,7 +732,7 @@ main {
 }
 
 .nav-copy small {
-    color: var(--white);
+    color: var(--nav-secondary);
 
     font-size: 0.58rem;
     line-height: 1.25;
@@ -574,8 +742,8 @@ main {
     height: 1px;
     margin: 1rem 0.35rem;
 
-    background: rgba(0, 0, 0, 0.72);
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+    background: var(--nav-divider);
+    box-shadow: 0 1px 0 var(--nav-divider-shadow);
 }
 
 .nav-group-compact {
@@ -585,7 +753,7 @@ main {
 .small-nav-link {
     padding-inline: 1.55rem;
 
-    color: var(--white);
+    color: var(--nav-secondary);
 
     font-size: 0.63rem;
 }
@@ -597,8 +765,8 @@ main {
 
     padding: 0.85rem;
 
-    border-top: 1px solid rgba(255, 255, 255, 0.13);
-    background: rgba(0, 0, 0, 0.23);
+    border-top: 1px solid var(--nav-panel-border);
+    background: var(--nav-panel-bg);
 }
 
 .sidebar-status div {
@@ -607,14 +775,14 @@ main {
 }
 
 .sidebar-status strong {
-    color: var(--gold);
+    color: var(--gold-text);
 
     font-family: var(--font-mono);
     font-size: 0.63rem;
 }
 
 .sidebar-status span:not(.status-light) {
-    color: var(--white);
+    color: var(--nav-secondary);
 
     font-family: var(--font-mono);
     font-size: 0.55rem;
@@ -628,8 +796,8 @@ main {
 
     border-radius: 50%;
 
-    background: var(--success);
-    box-shadow: 0 0 10px rgba(52, 219, 106, 0.8);
+    background: var(--status);
+    box-shadow: 0 0 10px var(--status-glow);
 }
 
 
@@ -669,7 +837,7 @@ main {
 .section-kicker {
     margin-bottom: 0.38rem;
 
-    color: var(--gold);
+    color: var(--gold-text);
 
     font-family: var(--font-mono);
     font-size: 0.72rem;
@@ -721,8 +889,8 @@ main {
 
     padding: 0.75rem 0.9rem;
 
-    border: 1px solid var(--gold-dark);
-    background: rgba(242, 182, 0, 0.04);
+    border: 1px solid var(--gold-border);
+    background: var(--badge-bg);
 
     text-align: right;
 }
@@ -736,7 +904,7 @@ main {
 }
 
 .mission-status strong {
-    color: var(--gold);
+    color: var(--gold-text);
 
     font-family: var(--font-mono);
     font-size: 0.75rem;
@@ -753,7 +921,7 @@ main {
 }
 
 .lead-copy {
-    color: var(--white);
+    color: var(--heading);
 
     font-size: 1.06rem;
     font-weight: 700;
@@ -776,22 +944,22 @@ main {
     min-height: 42px;
     padding: 0.65rem 1rem;
 
-    color: var(--black);
-    background: var(--gold);
+    color: var(--button-fg);
+    background: var(--button-bg);
 
     font-family: var(--font-mono);
     font-size: 0.72rem;
     font-weight: 900;
     text-decoration: none;
 
-    border: 1px solid var(--gold-bright);
+    border: 1px solid var(--button-border);
 }
 
 .primary-button:hover,
 .primary-button:focus-visible {
-    color: var(--white);
-    background: var(--purple-bright);
-    border-color: var(--violet);
+    color: var(--button-hover-fg);
+    background: var(--button-hover-bg);
+    border-color: var(--button-hover-border);
 }
 
 .text-link {
@@ -802,10 +970,10 @@ main {
     padding: 0.55rem;
 
     border: 1px solid var(--line-bright);
-    background: #050505;
+    background: var(--media-surface);
 
     box-shadow:
-        10px 10px 0 rgba(67, 0, 140, 0.22);
+        10px 10px 0 var(--media-shadow);
 }
 
 .mission-facts {
@@ -833,7 +1001,7 @@ main {
     display: block;
     margin-bottom: 0.75rem;
 
-    color: var(--purple-bright);
+    color: var(--accent);
 
     font-family: var(--font-mono);
     font-size: 1.45rem;
@@ -844,7 +1012,7 @@ main {
     display: block;
     margin-bottom: 0.5rem;
 
-    color: var(--gold);
+    color: var(--gold-text);
 
     font-size: 0.77rem;
 }
@@ -1003,7 +1171,7 @@ main {
 .capability-media {
     padding: 0.4rem;
 
-    background: var(--black-raised);
+    background: var(--surface-raised);
     border: 1px solid var(--line);
 }
 
@@ -1011,7 +1179,7 @@ main {
     display: block;
     margin-bottom: 0.5rem;
 
-    color: var(--gold);
+    color: var(--gold-text);
 
     font-family: var(--font-mono);
     font-size: 0.64rem;
@@ -1039,10 +1207,10 @@ main {
 .project-links a {
     padding: 0.42rem 0.58rem;
 
-    color: var(--white);
-    background: rgba(67, 0, 140, 0.3);
+    color: var(--project-fg);
+    background: var(--project-bg);
 
-    border: 1px solid #531099;
+    border: 1px solid var(--project-border);
 
     font-family: var(--font-mono);
     font-size: 0.64rem;
@@ -1051,9 +1219,9 @@ main {
 
 .project-links a:hover,
 .project-links a:focus-visible {
-    color: var(--black);
-    background: var(--gold);
-    border-color: var(--gold);
+    color: var(--project-hover-fg);
+    background: var(--project-hover-bg);
+    border-color: var(--project-hover-bg);
 }
 
 
@@ -1257,7 +1425,7 @@ main {
     overflow: hidden;
 
     border: 1px solid var(--line);
-    background: var(--black-soft);
+    background: var(--surface);
 }
 
 .portrait-slot {
@@ -1267,14 +1435,9 @@ main {
     width: 100%;
     aspect-ratio: 16 / 10;
 
-    color: var(--gold);
+    color: var(--gold-text);
     background:
-        linear-gradient(
-            135deg,
-            rgba(67, 0, 140, 0.6),
-            rgba(0, 0, 0, 0.1)
-        ),
-        var(--black-raised);
+        var(--portrait-bg);
 
     border-bottom: 1px solid var(--line);
 
@@ -1290,7 +1453,7 @@ main {
     display: block;
     margin-bottom: 0.35rem;
 
-    color: var(--violet);
+    color: var(--accent-text);
 
     font-family: var(--font-mono);
     font-size: 0.58rem;
@@ -1334,7 +1497,7 @@ main {
 }
 
 .question-number {
-    color: var(--purple-bright);
+    color: var(--accent);
 
     font-family: var(--font-mono);
     font-size: 1.45rem;
@@ -1370,24 +1533,13 @@ main {
 
     object-fit: contain;
 
-    filter:
-        brightness(0)
-        saturate(100%)
-        invert(78%)
-        sepia(96%)
-        saturate(1475%)
-        hue-rotate(356deg)
-        brightness(102%)
-        contrast(101%);
+    filter: var(--icon-accent);
 }
 
 .nav-link:hover .nav-symbol img,
 .nav-link:focus-visible .nav-symbol img,
 .nav-link.is-active .nav-symbol img {
-    filter:
-        brightness(0)
-        saturate(100%)
-        invert(100%);
+    filter: var(--icon-nav-active);
 }
 
 .small-nav-link-icon {
@@ -1400,10 +1552,7 @@ main {
 .small-nav-link-icon img {
     object-fit: contain;
 
-    filter:
-        brightness(0)
-        saturate(100%)
-        invert(100%);
+    filter: var(--icon-secondary);
 }
 
 .small-nav-leading-icon {
@@ -1420,15 +1569,7 @@ main {
 
 .small-nav-link-icon:hover img,
 .small-nav-link-icon:focus-visible img {
-    filter:
-        brightness(0)
-        saturate(100%)
-        invert(78%)
-        sepia(96%)
-        saturate(1475%)
-        hue-rotate(356deg)
-        brightness(102%)
-        contrast(101%);
+    filter: var(--icon-hover);
 }
 
 .footer-icon-slot img {
@@ -1437,23 +1578,12 @@ main {
 
     object-fit: contain;
 
-    filter:
-        brightness(0)
-        saturate(100%)
-        invert(78%)
-        sepia(96%)
-        saturate(1475%)
-        hue-rotate(356deg)
-        brightness(102%)
-        contrast(101%);
+    filter: var(--icon-accent);
 }
 
 .footer-navigation a:hover .footer-icon-slot img,
 .footer-navigation a:focus-visible .footer-icon-slot img {
-    filter:
-        brightness(0)
-        saturate(100%)
-        invert(0%);
+    filter: var(--icon-footer-hover);
 }
 
 /* ================================================================
@@ -1474,8 +1604,8 @@ main {
 
     padding: 0.75rem;
 
-    color: var(--gold);
-    background: rgba(242, 182, 0, 0.035);
+    color: var(--gold-text);
+    background: var(--announcement-bg);
 
     border-bottom: 1px solid var(--line);
 
@@ -1483,7 +1613,7 @@ main {
 }
 
 .footer-announcement strong {
-    color: var(--gold);
+    color: var(--gold-text);
 
     font-size: 0.73rem;
 }
@@ -1506,7 +1636,7 @@ main {
     justify-items: center;
     gap: 0.32rem;
 
-    color: var(--white);
+    color: var(--heading);
 
     font-size: 0.56rem;
     text-decoration: underline;
@@ -1520,9 +1650,9 @@ main {
     width: 42px;
     height: 42px;
 
-    color: var(--gold);
+    color: var(--gold-text);
 
-    border: 1px solid var(--gold-dark);
+    border: 1px solid var(--gold-border);
 
     font-family: var(--font-display);
     font-size: 1rem;
@@ -1533,8 +1663,8 @@ main {
 
 .footer-navigation a:hover .footer-icon-slot,
 .footer-navigation a:focus-visible .footer-icon-slot {
-    color: var(--black);
-    background: var(--gold);
+    color: var(--project-hover-fg);
+    background: var(--project-hover-bg);
 }
 
 .footer-meta {
@@ -1662,7 +1792,7 @@ main {
 
         margin-bottom: 1rem;
 
-        border-right: 1px solid var(--purple-bright);
+        border-right: 1px solid var(--accent);
     }
 
     body.nav-open .sidebar {
