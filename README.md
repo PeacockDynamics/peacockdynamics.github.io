@@ -514,12 +514,6 @@ These media references are preserved from the source page so the README can rema
 | Favicon | `assets/logo/icon_dark.png` | - |
 | Main logo | `assets/logo/dark_full.png` | `Peacock Dynamics emblem` |
 
-## Mission visual
-
-| Asset | Source alt text |
-|---|---|
-| `assets/images/hero/marine-swarm-hero.png` | `Concept visualization of a coordinated marine robotic swarm exploring the deep ocean` |
-
 ## Capability visuals
 
 | Capability area | Asset | Source alt text |

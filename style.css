@@ -233,11 +233,6 @@
     display: block;
 }
 
-/* Both hero files share the original image's displayed proportions. */
-.hero-media-frame img {
-    aspect-ratio: 1586 / 992;
-}
-
 /* ================================================================
    2. RESET AND BASE
    ================================================================ */
@@ -912,7 +907,7 @@ main {
 
 .hero-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(300px, 0.8fr);
+    grid-template-columns: minmax(0, 1fr);
     gap: 2.2rem;
 
     align-items: center;
@@ -964,16 +959,6 @@ main {
 
 .text-link {
     font-size: 0.75rem;
-}
-
-.hero-media-frame {
-    padding: 0.55rem;
-
-    border: 1px solid var(--line-bright);
-    background: var(--media-surface);
-
-    box-shadow:
-        10px 10px 0 var(--media-shadow);
 }
 
 .mission-facts {
@@ -1126,7 +1111,6 @@ main {
 }
 
 .image-slot img,
-.hero-media-frame img,
 .capability-media img {
     width: 100%;
     height: 100%;
@@ -1730,10 +1714,6 @@ main {
 
     .hero-grid {
         grid-template-columns: 1fr;
-    }
-
-    .hero-media-frame {
-        max-width: 720px;
     }
 
     .roadmap-grid {
