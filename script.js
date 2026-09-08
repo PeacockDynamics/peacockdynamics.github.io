@@ -315,58 +315,42 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
 
-    if (
-        "IntersectionObserver" in window &&
-        pageSections.length > 0
-    ) {
+    // Section height must not affect whether its navigation link can activate.
+    const updateActiveNavigation = () => {
+        if (pageSections.length === 0) {
+            return;
+        }
 
-        const sectionObserver =
-            new IntersectionObserver(
-                (entries) => {
+        const readingLine = window.innerHeight * 0.18;
+        let activeSection = pageSections[0];
 
-                    const visibleEntries =
-                        entries
-                            .filter(
-                                (entry) =>
-                                    entry.isIntersecting
-                            )
-                            .sort(
-                                (entryA, entryB) =>
-                                    entryB.intersectionRatio -
-                                    entryA.intersectionRatio
-                            );
+        for (const section of pageSections) {
+            if (section.getBoundingClientRect().top > readingLine) {
+                break;
+            }
+            activeSection = section;
+        }
 
-                    const mostVisibleSection =
-                        visibleEntries[0];
+        setActiveNavigationLink(activeSection.id);
+    };
 
-                    if (!mostVisibleSection) {
-                        return;
-                    }
-
-                    setActiveNavigationLink(
-                        mostVisibleSection.target.id
-                    );
-
-                },
-                {
-                    threshold: [
-                        0.15,
-                        0.3,
-                        0.5,
-                        0.7
-                    ],
-
-                    rootMargin:
-                        "-18% 0px -55% 0px"
-                }
-            );
-
-
-        pageSections.forEach((section) => {
-            sectionObserver.observe(section);
+    let navigationFramePending = false;
+    const scheduleNavigationUpdate = () => {
+        if (navigationFramePending) {
+            return;
+        }
+        navigationFramePending = true;
+        window.requestAnimationFrame(() => {
+            navigationFramePending = false;
+            updateActiveNavigation();
         });
+    };
 
-    }
+    window.addEventListener("scroll", scheduleNavigationUpdate, { passive: true });
+    window.addEventListener("resize", scheduleNavigationUpdate);
+    window.addEventListener("pageshow", scheduleNavigationUpdate);
+    window.addEventListener("load", scheduleNavigationUpdate);
+    updateActiveNavigation();
 
 
     /* ============================================================
