@@ -9,7 +9,7 @@
    ================================================================ */
 
 :root {
-    /* Semantic theme roles. Dark remains the default. */
+    /* Semantic color roles for the dark design. */
     --canvas: var(--black);
     --header-surface: var(--black);
     --surface: var(--black-soft);
@@ -61,8 +61,6 @@
     --icon-secondary: brightness(0) saturate(100%) invert(100%);
     --icon-hover: var(--icon-accent);
     --icon-footer-hover: brightness(0) saturate(100%) invert(0%);
-    --toggle-fg: var(--gold);
-    --toggle-bg: var(--black-soft);
 
     --black: #000000;
     --black-soft: #050505;
@@ -120,118 +118,6 @@
 }
 
 
-
-/* A light canvas with purple interaction colors and readable amber labels. */
-:root[data-theme="light"] {
-    color-scheme: light;
-    --canvas: #f8f7fa;
-    --header-surface: #ffffff;
-    --surface: #ffffff;
-    --surface-raised: #f0edf5;
-    --heading: #211b2b;
-    --text: #302939;
-    --text-muted: #51495e;
-    --text-dim: #645b70;
-    --line: #d5cfde;
-    --line-bright: #aaa0b7;
-    --accent: #6425a6;
-    --accent-text: #6425a6;
-    --gold-text: #754d00;
-    --link: #6425a6;
-    --link-hover: #461773;
-    --focus: #6425a6;
-    --selection-fg: #ffffff;
-    --selection-bg: #6425a6;
-    --button-fg: #ffffff;
-    --button-bg: #6425a6;
-    --button-border: #6425a6;
-    --button-hover-fg: #ffffff;
-    --button-hover-bg: #461773;
-    --button-hover-border: #461773;
-    --nav-bg: linear-gradient(180deg, #f0e9f8, #eae1f3 70%, #e5dbee);
-    --nav-border: #bca7d1;
-    --nav-text: #4c2474;
-    --nav-secondary: #4f415f;
-    --nav-active-text: #381456;
-    --nav-active-bg: rgba(100, 37, 166, 0.1);
-    --nav-indicator: #6425a6;
-    --nav-heading-bg: rgba(255, 255, 255, 0.45);
-    --nav-panel-bg: rgba(100, 37, 166, 0.035);
-    --nav-panel-border: rgba(100, 37, 166, 0.18);
-    --nav-divider: rgba(100, 37, 166, 0.2);
-    --nav-divider-shadow: rgba(255, 255, 255, 0.6);
-    --scrollbar-thumb: #85649f;
-    --scrollbar-track: rgba(100, 37, 166, 0.06);
-    --status: #18743b;
-    --status-glow: rgba(24, 116, 59, 0.2);
-    --badge-bg: #fff5db;
-    --gold-border: #a07825;
-    --media-surface: #ffffff;
-    --media-shadow: rgba(100, 37, 166, 0.12);
-    --project-fg: #542080;
-    --project-bg: #eee5f7;
-    --project-border: #b9a0ce;
-    --project-hover-fg: #ffffff;
-    --project-hover-bg: #6425a6;
-    --portrait-bg: linear-gradient(135deg, #eee5f7, #f8f7fa);
-    --announcement-bg: #fff5db;
-    --icon-accent: brightness(0) saturate(100%) invert(19%) sepia(51%) saturate(3573%) hue-rotate(260deg) brightness(84%) contrast(96%);
-    --icon-nav-active: var(--icon-accent);
-    --icon-secondary: var(--icon-accent);
-    --icon-hover: brightness(0) saturate(100%) invert(10%) sepia(39%) saturate(3222%) hue-rotate(254deg) brightness(93%) contrast(104%);
-    --icon-footer-hover: brightness(0) saturate(100%) invert(100%);
-    --toggle-fg: #6425a6;
-    --toggle-bg: #ffffff;
-}
-
-/* Fixed control adds no space to the existing page or mobile navigation. */
-.theme-toggle {
-    position: fixed;
-    z-index: 100;
-    right: max(0.75rem, env(safe-area-inset-right));
-    bottom: max(4.5rem, env(safe-area-inset-bottom));
-    display: grid;
-    place-items: center;
-    width: 44px;
-    height: 44px;
-    padding: 10px;
-    color: var(--toggle-fg);
-    background: var(--toggle-bg);
-    border: 1px solid var(--gold-border);
-    border-radius: 50%;
-    box-shadow: 0 2px 10px var(--media-shadow);
-    cursor: pointer;
-}
-
-.theme-toggle[hidden] {
-    display: none;
-}
-
-.theme-toggle:hover,
-.theme-toggle:focus-visible {
-    color: var(--button-hover-fg);
-    background: var(--button-hover-bg);
-    border-color: var(--button-hover-border);
-}
-
-.theme-toggle svg {
-    width: 22px;
-    height: 22px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-.theme-toggle-moon,
-[data-theme="light"] .theme-toggle-sun {
-    display: none;
-}
-
-[data-theme="light"] .theme-toggle-moon {
-    display: block;
-}
 
 /* ================================================================
    2. RESET AND BASE
@@ -633,6 +519,15 @@ main {
    6. SIDEBAR
    ================================================================ */
 
+/* The rail spans the page; its navigation scrolls independently. */
+.sidebar-rail {
+    align-self: stretch;
+    min-width: 0;
+    border-left: 4px solid var(--accent);
+    border-right: 1px solid var(--nav-border);
+    background: var(--nav-bg);
+}
+
 .sidebar {
     position: sticky;
     top: 1rem;
@@ -644,11 +539,6 @@ main {
     scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
     scrollbar-width: thin;
 
-    border-left: 4px solid var(--accent);
-    border-right: 1px solid var(--nav-border);
-
-    background:
-        var(--nav-bg);
 }
 
 .sidebar::-webkit-scrollbar {
@@ -1209,6 +1099,79 @@ main {
 }
 
 
+/* Product cards and pending project media share the existing dark palette. */
+.product-access {
+    padding: 1rem;
+    border-left: 2px solid var(--gold-border);
+    background: var(--announcement-bg);
+}
+
+.product-access strong {
+    color: var(--gold-text);
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.product-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--accent);
+}
+
+.product-card h3 {
+    margin-bottom: 0.75rem;
+    font-size: 1.5rem;
+}
+
+.product-card .project-links {
+    margin-top: auto;
+    padding-top: 0.5rem;
+}
+
+.project-media-fallback {
+    display: none;
+    min-height: 210px;
+    padding: 1.25rem;
+    align-content: center;
+    gap: 0.6rem;
+    background: var(--surface-raised);
+    text-align: center;
+}
+
+.project-media-fallback strong {
+    color: var(--heading);
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+}
+
+.project-media-fallback > span:last-child {
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+}
+
+.capability-media.has-missing-image img {
+    display: none;
+}
+
+.capability-media.has-missing-image .project-media-fallback {
+    display: grid;
+}
+
+@media (max-width: 650px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
 /* ================================================================
    11. VENTURE LOG
    ================================================================ */
@@ -1762,8 +1725,15 @@ main {
         margin-top: 0;
     }
 
+    .sidebar-rail {
+        border: 0;
+        background: none;
+    }
+
     .sidebar {
         position: static;
+        border-left: 4px solid var(--accent);
+        background: var(--nav-bg);
 
         display: none;
 

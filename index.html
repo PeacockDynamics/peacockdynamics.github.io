@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
 
@@ -19,16 +19,6 @@
     <title>Peacock Dynamics | Marine Swarm Autonomy</title>
 
     <link rel="icon" type="image/png" href="assets/logo/icon_dark.png">
-    <!-- Apply only an explicit saved choice before the stylesheet paints. -->
-    <script>
-        try {
-            if (localStorage.getItem("peacock-theme") === "light") {
-                document.documentElement.dataset.theme = "light";
-            }
-        } catch {
-            /* Storage may be unavailable; dark remains the default. */
-        }
-    </script>
     <link rel="stylesheet" href="style.css">
 
     <script src="script.js" defer></script>
@@ -79,24 +69,6 @@
         Skip to main content
     </a>
 
-    <button
-        class="theme-toggle"
-        type="button"
-        role="switch"
-        aria-label="Light theme"
-        aria-checked="false"
-        title="Switch to light theme"
-        hidden
-    >
-        <svg class="theme-toggle-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <circle cx="12" cy="12" r="4"></circle>
-            <path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"></path>
-        </svg>
-        <svg class="theme-toggle-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"></path>
-        </svg>
-    </button>
-
     <div class="site-frame">
 
         <!-- =========================================================
@@ -123,8 +95,6 @@
                         <img
                             class="brand-logo"
                             src="assets/logo/dark_full.png"
-                            data-theme-dark="assets/logo/dark_full.png"
-                            data-theme-light="assets/logo/light_full.png"
                             alt="Peacock Dynamics emblem"
                             data-fallback-image
                         >
@@ -174,6 +144,7 @@
                  SIDEBAR NAVIGATION
                  ===================================================== -->
 
+            <div class="sidebar-rail">
             <aside
                 class="sidebar"
                 id="site-navigation"
@@ -213,6 +184,16 @@
                             <span class="nav-copy">
                                 <strong>Latest Work</strong>
                                 <small>Current research projects</small>
+                            </span>
+                        </a>
+
+                        <a class="nav-link" href="#products" data-nav-link>
+                            <span class="nav-symbol" aria-hidden="true">
+                                <img src="assets/icons/products.svg" alt="">
+                            </span>
+                            <span class="nav-copy">
+                                <strong>Our Products</strong>
+                                <small>Marine simulation tools</small>
                             </span>
                         </a>
 
@@ -289,6 +270,8 @@
                                 <strong>RECENT SYSTEMS</strong>
                                 <span>(01) MICROTRENCH-2D</span>
                                 <span>(02) MULTIUUV-LINK</span>
+                                <span>(03) AMBU-PARIKSHAN 1.0</span>
+                                <span>(04) UUV-CONTROL-BENCHMARK</span>
                             </div>
                         </div>
 
@@ -348,6 +331,7 @@
                     </div>
                 </div>
             </aside>
+            </div>
 
 
             <!-- =====================================================
@@ -471,15 +455,86 @@
                             </p>
 
                             <h2>
-                                Underwater exploration and multi-robot coordination
+                                Marine simulation, vehicle control, and swarm coordination
                             </h2>
                         </div>
 
                     </header>
 
                     <p class="section-introduction">
-                        MicroTrench-2D provides a lightweight simulation for prototyping underwater exploration algorithms. MultiUUV-Link builds on it to test how teams of unmanned underwater vehicles (UUVs) coordinate, share information under communication limits, and recover from agent failures.
+                        Our current work connects marine simulation, vehicle control, and multi-robot autonomy. Ambu-Parikshan 1.0 is our homegrown 3D marine robotics simulator, while UUV-Control-Benchmark studies underwater vehicle stabilization under disturbances. MicroTrench-2D and MultiUUV-Link focus on exploration and coordination under limited information and communication.
                     </p>
+
+
+                    <!-- Ambu-Parikshan 1.0 -->
+
+                    <article class="capability-row reveal" id="ambu-parikshan-work">
+                        <div class="capability-media">
+                            <img
+                                src="assets/images/animations/ambu_parikshan_demo.gif"
+                                alt="Ambu-Parikshan 1.0 interactive 3D underwater vehicle simulator"
+                                loading="lazy"
+                                data-fallback-image
+                            >
+                            <div class="project-media-fallback">
+                                <span class="capability-number">AMBU-PARIKSHAN 1.0</span>
+                                <strong>3D marine simulation</strong>
+                                <span>Demo preview coming soon</span>
+                            </div>
+                        </div>
+                        <div class="capability-copy">
+                            <span class="capability-number">AMBU-PARIKSHAN 1.0</span>
+                            <h3>A sovereign, homegrown simulator for marine robotics.</h3>
+                            <p>
+                                Developed in-house at Peacock Dynamics, Ambu-Parikshan 1.0 brings
+                                six-degree-of-freedom underwater vehicle dynamics, sensing,
+                                currents, and control into a dedicated 3D simulator. Its
+                                homegrown HydroLab-3D core supports reproducible single-vehicle
+                                and multi-UUV experiments, with headless execution and an
+                                optional interactive viewer. It runs on Python and its package
+                                dependencies, with no separate simulation platform required.
+                            </p>
+                            <div class="project-links">
+                                <a href="https://github.com/peacockdynamics/Ambu-Parikshan"
+                                   target="_blank" rel="noopener noreferrer"
+                                   aria-label="Open the Ambu-Parikshan 1.0 repository on GitHub">View Repository</a>
+                                <a href="#products">Explore Our Products</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- UUV-Control-Benchmark -->
+
+                    <article class="capability-row capability-row-reverse reveal">
+                        <div class="capability-media">
+                            <img
+                                src="assets/images/animations/uuv_control_benchmark_demo.gif"
+                                alt="PyBullet comparison of LQR and PPO underwater vehicle depth and pitch stabilization"
+                                loading="lazy"
+                                data-fallback-image
+                            >
+                            <div class="project-media-fallback">
+                                <span class="capability-number">UUV-CONTROL-BENCHMARK</span>
+                                <strong>Underwater vehicle control</strong>
+                                <span>Demo preview coming soon</span>
+                            </div>
+                        </div>
+                        <div class="capability-copy">
+                            <span class="capability-number">UUV-CONTROL-BENCHMARK</span>
+                            <h3>Underwater vehicle stabilization under disturbances.</h3>
+                            <p>
+                                A nonlinear depth-and-pitch control model for studying how
+                                underwater vehicles reject disturbances. The benchmark compares
+                                LQR, PPO, and residual control under external forces, persistent
+                                bias, and model mismatch.
+                            </p>
+                            <div class="project-links">
+                                <a href="https://github.com/peacockdynamics/UUV-Control-Benchmark"
+                                   target="_blank" rel="noopener noreferrer"
+                                   aria-label="Open the UUV-Control-Benchmark repository on GitHub">View Repository</a>
+                            </div>
+                        </div>
+                    </article>
 
 
                     <!-- MicroTrench-2D -->
@@ -517,6 +572,7 @@
                                 >
                                     View Repository
                                 </a>
+                                <a href="#products">Explore Our Products</a>
                             </div>
 
                         </div>
@@ -565,6 +621,68 @@
 
                     </article>
 
+                </section>
+
+
+                <!-- =================================================
+                     OUR PRODUCTS
+                     ================================================= -->
+
+                <section class="content-section reveal" id="products" data-section>
+                    <header class="section-header">
+                        <div>
+                            <p class="section-kicker">OUR PRODUCTS</p>
+                            <h2>Homegrown simulators for marine autonomy</h2>
+                        </div>
+                    </header>
+                    <p class="section-introduction">
+                        Two tools for developing and evaluating marine robotics algorithms:
+                        explore mission logic in 2D, then study vehicle dynamics, sensing,
+                        and control in 3D.
+                    </p>
+                    <p class="product-access">
+                        <strong>Interested in building with our simulators?</strong>
+                        We welcome requests to use both products free of charge under the
+                        Peacock Dynamics License, subject to approval.
+                        Tell us about your project by emailing
+                        <a href="mailto:aymisxx@proton.me">aymisxx@proton.me</a>.
+                    </p>
+                    <div class="products-grid">
+                        <article class="product-card">
+                            <span class="capability-number">2D EXPLORATION</span>
+                            <h3>MicroTrench-2D</h3>
+                            <p>
+                                A sovereign, homegrown 2D simulator developed at Peacock
+                                Dynamics for underwater exploration and resource discovery.
+                                Its CPU-only environment supports coverage and search experiments
+                                using local perception and persistent discovery memory. It runs
+                                on Python and its package dependencies, with no separate
+                                simulation platform required.
+                            </p>
+                            <div class="project-links">
+                                <a href="https://github.com/peacockdynamics/MicroTrench-2D"
+                                   target="_blank" rel="noopener noreferrer"
+                                   aria-label="Explore MicroTrench-2D on GitHub">Explore MicroTrench-2D</a>
+                            </div>
+                        </article>
+                        <article class="product-card">
+                            <span class="capability-number">3D VEHICLE SIMULATION</span>
+                            <h3>Ambu-Parikshan 1.0</h3>
+                            <p>
+                                A sovereign, homegrown 3D simulator developed at Peacock
+                                Dynamics for underwater vehicle dynamics, sensing, and control.
+                                Its HydroLab-3D core supports reproducible 6-DOF and multi-UUV
+                                experiments, with an optional interactive viewer. It runs on
+                                Python and its package dependencies, with no separate simulation
+                                platform required.
+                            </p>
+                            <div class="project-links">
+                                <a href="https://github.com/peacockdynamics/Ambu-Parikshan"
+                                   target="_blank" rel="noopener noreferrer"
+                                   aria-label="Explore Ambu-Parikshan 1.0 on GitHub">Explore Ambu-Parikshan 1.0</a>
+                            </div>
+                        </article>
+                    </div>
                 </section>
 
 
@@ -1228,6 +1346,13 @@
                             Mission
                         </a>
 
+                        <a href="#products">
+                            <span class="footer-icon-slot" aria-hidden="true">
+                                <img src="assets/icons/products.svg" alt="">
+                            </span>
+                            Our Products
+                        </a>
+
                         <a href="#lineage">
                             <span class="footer-icon-slot" aria-hidden="true">
                                 <img src="assets/icons/technology.svg" alt="">
@@ -1259,8 +1384,8 @@
 
                         <p>
                             Last updated:
-                            <time datetime="2026-09-08">
-                                [2026-09-08]
+                            <time datetime="2026-09-28">
+                                [2026-09-28]
                             </time>
                         </p>
 
