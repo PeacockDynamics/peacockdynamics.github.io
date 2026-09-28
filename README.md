@@ -7,6 +7,7 @@
 Peacock Dynamics develops **simulation-tested algorithms for coordinated marine robot swarms**, with an **algorithm-first** engineering approach centered on coverage, guidance, perception, decision-making, task allocation, and coordination under limited communication.
 
 **Current status:** `CONCEPT DEVELOPMENT`  
+
 **Active track:** `ALGORITHM-FIRST`
 
 ---
