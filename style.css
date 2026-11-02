@@ -29,7 +29,7 @@
     --button-hover-fg: var(--white);
     --button-hover-bg: var(--purple-bright);
     --button-hover-border: var(--violet);
-    --nav-bg: linear-gradient(180deg, #47008f, #300066 70%, #23004d);
+    --nav-bg: #47008f;
     --nav-border: #6413aa;
     --nav-text: #d8c4ff;
     --nav-secondary: var(--white);
@@ -316,7 +316,21 @@ main {
     overflow: hidden;
 
     border-bottom: 1px solid var(--line-bright);
-    background: var(--header-surface);
+    background-color: var(--header-surface);
+    background-image: url("assets/images/masthead.png");
+    background-position: center 48%;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.site-header::before {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+
+    content: "";
+    background: linear-gradient(90deg, #000000 20%, rgba(0, 0, 0, 0) 100%);
+    pointer-events: none;
 }
 
 .header-backdrop {
@@ -585,6 +599,8 @@ main {
     text-decoration: none;
 
     border-left: 2px solid transparent;
+
+    transition: background-color 150ms ease;
 }
 
 .nav-link:hover,
@@ -695,14 +711,63 @@ main {
 }
 
 .content-section + .content-section {
+    position: relative;
+
     border-top: 1px solid var(--line);
 }
 
+.content-section + .content-section::before,
+.section-rule::after {
+    position: absolute;
+    left: 0;
+
+    width: 48px;
+    height: 1px;
+
+    content: "";
+
+    background: var(--gold);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.content-section + .content-section::before {
+    top: -1px;
+}
+
+.section-rule::after {
+    top: 0;
+}
+
 .section-rule {
+    position: relative;
+
     height: 1px;
     margin-bottom: 1.55rem;
 
     background: var(--line-bright);
+}
+
+.section-rule:has(+ .hero-heading-row:hover)::after,
+.content-section + .content-section:has(> .section-header:hover)::before {
+    animation: section-divider-signal 600ms ease-in-out 1;
+}
+
+@keyframes section-divider-signal {
+    0% {
+        left: 0;
+        opacity: 0;
+    }
+
+    10%,
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        left: calc(100% - 48px);
+        opacity: 0;
+    }
 }
 
 .section-rule-bottom {
@@ -822,6 +887,9 @@ main {
 }
 
 .primary-button {
+    position: relative;
+    isolation: isolate;
+
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -845,6 +913,46 @@ main {
     color: var(--button-hover-fg);
     background: var(--button-hover-bg);
     border-color: var(--button-hover-border);
+}
+
+.primary-button::after {
+    position: absolute;
+    z-index: -1;
+    inset: 1px;
+
+    content: "";
+    pointer-events: none;
+
+    background-image: linear-gradient(
+        90deg,
+        transparent 49%,
+        var(--gold-bright) 50%,
+        transparent 51%
+    );
+    background-size: 300% 100%;
+    background-position: 100% 0;
+    opacity: 0;
+}
+
+.primary-button:hover::after {
+    animation: cta-gold-sweep 350ms ease-out 1;
+}
+
+@keyframes cta-gold-sweep {
+    0% {
+        background-position: 100% 0;
+        opacity: 0;
+    }
+
+    15%,
+    85% {
+        opacity: 0.45;
+    }
+
+    100% {
+        background-position: 0 0;
+        opacity: 0;
+    }
 }
 
 .text-link {
@@ -1029,6 +1137,14 @@ main {
     border-bottom: 1px solid var(--line);
 }
 
+#latest-work .capability-row {
+    transition: border-color 150ms ease;
+}
+
+#latest-work .capability-row:hover {
+    border-color: var(--line-bright);
+}
+
 .capability-row-reverse {
     grid-template-columns: minmax(0, 1.28fr) minmax(230px, 0.72fr);
 }
@@ -1047,6 +1163,18 @@ main {
 
     background: var(--surface-raised);
     border: 1px solid var(--line);
+}
+
+.capability-media img,
+.product-card img,
+.team-card img {
+    transition: filter 200ms ease;
+}
+
+.capability-media img:hover,
+.product-card img:hover,
+.team-card img:hover {
+    filter: brightness(1.05);
 }
 
 .capability-number {
@@ -1112,7 +1240,7 @@ main {
 
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     gap: 1rem;
 }
 
@@ -1133,6 +1261,154 @@ main {
 .product-card .project-links {
     margin-top: auto;
     padding-top: 0.5rem;
+}
+
+#products .product-architecture {
+    margin-top: 0.65rem;
+    border-top: 1px solid var(--line);
+}
+
+#products .product-architecture summary {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+
+    padding: 0.45rem 0;
+
+    color: var(--gold-text);
+
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.07em;
+    list-style: none;
+    cursor: pointer;
+}
+
+#products .product-architecture summary::-webkit-details-marker {
+    display: none;
+}
+
+#products .product-architecture summary::after {
+    content: "[+]";
+    white-space: nowrap;
+}
+
+#products .product-architecture[open] summary::after {
+    content: "[-]";
+}
+
+#products .product-architecture summary:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+}
+
+#products .product-architecture-panel {
+    height: auto;
+    opacity: 1;
+    transition: height 350ms ease-in-out, opacity 350ms ease-in-out;
+}
+
+#products .product-architecture-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 1000px;
+    max-height: 360px;
+    margin-inline: auto;
+}
+
+#products .product-architecture-svg-mobile {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    #products .product-architecture-panel {
+        overflow-x: auto;
+    }
+
+    #products .product-architecture-svg-desktop {
+        display: none;
+    }
+
+    #products .product-architecture-svg-mobile {
+        display: block;
+        min-width: 420px;
+        max-width: 420px;
+        max-height: none;
+    }
+}
+
+#products .architecture-block rect {
+    fill: var(--black-raised);
+    stroke: var(--line-bright);
+    stroke-width: 1.5;
+}
+
+#products .architecture-block .architecture-core-block {
+    fill: var(--purple-deep);
+    stroke: var(--violet);
+}
+
+#products .architecture-label {
+    fill: var(--text);
+    font-family: var(--font-mono);
+    font-size: 16px;
+    text-anchor: middle;
+}
+
+#products .architecture-mobile-label {
+    fill: var(--text);
+    font-family: var(--font-mono);
+    font-size: 16px;
+    text-anchor: middle;
+}
+
+#products .architecture-core-boundary {
+    fill: none;
+    stroke: var(--nav-border);
+    stroke-width: 1.5;
+}
+
+#products .architecture-boundary-label {
+    fill: var(--nav-text);
+    font-family: var(--font-mono);
+    font-size: 15px;
+}
+
+#products .architecture-flow path {
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 2;
+}
+
+#products .product-architecture-svg marker path {
+    fill: var(--gold);
+}
+
+#products .architecture-sum {
+    fill: var(--black);
+    stroke: var(--gold);
+    stroke-width: 2;
+}
+
+#products .architecture-sum-label {
+    fill: var(--gold);
+    font-family: var(--font-mono);
+    font-size: 22px;
+    text-anchor: middle;
+}
+
+#products .architecture-edge-label,
+#products .architecture-core-note {
+    fill: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 14px;
+}
+
+#products .architecture-mobile-note {
+    fill: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 14px;
 }
 
 .project-media-fallback {
@@ -1164,13 +1440,6 @@ main {
 .capability-media.has-missing-image .project-media-fallback {
     display: grid;
 }
-
-@media (max-width: 650px) {
-    .products-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
 
 /* ================================================================
    11. VENTURE LOG
@@ -1635,6 +1904,41 @@ main {
     font-size: 0.57rem;
 }
 
+.back-to-top {
+    position: fixed;
+    z-index: 900;
+    right: max(0.75rem, env(safe-area-inset-right));
+    bottom: max(0.75rem, env(safe-area-inset-bottom));
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 40px;
+    padding: 0.45rem 0.62rem;
+
+    color: var(--button-fg);
+    background: var(--button-bg);
+    border: 1px solid var(--button-border);
+
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 900;
+    line-height: 1;
+    text-decoration: none;
+}
+
+.back-to-top[hidden] {
+    display: none;
+}
+
+.back-to-top:hover,
+.back-to-top:focus-visible {
+    color: var(--button-hover-fg);
+    background: var(--button-hover-bg);
+    border-color: var(--button-hover-border);
+}
+
 
 /* ================================================================
    16. JAVASCRIPT ENHANCEMENTS
@@ -1953,6 +2257,19 @@ main {
         transition-duration: 0.01ms !important;
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
+    }
+
+    .section-rule::after,
+    .content-section + .content-section::before {
+        animation: none !important;
+    }
+
+    .primary-button:hover::after {
+        animation: none !important;
+    }
+
+    #products .product-architecture-panel {
+        transition: none;
     }
 
     .js .reveal {

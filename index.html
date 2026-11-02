@@ -18,6 +18,118 @@
 
     <title>Peacock Dynamics | Marine Swarm Autonomy</title>
 
+    <script>
+        (() => {
+            try {
+                const introKey = "peacock-dynamics-intro-played";
+
+                if (
+                    window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+                    window.sessionStorage.getItem(introKey) === "true"
+                ) {
+                    return;
+                }
+
+                window.sessionStorage.setItem(introKey, "true");
+                document.documentElement.classList.add("cinematic-intro-pending");
+
+                window.setTimeout(() => {
+                    document.documentElement.classList.remove("cinematic-intro-pending");
+                }, 3250);
+            } catch {
+                // Skip the intro if tab storage or motion preferences are unavailable.
+            }
+        })();
+    </script>
+
+    <style>
+        html.cinematic-intro-pending,
+        html.cinematic-intro-pending body {
+            background: #000;
+        }
+
+        .cinematic-intro {
+            display: none;
+        }
+
+        html.cinematic-intro-pending .cinematic-intro {
+            position: fixed;
+            z-index: 1000;
+            inset: 0;
+
+            display: grid;
+            place-items: center;
+
+            background: #000;
+            perspective: 900px;
+
+            animation: cinematic-overlay-fade 800ms ease 2000ms forwards;
+        }
+
+        html.cinematic-intro-pending .cinematic-intro img {
+            display: block;
+            width: min(72vw, 640px);
+            max-width: 72vw;
+            max-height: 72vh;
+
+            object-fit: contain;
+
+            animation:
+                cinematic-logo-spin 1000ms ease-in-out 1 forwards,
+                cinematic-logo-fade 800ms ease 2000ms forwards;
+        }
+
+        html.cinematic-intro-pending .site-frame {
+            opacity: 0;
+            animation: cinematic-site-reveal 400ms ease 2800ms both;
+        }
+
+        @keyframes cinematic-logo-spin {
+            from {
+                transform: rotateY(0deg);
+            }
+
+            to {
+                transform: rotateY(360deg);
+            }
+        }
+
+        @keyframes cinematic-logo-fade {
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes cinematic-overlay-fade {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        @keyframes cinematic-site-reveal {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html.cinematic-intro-pending .cinematic-intro {
+                display: none;
+                animation: none;
+            }
+
+            html.cinematic-intro-pending .site-frame {
+                opacity: 1;
+                animation: none;
+            }
+        }
+    </style>
+
     <link rel="icon" type="image/png" href="assets/logo/icon_dark.png">
     <link rel="stylesheet" href="style.css">
 
@@ -65,6 +177,14 @@
 </head>
 
 <body>
+    <div
+        class="cinematic-intro"
+        id="cinematic-intro"
+        aria-hidden="true"
+    >
+        <img src="assets/logo/dark_full.png" alt="">
+    </div>
+
     <a class="skip-link" href="#main-content">
         Skip to main content
     </a>
@@ -280,7 +400,7 @@
                                 <strong>RESEARCH MODE</strong>
                                 <span>ALGORITHM-FIRST</span>
                                 <span>SIMULATIONS-FIRST</span>
-                                <span>PROTOTYPE-DRIVEN</span>
+                                <span>INTEGRATION &amp; VALIDATION</span>
                             </div>
                         </div>
                     </div>
@@ -327,7 +447,7 @@
 
                     <div>
                         <strong>CURRENT STATUS</strong>
-                        <span>PROTOTYPING PHASE</span>
+                        <span>ACTIVE RESEARCH &amp; VALIDATION</span>
                     </div>
                 </div>
             </aside>
@@ -376,7 +496,7 @@
                             </span>
 
                             <strong>
-                                PROTOTYPING
+                                ACTIVE RESEARCH &amp; VALIDATION
                             </strong>
                         </div>
                     </div>
@@ -390,7 +510,7 @@
                             </p>
 
                             <p>
-                                We test these methods in simulation, measuring coverage, redundant motion, and vehicle separation. We examine how a swarm responds to incomplete information, communication limits, and individual failures before moving toward marine integration. The applications we are working toward include seabed mapping, environmental sensing, resource prospecting, and longer exploration missions. Our goal is to make wider ocean surveys practical with low-cost vehicles that can distribute the work and adapt with less operator intervention.
+                                Initial algorithm prototyping and simulation foundations are substantially in place. We continue to develop, experiment with, and validate coverage planning, task allocation, and motion control in simulation, assessing coverage, redundant motion, and vehicle separation under limited sensing and communication. The next phase will broaden system integration and validation. Deployment-oriented marine research, including seabed mapping and environmental sensing, remains a future objective.
                             </p>
 
                             <div class="hero-actions">
@@ -659,6 +779,54 @@
                                 on Python and its package dependencies, with no separate
                                 simulation platform required.
                             </p>
+                            <details class="product-architecture">
+                                <summary>TECHNICAL ARCHITECTURE</summary>
+                                <div class="product-architecture-panel">
+                                    <svg class="product-architecture-svg product-architecture-svg-desktop" viewBox="0 0 1000 360" role="img" aria-label="MicroTrench-2D flow: a static seabed image passes through the map loader into the MicroUUV2D core. The core supplies resource state and local observations to rendering and the interactive viewer; keyboard input returns to the core.">
+                                        <defs><marker id="micro-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" /></marker></defs>
+                                        <g class="architecture-block">
+                                            <rect x="35" y="48" width="200" height="64" />
+                                            <text x="135" y="76" class="architecture-label"><tspan x="135">Static seabed</tspan><tspan x="135" dy="20">image</tspan></text>
+                                            <rect x="300" y="48" width="200" height="64" />
+                                            <text x="400" y="76" class="architecture-label"><tspan x="400">io.py</tspan><tspan x="400" dy="20">map loader</tspan></text>
+                                            <rect x="590" y="48" width="200" height="64" class="architecture-core-block" />
+                                            <text x="690" y="76" class="architecture-label"><tspan x="690">core.py</tspan><tspan x="690" dy="20">MicroUUV2D</tspan></text>
+                                            <rect x="65" y="172" width="200" height="64" />
+                                            <text x="165" y="198" class="architecture-label"><tspan x="165">resources.py</tspan><tspan x="165" dy="20">resource state</tspan></text>
+                                            <rect x="350" y="172" width="200" height="64" />
+                                            <text x="450" y="198" class="architecture-label"><tspan x="450">Observation</tspan><tspan x="450" dy="20">local FOV crop</tspan></text>
+                                            <rect x="655" y="172" width="200" height="64" />
+                                            <text x="755" y="198" class="architecture-label"><tspan x="755">render.py</tspan><tspan x="755" dy="20">visualization</tspan></text>
+                                            <rect x="655" y="270" width="200" height="64" />
+                                            <text x="755" y="295" class="architecture-label"><tspan x="755">viewer.py</tspan><tspan x="755" dy="19">OpenCV · keyboard</tspan></text>
+                                        </g>
+                                        <g class="architecture-flow">
+                                            <path d="M235 80 H300" marker-end="url(#micro-arrow)" /><path d="M500 80 H590" marker-end="url(#micro-arrow)" />
+                                            <path d="M690 112 V135 H165 V172" marker-end="url(#micro-arrow)" /><path d="M690 135 V148 H450 V172" marker-end="url(#micro-arrow)" />
+                                            <path d="M265 204 V250 H630 V218 H655" marker-end="url(#micro-arrow)" /><path d="M550 204 H655" marker-end="url(#micro-arrow)" />
+                                            <path d="M755 236 V270" marker-end="url(#micro-arrow)" /><path d="M855 302 H960 V80 H790" marker-end="url(#micro-arrow)" />
+                                        </g>
+                                    </svg>
+                                    <svg class="product-architecture-svg product-architecture-svg-mobile" viewBox="0 0 420 640" role="img" aria-label="MicroTrench-2D flow: seabed image to map loader to simulator core; the core branches to resource state and local observations, which feed rendering and the viewer. Keyboard input returns to the core.">
+                                        <defs><marker id="micro-mobile-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" /></marker></defs>
+                                        <g class="architecture-block">
+                                            <rect x="70" y="20" width="280" height="48" /><text x="210" y="49" class="architecture-mobile-label">Static seabed image</text>
+                                            <rect x="70" y="90" width="280" height="48" /><text x="210" y="119" class="architecture-mobile-label">io.py · map loader</text>
+                                            <rect x="70" y="160" width="280" height="54" class="architecture-core-block" /><text x="210" y="184" class="architecture-mobile-label"><tspan x="210">core.py</tspan><tspan x="210" dy="18">MicroUUV2D</tspan></text>
+                                            <rect x="20" y="280" width="180" height="64" /><text x="110" y="306" class="architecture-mobile-label"><tspan x="110">resources.py</tspan><tspan x="110" dy="18">resource state</tspan></text>
+                                            <rect x="220" y="280" width="180" height="64" /><text x="310" y="306" class="architecture-mobile-label"><tspan x="310">Observation</tspan><tspan x="310" dy="18">local FOV crop</tspan></text>
+                                            <rect x="70" y="400" width="280" height="54" /><text x="210" y="424" class="architecture-mobile-label"><tspan x="210">render.py</tspan><tspan x="210" dy="18">visualization</tspan></text>
+                                            <rect x="70" y="500" width="280" height="54" /><text x="210" y="524" class="architecture-mobile-label"><tspan x="210">viewer.py</tspan><tspan x="210" dy="18">OpenCV · keyboard</tspan></text>
+                                        </g>
+                                        <g class="architecture-flow">
+                                            <path d="M210 68 V90" marker-end="url(#micro-mobile-arrow)" /><path d="M210 138 V160" marker-end="url(#micro-mobile-arrow)" />
+                                            <path d="M210 214 V245 H110 V280" marker-end="url(#micro-mobile-arrow)" /><path d="M210 245 H310 V280" marker-end="url(#micro-mobile-arrow)" />
+                                            <path d="M110 344 V370 H170 V400" marker-end="url(#micro-mobile-arrow)" /><path d="M310 344 V370 H250 V400" marker-end="url(#micro-mobile-arrow)" />
+                                            <path d="M210 454 V500" marker-end="url(#micro-mobile-arrow)" /><path d="M350 527 H410 V187 H350" marker-end="url(#micro-mobile-arrow)" />
+                                        </g>
+                                    </svg>
+                                </div>
+                            </details>
                             <div class="project-links">
                                 <a href="https://github.com/peacockdynamics/MicroTrench-2D"
                                    target="_blank" rel="noopener noreferrer"
@@ -676,6 +844,52 @@
                                 Python and its package dependencies, with no separate simulation
                                 platform required.
                             </p>
+                            <details class="product-architecture">
+                                <summary>TECHNICAL ARCHITECTURE</summary>
+                                <div class="product-architecture-panel">
+                                    <svg class="product-architecture-svg product-architecture-svg-desktop" viewBox="0 0 1000 360" role="img" aria-label="Ambu-Parikshan flow: YAML configuration feeds the application controllers. Command and environmental wrenches combine before HydroLab-3D six-degree-of-freedom dynamics. Vehicle state and sensor data feed logs and an optional viewer, and return as controller feedback.">
+                                        <defs><marker id="ambu-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" /></marker></defs>
+                                        <rect class="architecture-core-boundary" x="80" y="140" width="670" height="205" />
+                                        <text class="architecture-boundary-label" x="98" y="134">HYDROLAB-3D SIMULATION CORE</text>
+                                        <g class="architecture-block">
+                                            <rect x="35" y="48" width="200" height="64" /><text x="135" y="76" class="architecture-label"><tspan x="135">YAML scenario</tspan><tspan x="135" dy="20">configuration</tspan></text>
+                                            <rect x="300" y="48" width="200" height="64" class="architecture-core-block" /><text x="400" y="74" class="architecture-label"><tspan x="400">App + controllers</tspan><tspan x="400" dy="20">manual / PID / path</tspan></text>
+                                            <rect x="650" y="48" width="200" height="64" class="architecture-core-block" /><text x="750" y="74" class="architecture-label"><tspan x="750">Body-frame wrench</tspan><tspan x="750" dy="20">force + moment</tspan></text>
+                                            <rect x="100" y="155" width="200" height="64" /><text x="200" y="171" class="architecture-label"><tspan x="200">Environment wrench</tspan><tspan x="200" dy="18">currents · gravity</tspan><tspan x="200" dy="18">buoyancy</tspan></text>
+                                            <circle class="architecture-sum" cx="430" cy="187" r="26" /><text class="architecture-sum-label" x="430" y="194">Σ</text>
+                                            <rect x="520" y="155" width="200" height="64" class="architecture-core-block" /><text x="620" y="181" class="architecture-label"><tspan x="620">HydroLab-3D</tspan><tspan x="620" dy="20">6-DOF dynamics</tspan></text>
+                                            <rect x="520" y="267" width="200" height="64" class="architecture-core-block" /><text x="620" y="293" class="architecture-label"><tspan x="620">Vehicle state</tspan><tspan x="620" dy="20">pose + sensor data</tspan></text>
+                                            <rect x="770" y="267" width="200" height="64" /><text x="870" y="293" class="architecture-label"><tspan x="870">Logs · metrics</tspan><tspan x="870" dy="20">copied viewer data</tspan></text>
+                                        </g>
+                                        <g class="architecture-flow">
+                                            <path d="M235 80 H300" marker-end="url(#ambu-arrow)" /><path d="M500 80 H650" marker-end="url(#ambu-arrow)" />
+                                            <path d="M850 80 H930 V132 H430 V161" marker-end="url(#ambu-arrow)" /><path d="M300 187 H404" marker-end="url(#ambu-arrow)" /><path d="M456 187 H520" marker-end="url(#ambu-arrow)" />
+                                            <path d="M620 219 V267" marker-end="url(#ambu-arrow)" /><path d="M720 321 H770" marker-end="url(#ambu-arrow)" /><path d="M520 299 H20 V22 H400 V48" marker-end="url(#ambu-arrow)" />
+                                        </g>
+                                    </svg>
+                                    <svg class="product-architecture-svg product-architecture-svg-mobile" viewBox="0 0 420 640" role="img" aria-label="Ambu-Parikshan flow: YAML scenario configures the application and controllers. Command and environmental wrenches meet at a summing junction before HydroLab-3D dynamics. Vehicle state feeds logs and the optional viewer and returns as controller feedback.">
+                                        <defs><marker id="ambu-mobile-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" /></marker></defs>
+                                        <rect class="architecture-core-boundary" x="10" y="170" width="400" height="440" />
+                                        <text class="architecture-boundary-label" x="20" y="164">HYDROLAB-3D CORE</text>
+                                        <g class="architecture-block">
+                                            <rect x="70" y="18" width="280" height="48" /><text x="210" y="47" class="architecture-mobile-label">YAML scenario config</text>
+                                            <rect x="50" y="88" width="320" height="58" class="architecture-core-block" /><text x="210" y="112" class="architecture-mobile-label"><tspan x="210">App + controllers</tspan><tspan x="210" dy="18">manual / PID / path</tspan></text>
+                                            <rect x="20" y="198" width="180" height="64" class="architecture-core-block" /><text x="110" y="224" class="architecture-mobile-label"><tspan x="110">Body-frame wrench</tspan><tspan x="110" dy="18">force + moment</tspan></text>
+                                            <rect x="220" y="198" width="180" height="64" /><text x="310" y="214" class="architecture-mobile-label"><tspan x="310">Environment τenv</tspan><tspan x="310" dy="17">current · gravity</tspan><tspan x="310" dy="17">buoyancy</tspan></text>
+                                            <circle class="architecture-sum" cx="210" cy="303" r="24" /><text class="architecture-sum-label" x="210" y="309">Σ</text>
+                                            <rect x="70" y="360" width="280" height="54" class="architecture-core-block" /><text x="210" y="384" class="architecture-mobile-label"><tspan x="210">HydroLab-3D</tspan><tspan x="210" dy="18">6-DOF dynamics</tspan></text>
+                                            <rect x="70" y="450" width="280" height="54" class="architecture-core-block" /><text x="210" y="474" class="architecture-mobile-label"><tspan x="210">Vehicle state</tspan><tspan x="210" dy="18">pose + sensor data</tspan></text>
+                                            <rect x="70" y="540" width="280" height="54" /><text x="210" y="564" class="architecture-mobile-label"><tspan x="210">Logs · metrics</tspan><tspan x="210" dy="18">copied viewer data</tspan></text>
+                                        </g>
+                                        <g class="architecture-flow">
+                                            <path d="M210 66 V88" marker-end="url(#ambu-mobile-arrow)" /><path d="M210 146 V174 H110 V198" marker-end="url(#ambu-mobile-arrow)" />
+                                            <path d="M200 230 H210 V279 H186" marker-end="url(#ambu-mobile-arrow)" /><path d="M310 262 V303 H234" marker-end="url(#ambu-mobile-arrow)" />
+                                            <path d="M210 327 V360" marker-end="url(#ambu-mobile-arrow)" /><path d="M210 414 V450" marker-end="url(#ambu-mobile-arrow)" /><path d="M210 504 V540" marker-end="url(#ambu-mobile-arrow)" />
+                                            <path d="M70 477 H20 V117 H50" marker-end="url(#ambu-mobile-arrow)" />
+                                        </g>
+                                    </svg>
+                                </div>
+                            </details>
                             <div class="project-links">
                                 <a href="https://github.com/peacockdynamics/Ambu-Parikshan"
                                    target="_blank" rel="noopener noreferrer"
@@ -1327,7 +1541,7 @@
 >
     <div class="footer-announcement">
         <strong>
-            To contribute to the engineering work or discuss early-stage investment, contact us:
+            We’re exploring strategic investment and technical partnerships for the next phase of marine autonomy research. We welcome conversations with those interested in advancing system integration and validation with us.
         </strong>
 
         <a href="mailto:aymisxx@proton.me">
@@ -1382,13 +1596,6 @@
                             Peacock Dynamics.
                         </p>
 
-                        <p>
-                            Last updated:
-                            <time datetime="2026-09-28">
-                                [2026-09-28]
-                            </time>
-                        </p>
-
                         <a href="#top">
                             Back to top ↑
                         </a>
@@ -1398,5 +1605,15 @@
             </main>
         </div>
     </div>
+
+    <a
+        class="back-to-top"
+        id="back-to-top"
+        href="#top"
+        aria-label="Back to top"
+        hidden
+    >
+        ↑ TOP
+    </a>
 </body>
 </html>

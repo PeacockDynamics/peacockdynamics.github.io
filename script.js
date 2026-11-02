@@ -42,6 +42,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const currentYearElement =
         document.querySelector("#current-year");
 
+    const backToTopButton =
+        document.querySelector("#back-to-top");
+
 
     /* ============================================================
        2. CURRENT YEAR
@@ -184,6 +187,120 @@ document.addEventListener("DOMContentLoaded", () => {
             "(prefers-reduced-motion: reduce)"
         ).matches;
 
+    const productArchitectureDetails = Array.from(
+        document.querySelectorAll(
+            "#products .product-architecture"
+        )
+    );
+
+    productArchitectureDetails.forEach((details) => {
+        const summary = details.querySelector("summary");
+        const panel = details.querySelector(
+            ".product-architecture-panel"
+        );
+
+        if (!summary || !panel) {
+            return;
+        }
+
+        summary.addEventListener("click", (event) => {
+            event.preventDefault();
+
+            if (details.dataset.animating === "true") {
+                return;
+            }
+
+            const opening = !details.open;
+
+            if (
+                window.matchMedia(
+                    "(prefers-reduced-motion: reduce)"
+                ).matches
+            ) {
+                details.open = opening;
+                return;
+            }
+
+            details.dataset.animating = "true";
+            panel.style.overflowY = "hidden";
+
+            if (opening) {
+                details.open = true;
+                panel.style.height = "0px";
+                panel.style.opacity = "0";
+            } else {
+                panel.style.height = `${panel.getBoundingClientRect().height}px`;
+                panel.style.opacity = "1";
+            }
+
+            panel.getBoundingClientRect();
+
+            let fallbackTimer;
+
+            const finishAnimation = () => {
+                if (details.dataset.animating !== "true") {
+                    return;
+                }
+
+                window.clearTimeout(fallbackTimer);
+                panel.removeEventListener(
+                    "transitionend",
+                    finishOnTransition
+                );
+                panel.removeEventListener(
+                    "transitioncancel",
+                    finishOnTransition
+                );
+
+                if (!opening) {
+                    details.open = false;
+                }
+
+                panel.style.removeProperty("height");
+                panel.style.removeProperty("opacity");
+                panel.style.removeProperty("overflow-y");
+                delete details.dataset.animating;
+            };
+
+            const finishOnTransition = (transitionEvent) => {
+                if (
+                    transitionEvent.target === panel &&
+                    transitionEvent.propertyName === "height"
+                ) {
+                    finishAnimation();
+                }
+            };
+
+            panel.addEventListener(
+                "transitionend",
+                finishOnTransition
+            );
+            panel.addEventListener(
+                "transitioncancel",
+                finishOnTransition
+            );
+
+            window.requestAnimationFrame(() => {
+                if (details.dataset.animating !== "true") {
+                    return;
+                }
+
+                if (opening) {
+                    panel.style.height = `${panel.scrollHeight}px`;
+                    panel.style.opacity = "1";
+                } else {
+                    panel.style.height = "0px";
+                    panel.style.opacity = "0";
+                }
+            });
+
+            fallbackTimer = window.setTimeout(
+                finishAnimation,
+                450
+            );
+        });
+    });
+
 
     if (
         "IntersectionObserver" in window &&
@@ -264,6 +381,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Section height must not affect whether its navigation link can activate.
     const updateActiveNavigation = () => {
+        if (backToTopButton) {
+            backToTopButton.hidden = window.scrollY <= 600;
+        }
+
         if (pageSections.length === 0) {
             return;
         }
