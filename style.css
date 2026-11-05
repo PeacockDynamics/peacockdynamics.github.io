@@ -1166,14 +1166,12 @@ main {
 }
 
 .capability-media img,
-.product-card img,
-.team-card img {
+.product-card img {
     transition: filter 200ms ease;
 }
 
 .capability-media img:hover,
-.product-card img:hover,
-.team-card img:hover {
+.product-card img:hover {
     filter: brightness(1.05);
 }
 
@@ -1644,23 +1642,6 @@ main {
     background: var(--surface);
 }
 
-.portrait-slot {
-    display: grid;
-    place-items: center;
-
-    width: 100%;
-    aspect-ratio: 16 / 10;
-
-    color: var(--gold-text);
-    background:
-        var(--portrait-bg);
-
-    border-bottom: 1px solid var(--line);
-
-    font-family: var(--font-mono);
-    font-size: 0.64rem;
-}
-
 .team-card-copy {
     padding: 1rem;
 }
@@ -2114,13 +2095,6 @@ main {
         grid-template-columns: minmax(170px, 0.7fr) minmax(0, 1.3fr);
     }
 
-    .portrait-slot {
-        height: 100%;
-        aspect-ratio: auto;
-
-        border-right: 1px solid var(--line);
-        border-bottom: 0;
-    }
 }
 
 
@@ -2219,13 +2193,6 @@ main {
 
     .team-card {
         display: block;
-    }
-
-    .portrait-slot {
-        aspect-ratio: 16 / 10;
-
-        border-right: 0;
-        border-bottom: 1px solid var(--line);
     }
 
     .question-list li {

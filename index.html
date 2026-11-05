@@ -136,42 +136,9 @@
     <script src="script.js" defer></script>
 
     <style>
-        /* Founder card layout: portrait on the left, details on the right. */
-        .founder-card {
+        .team-card.founder-card {
             grid-column: 1 / -1;
-            display: grid;
-            grid-template-columns: minmax(220px, 0.42fr) minmax(0, 1fr);
-            align-items: stretch;
-        }
-
-        .founder-card .portrait-slot {
-            aspect-ratio: 3 / 4;
-            height: auto;
-            border-right: 1px solid var(--line);
-            border-bottom: 0;
-        }
-
-        .founder-card .portrait-slot img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .founder-card .team-card-copy {
-            display: grid;
-            align-content: center;
-        }
-
-        @media (max-width: 650px) {
-            .founder-card {
-                display: block;
-            }
-
-            .founder-card .portrait-slot {
-                aspect-ratio: 3 / 4;
-                border-right: 0;
-                border-bottom: 1px solid var(--line);
-            }
+            display: block;
         }
     </style>
 </head>
@@ -1246,16 +1213,6 @@
         <!-- Ayushman Mishra -->
 
         <article class="team-card founder-card">
-
-            <div class="portrait-slot">
-
-                <img
-                    src="assets/images/team/ayushman.png"
-                    alt="Ayushman Mishra portrait"
-                >
-
-            </div>
-
             <div class="team-card-copy">
 
                 <span class="team-role">
@@ -1339,16 +1296,6 @@
         <!-- Rajeev Tidke -->
 
         <article class="team-card founder-card">
-
-            <div class="portrait-slot">
-
-                <img
-                    src="assets/images/team/rajeev_tidke.png"
-                    alt="Rajeev Tidke portrait"
-                >
-
-            </div>
-
             <div class="team-card-copy">
 
                 <span class="team-role">
