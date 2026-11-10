@@ -330,6 +330,10 @@ html.experience-modern .command-ambient {
 .lineage-count { margin-top: -.35rem; }
 .selection-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-content: center; gap: .55rem; min-height: 0; }
 .project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.project-list-view { grid-template-rows: auto minmax(0, 1fr); }
+.project-grid { align-content: start; overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(185, 154, 255, .3) transparent; }
+.project-selection-item { grid-template-columns: 2rem minmax(0, 1fr) 5.5rem auto; min-height: 76px; }
+.project-selection-image { width: 5.5rem; height: 3.25rem; object-fit: cover; border: 1px solid var(--modern-line-soft); background: #0a0811; }
 .compact-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .people-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .selection-item {
@@ -389,6 +393,7 @@ html.experience-modern .command-ambient {
 }
 .resource-link:hover, .shortcut-link:hover { border-color: var(--modern-bright); background: rgba(57, 41, 81, .9); }
 .record-overview { display: grid; justify-items: start; align-content: center; gap: 1rem; }
+.project-record-image { justify-self: center; }
 .record-image { display: grid; place-items: center; width: min(100%, 690px); max-height: 37svh; margin: 0 auto; overflow: hidden; border: 1px solid var(--modern-line); background: #0a0811; }
 .record-image img { width: 100%; height: 100%; max-height: 37svh; object-fit: contain; }
 .platform-image, .platform-image img { max-height: min(24svh, 190px); }
@@ -462,6 +467,9 @@ html.experience-modern .command-ambient {
     .list-view { gap: .45rem; }
     .list-introduction { font-size: .69rem; line-height: 1.45; }
     .selection-grid, .project-grid, .compact-grid, .people-grid { gap: .38rem; }
+    .project-grid { grid-template-columns: minmax(0, 1fr); }
+    .project-selection-item { grid-template-columns: 1.5rem minmax(0, 1fr) 4rem auto; min-height: 68px; padding: .4rem .48rem; }
+    .project-selection-image { width: 4rem; height: 2.5rem; }
     .selection-item { grid-template-columns: 1.5rem minmax(0, 1fr) auto; gap: .38rem; min-height: 51px; padding: .45rem .48rem; }
     .selection-index { font-size: .5rem; }
     .selection-title { font-size: .72rem; line-height: 1.25; }
@@ -481,7 +489,9 @@ html.experience-modern .command-ambient {
     .inline-route { margin-top: .6rem; font-size: .55rem; }
     .detail-copy { gap: .7rem; }
     .resource-link, .shortcut-link { min-height: 39px; padding: .5rem .65rem; font-size: .67rem; }
-    .record-image, .record-image img { max-height: 33svh; }
+    .record-image, .record-image img { max-height: 20svh; }
+    .project-record-image { width: min(100%, 520px); }
+    .project-record-image img { object-fit: cover; }
     .command-architecture-svg-desktop { display: none; }
     .command-architecture-svg-mobile { display: block; max-height: calc(100svh - 250px); }
     .architecture-caption { font-size: .46rem; }

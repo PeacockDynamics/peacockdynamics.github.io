@@ -241,6 +241,27 @@
         });
         return list;
     };
+    const projectSelectionList = (items, routeFor) => {
+        const list = el("div", "selection-grid project-grid");
+        items.forEach((item) => {
+            const entry = makeButton("", routeFor(item), "selection-item project-selection-item");
+            entry.append(el("span", "selection-index", item.index || "—"));
+            const copy = el("span", "selection-copy");
+            copy.append(el("strong", "selection-title", item.title));
+            if (item.label) copy.append(el("small", "selection-meta", item.label));
+            entry.append(copy);
+            if (item.image && item.image.src) {
+                const thumb = el("img", "project-selection-image");
+                thumb.src = item.image.src;
+                thumb.alt = "";
+                thumb.loading = "lazy";
+                entry.append(thumb);
+            }
+            entry.append(el("span", "selection-arrow", "↗"));
+            list.append(entry);
+        });
+        return list;
+    };
 
     const makeShell = () => {
         if (shell) return;
@@ -332,7 +353,7 @@
         [
             ["01", "MISSION", "mission/current/1", "node-mission"],
             ["02", "TECHNOLOGY", "technology", "node-technology"],
-            ["03", "RESEARCH & PROJECTS", "projects", "node-projects"],
+            ["03", "RESEARCH", "projects", "node-projects"],
             ["04", "ORGANIZATION", "organization", "node-organization"],
             ["05", "CONTACT", "contact", "node-contact"]
         ].forEach(([number, label, route, position]) => {
@@ -501,11 +522,11 @@
     const projectIndex = (kind) => {
         const isLineage = kind === "lineage";
         const records = isLineage ? lineage : projects;
-        const content = el("div", "list-view");
+        const content = el("div", "list-view project-list-view");
         content.append(el("p", "list-introduction", isLineage ? mission.lineageIntro : mission.projectIntro));
         if (isLineage && mission.lineageIndex) content.append(el("span", "detail-index lineage-count", mission.lineageIndex));
-        content.append(selectionList(records, (item) => "projects/" + kind + "/" + item.id + "/overview/1", "selection-grid project-grid"));
-        const panel = makePanel({ category: "Research & Projects", title: isLineage ? mission.lineageTitle : mission.projectsTitle, back: "home", content });
+        content.append(projectSelectionList(records, (item) => "projects/" + kind + "/" + item.id + "/overview/1"));
+        const panel = makePanel({ category: "Research", title: isLineage ? mission.lineageTitle : mission.projectsTitle, back: "home", content });
         panel.append(makeTabs([{ id: "current", label: "Current work", route: "projects/current" }, { id: "lineage", label: "Research lineage", route: "projects/lineage" }, { id: "challenges", label: "Challenges", route: "projects/challenges" }], kind));
         return panel;
     };
@@ -513,7 +534,7 @@
         const content = el("div", "list-view");
         content.append(el("p", "list-introduction", mission.challengeIntro));
         content.append(selectionList(challenges, (item) => "mission/constraints/" + item.id, "selection-grid compact-grid"));
-        const panel = makePanel({ category: "Research & Projects / Challenges", title: mission.challengeTitle, back: "home", content });
+        const panel = makePanel({ category: "Research / Challenges", title: mission.challengeTitle, back: "home", content });
         panel.append(makeTabs([{ id: "current", label: "Current work", route: "projects/current" }, { id: "lineage", label: "Research lineage", route: "projects/lineage" }, { id: "challenges", label: "Challenges", route: "projects/challenges" }], "challenges"));
         return panel;
     };
@@ -522,19 +543,18 @@
         const records = kind === "lineage" ? lineage : projects;
         const item = records.find((record) => record.id === parts[1]);
         if (!item) return projectIndex(kind);
-        const tab = ["overview", "visual", "resources"].includes(parts[2]) ? parts[2] : "overview";
+        // Older deep links with /visual or /resources resolve to the unified project view.
         const page = Number(parts[3]) || 1;
         const base = "projects/" + kind + "/" + item.id;
         const content = el("div", "record-overview");
-        let pages = null;
-        if (tab === "overview") {
-            const data = textPage(item.description, page, 280);
-            content.append(el("span", "detail-index", (kind === "lineage" ? "TECHNICAL LINEAGE" : item.label) + " / " + item.index), data.content);
-            pages = pager(data.current, data.pages.length, (n) => base + "/overview/" + n);
-        } else if (tab === "visual") appendImage(content, item.image);
-        else appendLinks(content, item.links);
-        const panel = makePanel({ category: kind === "lineage" ? "Research & Projects / Lineage" : "Research & Projects / Current work", title: item.title, back: "projects/" + kind, content });
-        panel.append(makeTabs([{ id: "overview", label: "Information", route: base + "/overview/1" }, { id: "visual", label: "Visual", route: base + "/visual" }, { id: "resources", label: "Links", route: base + "/resources" }], tab));
+        const compact = window.matchMedia("(max-width: 620px), (max-height: 650px)").matches;
+        const data = textPage(item.description, page, compact ? 250 : 430);
+        content.append(el("span", "detail-index", (kind === "lineage" ? "TECHNICAL LINEAGE" : item.label) + " / " + item.index));
+        if (item.image) appendImage(content, item.image, "record-image project-record-image");
+        content.append(data.content);
+        if (item.links && item.links.length) appendLinks(content, item.links);
+        const panel = makePanel({ category: kind === "lineage" ? "Research / Lineage" : "Research / Current work", title: item.title, back: "projects/" + kind, content });
+        const pages = pager(data.current, data.pages.length, (n) => base + "/overview/" + n);
         if (pages) panel.append(pages);
         return panel;
     };
@@ -548,18 +568,14 @@
     const renderPerson = (parts) => {
         const person = people.find((record) => record.id === parts[0]);
         if (!person) return organizationIndex();
-        const tab = parts[1] === "resources" ? "resources" : "profile";
         const page = Number(parts[2]) || 1;
         const pages = person.paragraphs.flatMap((paragraph) => splitText(paragraph, 270));
         const current = Math.min(Math.max(1, page), pages.length);
         const content = el("div", "record-overview person-profile");
-        let controls = null;
-        if (tab === "profile") {
-            content.append(el("span", "detail-index", person.role), el("p", "paged-copy", pages[current - 1]));
-            controls = pager(current, pages.length, (n) => "organization/" + person.id + "/profile/" + n);
-        } else appendLinks(content, person.links);
+        content.append(el("span", "detail-index", person.role), el("p", "paged-copy", pages[current - 1]));
+        if (person.links && person.links.length) appendLinks(content, person.links);
         const panel = makePanel({ category: "Organization / Founder", title: person.name, back: "organization", content });
-        panel.append(makeTabs([{ id: "profile", label: "Profile", route: "organization/" + person.id + "/profile/1" }, { id: "resources", label: "Links", route: "organization/" + person.id + "/resources" }], tab));
+        const controls = pager(current, pages.length, (n) => "organization/" + person.id + "/profile/" + n);
         if (controls) panel.append(controls);
         return panel;
     };
@@ -575,7 +591,7 @@
         content.append(el("small", "contact-copyright", "© " + new Date().getFullYear() + " Peacock Dynamics"));
         const shortcuts = el("nav", "contact-shortcuts");
         shortcuts.setAttribute("aria-label", "Interface sections");
-        [["Mission", "mission/current/1"], ["Technology", "technology"], ["Research & Projects", "projects"], ["Organization", "organization"]].forEach(([label, route]) => shortcuts.append(routeButton(label, route, "shortcut-link")));
+        [["Mission", "mission/current/1"], ["Technology", "technology"], ["Research", "projects"], ["Organization", "organization"]].forEach(([label, route]) => shortcuts.append(routeButton(label, route, "shortcut-link")));
         content.append(shortcuts);
         const panel = makePanel({ category: "Contact", title: "Continue the conversation", subtitle: "Research partnerships · Technical collaboration", back: "home", content });
         const controls = pager(statement.current, statement.pages.length, (n) => "contact/" + n);
