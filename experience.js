@@ -44,7 +44,7 @@
         stylesheetPromise = new Promise((resolve, reject) => {
             stylesheet = document.createElement("link");
             stylesheet.rel = "stylesheet";
-            stylesheet.href = "modern.css";
+            stylesheet.href = "modern.css?v=20261110-2";
             stylesheet.onload = resolve;
             stylesheet.onerror = () => {
                 stylesheet.remove();
