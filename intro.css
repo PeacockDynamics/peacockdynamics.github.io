@@ -169,6 +169,11 @@ html.intro-active #back-to-top {
     stroke-width: 1.5;
 }
 
+.uuv-graph path,
+.uuv-graph-nodes circle {
+    vector-effect: non-scaling-stroke;
+}
+
 .art-lit {
     color: #94e8ff;
     filter: drop-shadow(0 0 5px rgba(47, 179, 221, 0.3));
@@ -359,6 +364,7 @@ html.intro-active #back-to-top {
 
 .intro-lockup {
     --logo-diameter: clamp(220px, 33vw, 390px);
+    --tagline-width: clamp(176px, 26.4vw, 312px);
     gap: 0.45rem;
     transform: translateY(5px);
 }
@@ -389,6 +395,8 @@ html.intro-active #back-to-top {
     width: 100%;
     height: auto;
     margin: 0;
+    border-radius: 50%;
+    clip-path: circle(49.5% at center);
     filter: drop-shadow(0 0 20px rgba(65, 159, 193, 0.16));
 }
 
@@ -425,12 +433,12 @@ html.intro-active #back-to-top {
 }
 
 .intro-tagline {
-    width: var(--logo-diameter);
-    max-width: var(--logo-diameter);
+    width: var(--tagline-width);
+    max-width: var(--tagline-width);
     margin: 0.15rem 0 0;
     color: #a34fff;
     font-family: var(--font-mono, "Courier New", monospace);
-    font-size: clamp(0.42rem, 0.55vw, 0.58rem);
+    font-size: clamp(1.05rem, 1.375vw, 1.45rem);
     letter-spacing: 0.12em;
     line-height: 1.7;
     text-align: center;
@@ -509,9 +517,9 @@ html.intro-fading .intro-skip {
     .device-choice-options { grid-template-columns: 1fr; }
     .device-choice-options button { min-height: 68px; }
     .intro-convergence svg { width: min(74vw, 300px); }
-    .intro-lockup { --logo-diameter: min(74vw, 300px); }
+    .intro-lockup { --logo-diameter: min(74vw, 300px); --tagline-width: min(59.2vw, 240px); }
     .intro-logo-mark { width: var(--logo-diameter); }
-    .intro-tagline { font-size: 0.42rem; letter-spacing: 0.07em; }
+    .intro-tagline { font-size: 1.05rem; letter-spacing: 0.07em; }
     .intro-caption { left: 0.85rem; bottom: max(1.2rem, env(safe-area-inset-bottom)); max-width: 68vw; gap: 0.5rem; font-size: 0.54rem; letter-spacing: 0.08em; }
     .art-lit { stroke-width: 3.5; }
 }

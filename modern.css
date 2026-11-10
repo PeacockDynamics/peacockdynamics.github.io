@@ -108,10 +108,7 @@ html.experience-modern .command-ambient {
     color: var(--modern-text) !important;
     text-decoration: none;
 }
-.command-brand img { width: 50px; height: 44px; object-fit: contain; }
-.command-wordmark { display: flex; flex-direction: column; color: #eee8f7; font-size: .77rem; font-weight: 500; letter-spacing: .18em; line-height: 1.45; white-space: nowrap; }
-.command-wordmark strong { color: var(--modern-bright); font-weight: 650; }
-.command-wordmark small { margin-top: .16rem; color: #897e9b; font: .53rem ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .11em; }
+.command-brand img { width: 55px; height: 48px; object-fit: contain; }
 
 .command-main {
     position: relative;
@@ -217,7 +214,6 @@ html.experience-modern .command-ambient {
 .dial-center svg { width: 62px; height: 62px; overflow: visible; }
 .dial-mark-lines { fill: none; stroke: #a88bd4; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; }
 .dial-mark-nodes { fill: #c5adf2; stroke: #100b1c; stroke-width: 1.4; }
-.dial-center span { margin-top: .35rem; }
 .dial-nodes { position: absolute; inset: 0; }
 .dial-node {
     position: absolute;
@@ -430,9 +426,7 @@ html.experience-modern .command-ambient {
 @media (max-width: 620px) {
     .command-header { min-height: 67px; gap: .5rem; padding: max(.45rem, env(safe-area-inset-top)) .7rem .45rem; }
     .command-brand { gap: .45rem; }
-    .command-brand img { width: 38px; height: 37px; }
-    .command-wordmark { font-size: .64rem; letter-spacing: .13em; }
-    .command-wordmark small { max-width: 46vw; overflow: hidden; font-size: .43rem; letter-spacing: .065em; text-overflow: ellipsis; }
+    .command-brand img { width: 42px; height: 41px; }
     .command-main { padding: .35rem .65rem; }
     .command-status { min-height: 25px; gap: .4rem; font-size: .48rem; letter-spacing: .09em; }
     .status-context { display: none; }
@@ -502,7 +496,6 @@ html.experience-modern .command-ambient {
 }
 
 @media (max-width: 380px) {
-    .command-wordmark small { display: none; }
     .sonar-dial { width: min(92vw, 350px); height: min(92vw, 350px); max-height: calc(100svh - 195px); }
     .dial-node { font-size: .54rem; }
     .node-projects { right: 0; }

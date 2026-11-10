@@ -44,7 +44,7 @@
         stylesheetPromise = new Promise((resolve, reject) => {
             stylesheet = document.createElement("link");
             stylesheet.rel = "stylesheet";
-            stylesheet.href = "modern.css?v=20261110-2";
+            stylesheet.href = "modern.css?v=20261110-3";
             stylesheet.onload = resolve;
             stylesheet.onerror = () => {
                 stylesheet.remove();
@@ -270,7 +270,7 @@
         header.innerHTML = [
             '<a class="command-brand" href="#pd/home" data-route="home" aria-label="Peacock Dynamics command home">',
             '<img src="assets/logo/dark_full.png" alt="Peacock Dynamics" width="80" height="50">',
-            '<span class="command-wordmark">PEACOCK <strong>DYNAMICS</strong><small>MARINE AUTONOMY · SWARM CONTROL · ROBOTIC EXPLORATION</small></span></a>'
+            '</a>'
         ].join("");
         const main = el("main", "command-main");
         main.id = "modern-main";
@@ -292,7 +292,7 @@
             '</g><g class="ambient-points"><circle cx="238" cy="286" r="2"/><circle cx="1097" cy="210" r="2"/><circle cx="940" cy="590" r="2"/><circle cx="388" cy="738" r="2"/></g></svg>'
         ].join("");
         const status = el("div", "command-status");
-        status.innerHTML = '<span class="status-light"></span><span>MARINE SYSTEMS</span><i></i><span class="status-context">AUTONOMOUS RESEARCH INTERFACE</span>';
+        status.innerHTML = '<span class="status-light"></span><span>UUV AUTONOMY</span><i></i><span class="status-context">PEACOCK DYNAMICS RESEARCH</span>';
         shell.append(ambient, header, main, status);
         modernRoot.replaceChildren(shell);
         modernRoot.hidden = false;
@@ -333,9 +333,9 @@
         const home = el("section", "dial-screen");
         home.setAttribute("aria-label", "Main navigation");
         const intro = el("div", "dial-intro");
-        const dialTitle = el("h1", "dial-title", "Select a channel");
+        const dialTitle = el("h1", "dial-title", "Explore our research");
         dialTitle.tabIndex = -1;
-        intro.append(el("p", "dial-eyebrow", "SUBSEA AUTONOMY SYSTEMS"), dialTitle);
+        intro.append(el("p", "dial-eyebrow", "UUV AUTONOMY RESEARCH"), dialTitle);
         home.append(intro);
         const dial = el("div", "sonar-dial");
         dial.setAttribute("role", "group");
@@ -347,14 +347,14 @@
             '<path class="dial-crosshair" d="M260 125v31M260 364v31M125 260h31M364 260h31"/><circle class="dial-sweep" cx="260" cy="260" r="180"/></svg>',
             '<div class="dial-center" aria-hidden="true"><svg viewBox="34 35 192 193" role="presentation">',
             '<g class="dial-mark-lines"><path d="M130 45V85 M91 57 118 111 M169 57 142 111 M63 87 112 122 M197 87 148 122 M54 126 112 132 M206 126 148 132 M130 92V117 M122 97 125 117 M138 97 135 117 M120 117H140L130 138Z M130 138V218 M119 218H141"/></g>',
-            '<g class="dial-mark-nodes"><circle cx="130" cy="45" r="5"/><circle cx="91" cy="57" r="5"/><circle cx="169" cy="57" r="5"/><circle cx="63" cy="87" r="5"/><circle cx="197" cy="87" r="5"/><circle cx="54" cy="126" r="5"/><circle cx="206" cy="126" r="5"/><circle cx="122" cy="97" r="3.4"/><circle cx="130" cy="92" r="4.2"/><circle cx="138" cy="97" r="3.4"/><circle cx="130" cy="138" r="4.2"/><circle cx="130" cy="218" r="4.2"/><circle cx="119" cy="218" r="3.3"/><circle cx="141" cy="218" r="3.3"/></g></svg><span>PD / 05</span></div>',
+            '<g class="dial-mark-nodes"><circle cx="130" cy="45" r="5"/><circle cx="91" cy="57" r="5"/><circle cx="169" cy="57" r="5"/><circle cx="63" cy="87" r="5"/><circle cx="197" cy="87" r="5"/><circle cx="54" cy="126" r="5"/><circle cx="206" cy="126" r="5"/><circle cx="122" cy="97" r="3.4"/><circle cx="130" cy="92" r="4.2"/><circle cx="138" cy="97" r="3.4"/><circle cx="130" cy="138" r="4.2"/><circle cx="130" cy="218" r="4.2"/><circle cx="119" cy="218" r="3.3"/><circle cx="141" cy="218" r="3.3"/></g></svg></div>',
             '<div class="dial-nodes"></div><span class="dial-bearing bearing-n">N</span><span class="dial-bearing bearing-e">E</span><span class="dial-bearing bearing-s">S</span><span class="dial-bearing bearing-w">W</span>'
         ].join("");
         [
-            ["01", "MISSION", "mission/current/1", "node-mission"],
-            ["02", "TECHNOLOGY", "technology", "node-technology"],
+            ["01", "OVERVIEW", "mission/current/1", "node-mission"],
+            ["02", "METHODS & TOOLS", "technology", "node-technology"],
             ["03", "RESEARCH", "projects", "node-projects"],
-            ["04", "ORGANIZATION", "organization", "node-organization"],
+            ["04", "FOUNDERS", "organization", "node-organization"],
             ["05", "CONTACT", "contact", "node-contact"]
         ].forEach(([number, label, route, position]) => {
             const node = makeButton("", route, "dial-node " + position);
@@ -364,7 +364,7 @@
         });
         home.append(dial);
         const instruction = el("p", "dial-instruction");
-        instruction.innerHTML = 'SELECT A CHANNEL <span>·</span> ESC TO RETURN TO DIAL';
+        instruction.innerHTML = 'CHOOSE A SECTION <span>·</span> ESC TO RETURN HOME';
         home.append(instruction);
         return home;
     };
@@ -375,7 +375,7 @@
             const page = textPage(mission.progress, parts[2], 285);
             const content = el("div", "detail-copy");
             content.append(el("span", "detail-index", "CURRENT PHASE / " + mission.status[1]), page.content);
-            const panel = makePanel({ category: "Mission / Validation", title: "Simulation-first development", back: "mission/current/1", content });
+            const panel = makePanel({ category: "Research / Next steps", title: "Current work and next steps", back: "mission/current/1", content });
             const pages = pager(page.current, page.pages.length, (n) => "mission/progress/" + n);
             if (pages) panel.append(pages);
             return panel;
@@ -387,40 +387,40 @@
                 card.append(el("span", "selection-index", item.index), el("strong", "focus-title", item.title), el("span", "focus-summary", item.description), el("span", "selection-arrow", "↗"));
                 content.append(card);
             });
-            const panel = makePanel({ category: "Mission / Research focus", title: "Research priorities", back: "mission/current/1", content });
-            panel.append(makeTabs([{ id: "current", label: "Mission", route: "mission/current/1" }, { id: "focus", label: "Research focus", route: "mission/focus" }, { id: "constraints", label: "Constraints", route: "mission/constraints" }], "focus"));
+            const panel = makePanel({ category: "Research", title: "Research areas", back: "mission/current/1", content });
+            panel.append(makeTabs([{ id: "current", label: "Overview", route: "mission/current/1" }, { id: "focus", label: "Research areas", route: "mission/focus" }, { id: "constraints", label: "Research questions", route: "mission/constraints" }], "focus"));
             return panel;
         }
         if (section === "constraints" && parts[2]) {
             const item = challenges.find((record) => record.id === parts[2]);
             if (!item) return renderMission(["mission", "constraints"]);
             const content = el("div", "detail-copy");
-            content.append(el("span", "detail-index", "CONSTRAINT " + item.index + " / 04"), el("p", "paged-copy", item.description));
-            return makePanel({ category: "Mission / Operating constraints", title: item.title, back: "mission/constraints", content });
+            content.append(el("span", "detail-index", "RESEARCH QUESTION " + item.index + " / 04"), el("p", "paged-copy", item.description));
+            return makePanel({ category: "Research question", title: item.title, back: "mission/constraints", content });
         }
         if (section === "constraints") {
             const content = el("div", "list-view");
             content.append(el("p", "list-introduction", mission.challengeIntro));
             content.append(selectionList(challenges, (item) => "mission/constraints/" + item.id, "selection-grid compact-grid"));
-            const panel = makePanel({ category: "Mission / Operating constraints", title: mission.challengeTitle, back: "mission/current/1", content });
-            panel.append(makeTabs([{ id: "current", label: "Mission", route: "mission/current/1" }, { id: "focus", label: "Research focus", route: "mission/focus" }, { id: "constraints", label: "Constraints", route: "mission/constraints" }], "constraints"));
+            const panel = makePanel({ category: "Research questions", title: mission.challengeTitle, back: "mission/current/1", content });
+            panel.append(makeTabs([{ id: "current", label: "Overview", route: "mission/current/1" }, { id: "focus", label: "Research areas", route: "mission/focus" }, { id: "constraints", label: "Research questions", route: "mission/constraints" }], "constraints"));
             return panel;
         }
         const page = textPage(mission.lead, parts[2], 285);
         const content = el("div", "mission-reading");
         content.append(page.content);
         const status = el("div", "mission-status-grid");
-        [["ACTIVE TRACK", mission.status[0]], ["CURRENT PHASE", mission.status[1]]].forEach(([label, value]) => {
+        [["RESEARCH AREA", mission.status[0]], ["CURRENT PHASE", mission.status[1]]].forEach(([label, value]) => {
             const item = el("div", "mission-status-unit");
             item.append(el("small", "status-label", label), el("strong", "status-value", value || "ACTIVE RESEARCH"));
             status.append(item);
         });
         content.append(status);
-        const panel = makePanel({ category: "Mission", title: mission.title, subtitle: "Distributed autonomy under limited sensing and communication.", back: "home", content });
-        panel.append(makeTabs([{ id: "current", label: "Mission", route: "mission/current/1" }, { id: "focus", label: "Research focus", route: "mission/focus" }, { id: "constraints", label: "Constraints", route: "mission/constraints" }], "current"));
+        const panel = makePanel({ category: "Research program", title: mission.title, subtitle: "Autonomy for UUV teams operating with limited sensing and communication.", back: "home", content });
+        panel.append(makeTabs([{ id: "current", label: "Overview", route: "mission/current/1" }, { id: "focus", label: "Research areas", route: "mission/focus" }, { id: "constraints", label: "Research questions", route: "mission/constraints" }], "current"));
         const pages = pager(page.current, page.pages.length, (n) => "mission/current/" + n);
         if (pages) panel.append(pages);
-        panel.querySelector(".panel-content").append(makeButton("CURRENT VALIDATION PHASE ↗", "mission/progress/1", "inline-route"));
+        panel.querySelector(".panel-content").append(makeButton("CURRENT WORK & NEXT STEPS ↗", "mission/progress/1", "inline-route"));
         return panel;
     };
 
@@ -452,8 +452,8 @@
             const item = facts.find((record) => record.id === parts[2]);
             if (!item) return renderTechnology(["technology", "capabilities"]);
             const content = el("div", "detail-copy");
-            content.append(el("span", "detail-index", "CAPABILITY / " + item.index), el("p", "paged-copy", item.description));
-            return makePanel({ category: "Technology / Capability", title: item.title, back: "technology/capabilities", content });
+            content.append(el("span", "detail-index", "RESEARCH AREA / " + item.index), el("p", "paged-copy", item.description));
+            return makePanel({ category: "Research area", title: item.title, back: "technology/capabilities", content });
         }
         if (parts[1] === "platform") return renderPlatform(parts.slice(2));
         if (parts[1] === "access") {
@@ -462,20 +462,20 @@
             const email = el("a", "contact-email", mission.email.replace(/^mailto:/i, ""));
             email.href = mission.email;
             content.append(email);
-            return makePanel({ category: "Technology / Product access", title: "Using the simulators", back: "technology/platforms", content });
+            return makePanel({ category: "Research tools / Access", title: "Using the simulators", back: "technology/platforms", content });
         }
         const tab = parts[1] === "platforms" ? "platforms" : "capabilities";
         const content = el("div", "list-view");
         if (tab === "capabilities") {
-            content.append(el("p", "list-introduction", "Research areas drawn from Peacock Dynamics’ current mission."));
+            content.append(el("p", "list-introduction", "Current research areas."));
             content.append(selectionList(facts, (item) => "technology/capability/" + item.id, "selection-grid"));
         } else {
             content.append(el("p", "list-introduction", mission.productsIntro));
             content.append(selectionList(products, (item) => "technology/platform/" + item.id + "/overview/1", "selection-grid"));
-            content.append(makeButton("PRODUCT ACCESS & LICENSING ↗", "technology/access", "inline-route"));
+            content.append(makeButton("ACCESS & LICENSING ↗", "technology/access", "inline-route"));
         }
-        const panel = makePanel({ category: "Technology", title: tab === "platforms" ? mission.productsTitle : "Research capabilities", subtitle: "Select a system to inspect its details.", back: "home", content });
-        panel.append(makeTabs([{ id: "capabilities", label: "Capabilities", route: "technology/capabilities" }, { id: "platforms", label: "Platforms", route: "technology/platforms" }], tab));
+        const panel = makePanel({ category: "Research", title: tab === "platforms" ? mission.productsTitle : "Research methods", subtitle: "Choose a topic for details.", back: "home", content });
+        panel.append(makeTabs([{ id: "capabilities", label: "Research methods", route: "technology/capabilities" }, { id: "platforms", label: "Simulation tools", route: "technology/platforms" }], tab));
         return panel;
     };
 
@@ -513,7 +513,7 @@
             content.append(el("p", "architecture-caption", compact ? "SYSTEM ARCHITECTURE / SEGMENT " + String(diagramPage).padStart(2, "0") + " OF 02" : "SYSTEM ARCHITECTURE / simulator flow"));
             if (compact) pages = pager(diagramPage, 2, (n) => base + "/architecture/" + n);
         } else appendLinks(content, item.links);
-        const panel = makePanel({ category: "Technology / Platform", title: item.title, back: "technology/platforms", content });
+        const panel = makePanel({ category: "Research tools / Simulator", title: item.title, back: "technology/platforms", content });
         panel.append(makeTabs([{ id: "overview", label: "Overview", route: base + "/overview/1" }, { id: "architecture", label: "Architecture", route: base + "/architecture/1" }, { id: "resources", label: "Resources", route: base + "/resources" }], tab));
         if (pages) panel.append(pages);
         return panel;
@@ -527,15 +527,15 @@
         if (isLineage && mission.lineageIndex) content.append(el("span", "detail-index lineage-count", mission.lineageIndex));
         content.append(projectSelectionList(records, (item) => "projects/" + kind + "/" + item.id + "/overview/1"));
         const panel = makePanel({ category: "Research", title: isLineage ? mission.lineageTitle : mission.projectsTitle, back: "home", content });
-        panel.append(makeTabs([{ id: "current", label: "Current work", route: "projects/current" }, { id: "lineage", label: "Research lineage", route: "projects/lineage" }, { id: "challenges", label: "Challenges", route: "projects/challenges" }], kind));
+        panel.append(makeTabs([{ id: "current", label: "Current research", route: "projects/current" }, { id: "lineage", label: "Research background", route: "projects/lineage" }, { id: "challenges", label: "Research questions", route: "projects/challenges" }], kind));
         return panel;
     };
     const challengesIndex = () => {
         const content = el("div", "list-view");
         content.append(el("p", "list-introduction", mission.challengeIntro));
         content.append(selectionList(challenges, (item) => "mission/constraints/" + item.id, "selection-grid compact-grid"));
-        const panel = makePanel({ category: "Research / Challenges", title: mission.challengeTitle, back: "home", content });
-        panel.append(makeTabs([{ id: "current", label: "Current work", route: "projects/current" }, { id: "lineage", label: "Research lineage", route: "projects/lineage" }, { id: "challenges", label: "Challenges", route: "projects/challenges" }], "challenges"));
+        const panel = makePanel({ category: "Research questions", title: mission.challengeTitle, back: "home", content });
+        panel.append(makeTabs([{ id: "current", label: "Current research", route: "projects/current" }, { id: "lineage", label: "Research background", route: "projects/lineage" }, { id: "challenges", label: "Research questions", route: "projects/challenges" }], "challenges"));
         return panel;
     };
     const renderProject = (parts) => {
@@ -549,11 +549,11 @@
         const content = el("div", "record-overview");
         const compact = window.matchMedia("(max-width: 620px), (max-height: 650px)").matches;
         const data = textPage(item.description, page, compact ? 250 : 430);
-        content.append(el("span", "detail-index", (kind === "lineage" ? "TECHNICAL LINEAGE" : item.label) + " / " + item.index));
+        content.append(el("span", "detail-index", (kind === "lineage" ? "RESEARCH BACKGROUND" : item.label) + " / " + item.index));
         if (item.image) appendImage(content, item.image, "record-image project-record-image");
         content.append(data.content);
         if (item.links && item.links.length) appendLinks(content, item.links);
-        const panel = makePanel({ category: kind === "lineage" ? "Research / Lineage" : "Research / Current work", title: item.title, back: "projects/" + kind, content });
+        const panel = makePanel({ category: kind === "lineage" ? "Research / Background" : "Research / Current study", title: item.title, back: "projects/" + kind, content });
         const pages = pager(data.current, data.pages.length, (n) => base + "/overview/" + n);
         if (pages) panel.append(pages);
         return panel;
@@ -561,9 +561,9 @@
 
     const organizationIndex = () => {
         const content = el("div", "list-view organization-index");
-        content.append(el("p", "list-introduction", "Founding team and technical direction."));
+        content.append(el("p", "list-introduction", "Meet the founders."));
         content.append(selectionList(people, (person) => "organization/" + person.id + "/profile/1", "selection-grid people-grid"));
-        return makePanel({ category: "Organization", title: mission.organizationTitle, back: "home", content });
+        return makePanel({ category: "Founders", title: mission.organizationTitle, back: "home", content });
     };
     const renderPerson = (parts) => {
         const person = people.find((record) => record.id === parts[0]);
@@ -574,7 +574,7 @@
         const content = el("div", "record-overview person-profile");
         content.append(el("span", "detail-index", person.role), el("p", "paged-copy", pages[current - 1]));
         if (person.links && person.links.length) appendLinks(content, person.links);
-        const panel = makePanel({ category: "Organization / Founder", title: person.name, back: "organization", content });
+        const panel = makePanel({ category: "Founder", title: person.name, back: "organization", content });
         const controls = pager(current, pages.length, (n) => "organization/" + person.id + "/profile/" + n);
         if (controls) panel.append(controls);
         return panel;
@@ -591,9 +591,9 @@
         content.append(el("small", "contact-copyright", "© " + new Date().getFullYear() + " Peacock Dynamics"));
         const shortcuts = el("nav", "contact-shortcuts");
         shortcuts.setAttribute("aria-label", "Interface sections");
-        [["Mission", "mission/current/1"], ["Technology", "technology"], ["Research", "projects"], ["Organization", "organization"]].forEach(([label, route]) => shortcuts.append(routeButton(label, route, "shortcut-link")));
+        [["Overview", "mission/current/1"], ["Methods & tools", "technology"], ["Research", "projects"], ["Founders", "organization"]].forEach(([label, route]) => shortcuts.append(routeButton(label, route, "shortcut-link")));
         content.append(shortcuts);
-        const panel = makePanel({ category: "Contact", title: "Continue the conversation", subtitle: "Research partnerships · Technical collaboration", back: "home", content });
+        const panel = makePanel({ category: "Contact", title: "Contact Peacock Dynamics", subtitle: "Research collaboration · Technical partnerships · Investment", back: "home", content });
         const controls = pager(statement.current, statement.pages.length, (n) => "contact/" + n);
         if (controls) panel.append(controls);
         return panel;
