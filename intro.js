@@ -27,6 +27,7 @@
 
     if (!overlay || !site || !skip || !caption || !captionIndex || !captionTitle || scenes.length !== 6) {
         root.classList.remove("intro-active");
+        window.dispatchEvent(new Event("pd-intro-dismissed"));
         return;
     }
 
@@ -63,16 +64,17 @@
         lockup.classList.remove("is-active");
         root.classList.remove("intro-active", "intro-fading");
         overlay.setAttribute("aria-hidden", "true");
-        site.inert = false;
+        site.inert = root.classList.contains("device-choice-active");
         document.body.style.removeProperty("overflow");
         if (overlay.contains(document.activeElement)) skip.blur();
+        window.dispatchEvent(new Event("pd-intro-dismissed"));
     };
 
     const beginDismiss = () => {
         if (finished || root.classList.contains("intro-fading")) return;
         clearTimers();
         root.classList.add("intro-fading");
-        site.inert = false;
+        site.inert = root.classList.contains("device-choice-active");
         later(release, 920);
     };
 
@@ -103,6 +105,8 @@
                 later(advance, 800);
                 return;
             }
+            scenes.forEach((scene) => scene.classList.remove("is-active"));
+            caption.classList.remove("is-active");
             convergence.classList.add("is-active");
             later(() => {
                 convergence.classList.remove("is-active");

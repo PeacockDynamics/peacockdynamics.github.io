@@ -18,9 +18,22 @@
 
     <script>
         (() => {
-            if (window.matchMedia("(max-width: 850px)").matches) {
-                document.documentElement.classList.add("experience-modern");
-            }
+            const root = document.documentElement;
+            let choice = null;
+            try { choice = window.sessionStorage.getItem("peacock-dynamics-device-choice"); } catch { /* Ask again when storage is unavailable. */ }
+            if (choice === "mobile") root.classList.add("experience-modern");
+            else if (choice !== "computer") root.classList.add("device-choice-active");
+            window.__pdExperienceFailsafe = window.setTimeout(() => {
+                if (window.__pdExperienceReady) return;
+                root.classList.remove("device-choice-active", "experience-modern");
+                const site = document.querySelector(".site-frame");
+                if (site) site.inert = false;
+                const prompt = document.querySelector("#device-choice");
+                if (prompt) {
+                    prompt.setAttribute("aria-hidden", "true");
+                    prompt.inert = true;
+                }
+            }, 12000);
         })();
     </script>
 
@@ -38,8 +51,9 @@
                     document.documentElement.classList.remove("intro-active");
                     document.querySelector("#cinematic-intro")?.setAttribute("aria-hidden", "true");
                     const site = document.querySelector(".site-frame");
-                    if (site) site.inert = false;
+                    if (site) site.inert = document.documentElement.classList.contains("device-choice-active");
                     document.body?.style.removeProperty("overflow");
+                    window.dispatchEvent(new Event("pd-intro-dismissed"));
                 }, 9800);
             } catch {
                 // Storage or motion preference access can fail; show the site immediately.
@@ -57,6 +71,9 @@
         html:not(.experience-modern) #modern-experience,
         #modern-experience[hidden] { display: none !important; }
         html.intro-active #modern-experience { visibility: hidden !important; }
+        html.device-choice-active .site-frame,
+        html.device-choice-active #modern-experience,
+        html.device-choice-active #back-to-top { visibility: hidden !important; }
     </style>
 
     <script src="script.js" defer></script>
@@ -178,6 +195,25 @@
             <p class="intro-tagline">Marine Autonomy <span>·</span> Swarm Control <span>·</span> Robotic Exploration</p>
         </div>
         <button class="intro-skip" type="button" id="intro-skip">Skip intro <span aria-hidden="true">↗</span></button>
+    </section>
+
+    <section class="device-choice" id="device-choice" aria-hidden="true">
+        <div class="device-choice-panel" role="dialog" aria-modal="true" aria-labelledby="device-choice-title" aria-describedby="device-choice-description" tabindex="-1">
+            <p class="device-choice-kicker">PEACOCK DYNAMICS / EXPERIENCE SELECT</p>
+            <h1 id="device-choice-title">Which device are you using?</h1>
+            <p id="device-choice-description">Choose the interface designed for the screen you have.</p>
+            <div class="device-choice-options">
+                <button type="button" data-device-choice="computer">
+                    <span class="device-choice-name">Computer</span>
+                    <span class="device-choice-detail">Classic website</span>
+                </button>
+                <button type="button" data-device-choice="mobile">
+                    <span class="device-choice-name">Mobile</span>
+                    <span class="device-choice-detail">Underwater command interface</span>
+                </button>
+            </div>
+            <p class="device-choice-error" id="device-choice-error" role="status" aria-live="polite"></p>
+        </div>
     </section>
 
     <a class="skip-link" href="#main-content">

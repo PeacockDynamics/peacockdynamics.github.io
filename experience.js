@@ -5,10 +5,11 @@
     const root = document.documentElement;
     const modernRoot = document.querySelector("#modern-experience");
     const classicFrame = document.querySelector(".site-frame");
+    const deviceChoice = document.querySelector("#device-choice");
+    const deviceChoiceError = document.querySelector("#device-choice-error");
     const skipLink = document.querySelector(".skip-link");
     const themeColor = document.querySelector('meta[name="theme-color"]');
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const mobileViewport = window.matchMedia("(max-width: 850px)");
     const initialHash = window.location.hash;
     let active = root.classList.contains("experience-modern") ? "modern" : "classic";
     let stylesheet = null;
@@ -20,7 +21,7 @@
     let transitionTimer = 0;
     let lastHandledHash = "";
 
-    if (!modernRoot || !classicFrame) return;
+    if (!modernRoot || !classicFrame || !deviceChoice) return;
 
     const slug = (value) => value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
     const text = (node) => node && node.textContent ? node.textContent.replace(/\s+/g, " ").trim() : "";
@@ -250,7 +251,6 @@
             '<img src="assets/logo/dark_full.png" alt="Peacock Dynamics" width="80" height="50">',
             '<span class="command-wordmark">PEACOCK <strong>DYNAMICS</strong><small>MARINE AUTONOMY · SWARM CONTROL · ROBOTIC EXPLORATION</small></span></a>'
         ].join("");
-        header.append(switcher);
         const main = el("main", "command-main");
         main.id = "modern-main";
         main.tabIndex = -1;
@@ -650,56 +650,116 @@
     const applyMode = (mode) => {
         active = mode;
         root.classList.toggle("experience-modern", mode === "modern");
+        root.classList.remove("device-choice-active");
         setModeMetadata(mode);
+        deviceChoice.setAttribute("aria-hidden", "true");
+        deviceChoice.inert = true;
+        classicFrame.inert = mode === "modern";
+        modernRoot.inert = mode !== "modern";
         if (mode === "classic" && window.location.hash.startsWith("#pd/")) {
             window.history.replaceState({}, "", window.location.pathname + window.location.search);
             routeTrail = [];
             lastHandledHash = "";
         }
     };
-    const chooseForViewport = async (mode) => {
-        if (mode === active) return;
+    const focusDeviceChoice = () => {
+        if (root.classList.contains("device-choice-active")) {
+            deviceChoice.querySelector(".device-choice-panel")?.focus({ preventScroll: true });
+        }
+    };
+    const showDeviceChoice = (message) => {
+        root.classList.add("device-choice-active");
+        deviceChoice.setAttribute("aria-hidden", "false");
+        deviceChoice.inert = false;
+        classicFrame.inert = true;
+        modernRoot.inert = true;
+        if (deviceChoiceError) deviceChoiceError.textContent = message || "";
+        focusDeviceChoice();
+    };
+    let choosingDevice = false;
+    const chooseDevice = async (choice) => {
+        if (choosingDevice || !["computer", "mobile"].includes(choice)) return;
+        choosingDevice = true;
+        const mode = choice === "mobile" ? "modern" : "classic";
         if (mode === "modern") {
             try {
                 await loadStyles();
-                if (!mobileViewport.matches) return;
                 makeShell();
-                renderRoute(routeFromHash() || "home", false);
+                const route = routeFromHash() || "home";
+                if (/^#pd\//.test(initialHash)) window.history.replaceState({ pdRoute: route }, "", initialHash);
+                renderRoute(route, false);
             } catch {
-                if (mobileViewport.matches) applyMode("classic");
+                choosingDevice = false;
+                if (deviceChoiceError) deviceChoiceError.textContent = "The mobile interface could not load. Please try again.";
                 return;
             }
         }
-        if ((mode === "modern") !== mobileViewport.matches) return;
         if (!reducedMotion.matches) document.body.classList.add("experience-transitioning");
         applyMode(mode);
+        try { window.sessionStorage.setItem("peacock-dynamics-device-choice", choice); } catch { /* This page view still changes. */ }
         if (!reducedMotion.matches) window.requestAnimationFrame(() => window.setTimeout(() => document.body.classList.remove("experience-transitioning"), 300));
+        const destination = document.querySelector(mode === "modern" ? "#modern-main" : "#main-content");
+        if (destination) {
+            destination.tabIndex = -1;
+            destination.focus({ preventScroll: true });
+        }
+        choosingDevice = false;
     };
-    const syncExperience = () => chooseForViewport(mobileViewport.matches ? "modern" : "classic");
     window.addEventListener("popstate", syncRoute);
     window.addEventListener("hashchange", syncRoute);
-    if (mobileViewport.addEventListener) mobileViewport.addEventListener("change", syncExperience);
-    else mobileViewport.addListener(syncExperience);
+    deviceChoice.addEventListener("click", (event) => {
+        const option = event.target.closest("[data-device-choice]");
+        if (option) chooseDevice(option.dataset.deviceChoice);
+    });
+    deviceChoice.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+            event.preventDefault();
+            return;
+        }
+        if (event.key !== "Tab") return;
+        const options = Array.from(deviceChoice.querySelectorAll("[data-device-choice]:not(:disabled)"));
+        const first = options[0];
+        const last = options[options.length - 1];
+        const panel = deviceChoice.querySelector(".device-choice-panel");
+        if (event.shiftKey && (document.activeElement === first || document.activeElement === panel)) {
+            event.preventDefault();
+            last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first?.focus();
+        }
+    });
     window.addEventListener("resize", () => {
         if (active === "modern" && currentRoute.includes("/architecture/")) renderRoute(currentRoute, false);
     });
 
     const directRoute = /^#pd\//.test(initialHash);
-    active = mobileViewport.matches ? "modern" : "classic";
-    root.classList.toggle("experience-modern", active === "modern");
     setModeMetadata(active);
-    if (active === "modern") {
+    const awaitingChoice = root.classList.contains("device-choice-active");
+    if (awaitingChoice) {
+        showDeviceChoice();
+        if (root.classList.contains("intro-active")) window.addEventListener("pd-intro-dismissed", focusDeviceChoice, { once: true });
+    } else {
+        classicFrame.inert = active === "modern";
+        modernRoot.inert = active !== "modern";
+        deviceChoice.inert = true;
+    }
+    if (!awaitingChoice && active === "modern") {
         loadStyles().then(() => {
             makeShell();
             const route = routeFromHash() || "home";
             if (directRoute) window.history.replaceState({ pdRoute: route }, "", initialHash);
             renderRoute(route, false);
         }).catch(() => {
-            if (mobileViewport.matches) {
-                root.classList.remove("experience-modern");
-                active = "classic";
-                setModeMetadata(active);
-            }
+            root.classList.remove("experience-modern");
+            active = "classic";
+            setModeMetadata(active);
+            showDeviceChoice("The mobile interface could not load. Please choose an experience again.");
         });
+    }
+    window.__pdExperienceReady = true;
+    if (window.__pdExperienceFailsafe) {
+        window.clearTimeout(window.__pdExperienceFailsafe);
+        window.__pdExperienceFailsafe = null;
     }
 })();
