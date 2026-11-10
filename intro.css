@@ -1,0 +1,416 @@
+/* Cinematic identity intro. All motion is scoped to this overlay. */
+html.intro-active,
+html.intro-active body {
+    overflow: hidden;
+    background: #000;
+}
+
+.cinematic-intro {
+    position: fixed;
+    z-index: 1100;
+    inset: 0;
+    display: none;
+    overflow: hidden;
+    place-items: center;
+    color: #f1f3f5;
+    background: #000;
+    isolation: isolate;
+}
+
+html.intro-active .cinematic-intro {
+    display: grid;
+    opacity: 1;
+}
+
+html.intro-active .site-frame,
+html.intro-active #back-to-top {
+    visibility: hidden;
+}
+
+.intro-shots {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.intro-scene {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    overflow: visible;
+    transition: opacity 110ms linear;
+}
+
+.intro-scene.is-active {
+    opacity: 1;
+}
+
+.art-base {
+    fill: none;
+    color: #1a3947;
+    opacity: 0.3;
+}
+
+.graph-lines path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.graph-points circle {
+    fill: currentColor;
+    stroke: #061018;
+    stroke-width: 1.5;
+}
+
+.art-lit {
+    color: #94e8ff;
+    filter: drop-shadow(0 0 5px rgba(47, 179, 221, 0.3));
+}
+
+.art-lit .graph-lines path {
+    stroke-width: 2;
+}
+
+.art-lit .graph-points circle {
+    stroke: #d9f8ff;
+    stroke-width: 1;
+}
+
+.art-lit {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 34%, #000 66%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, #000 34%, #000 66%, transparent 100%);
+    -webkit-mask-size: 34% 100%;
+    mask-size: 34% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: -48vw 0;
+    mask-position: -48vw 0;
+}
+
+.intro-scene.is-active .art-lit {
+    animation: intro-sweep-ltr 800ms cubic-bezier(.35, 0, .2, 1) both;
+}
+
+.intro-scene[data-direction="rtl"].is-active .art-lit {
+    animation-name: intro-sweep-rtl;
+}
+
+/* Alternate cool and restrained red light across the same graph language. */
+.intro-scene:nth-child(2) .art-lit {
+    color: #b85c70;
+    filter: drop-shadow(0 0 6px rgba(202, 58, 79, 0.26));
+}
+
+.intro-scene:nth-child(3) .art-lit {
+    color: #82c8ff;
+    filter: drop-shadow(0 0 6px rgba(57, 137, 236, 0.3));
+}
+
+.intro-scene:nth-child(4) .art-lit {
+    color: #c16670;
+    filter: drop-shadow(0 0 6px rgba(210, 58, 69, 0.28));
+}
+
+.intro-scene:nth-child(6) .art-lit {
+    filter: drop-shadow(0 0 7px rgba(86, 186, 226, 0.32));
+}
+
+@keyframes intro-sweep-ltr {
+    from { -webkit-mask-position: -48vw 0; mask-position: -48vw 0; }
+    to { -webkit-mask-position: 148vw 0; mask-position: 148vw 0; }
+}
+
+@keyframes intro-sweep-rtl {
+    from { -webkit-mask-position: 148vw 0; mask-position: 148vw 0; }
+    to { -webkit-mask-position: -48vw 0; mask-position: -48vw 0; }
+}
+
+/* A few restrained warm nodes mark hazards and feedback junctions. */
+.intro-scene:nth-child(5) .art-lit .graph-points circle:nth-child(3n),
+.intro-scene:nth-child(6) .art-lit .graph-points circle:nth-child(4n) {
+    fill: #d99076;
+    stroke: #ffd0b8;
+}
+
+.intro-scene:nth-child(5) .art-base .graph-points circle:nth-child(3n),
+.intro-scene:nth-child(6) .art-base .graph-points circle:nth-child(4n) {
+    color: #634237;
+}
+
+.intro-vignette {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse at center, transparent 18%, rgba(0, 0, 0, 0.48) 70%, #000 115%),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.38), transparent 30%, transparent 68%, rgba(0, 0, 0, 0.55));
+}
+
+.intro-caption {
+    position: absolute;
+    z-index: 4;
+    left: clamp(1rem, 4vw, 3rem);
+    bottom: max(1.35rem, env(safe-area-inset-bottom));
+    display: flex;
+    align-items: center;
+    gap: 0.72rem;
+    max-width: min(72vw, 34rem);
+    color: rgba(221, 233, 237, 0.83);
+    font-family: var(--font-mono, "Courier New", monospace);
+    font-size: clamp(0.56rem, 0.8vw, 0.7rem);
+    letter-spacing: 0.12em;
+    line-height: 1.4;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(5px);
+    transition: opacity 220ms ease, transform 300ms ease;
+    pointer-events: none;
+}
+
+.intro-caption.is-active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.intro-caption-index {
+    flex: 0 0 auto;
+    color: #7bdcf7;
+    font-size: 0.9em;
+}
+
+.intro-caption-rule {
+    flex: 0 0 1px;
+    height: 1.05rem;
+    background: linear-gradient(180deg, rgba(133, 223, 248, 0.9), rgba(133, 223, 248, 0.18));
+}
+
+.intro-caption-title {
+    color: rgba(232, 240, 243, 0.84);
+}
+
+.intro-caption[data-shot="2"] .intro-caption-index,
+.intro-caption[data-shot="4"] .intro-caption-index {
+    color: #d27a82;
+}
+
+.intro-caption[data-shot="3"] .intro-caption-index {
+    color: #82c8ff;
+}
+
+.intro-convergence,
+.intro-lockup {
+    position: absolute;
+    z-index: 3;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.intro-convergence svg {
+    width: clamp(220px, 33vw, 390px);
+    overflow: visible;
+    fill: none;
+    filter: drop-shadow(0 0 8px rgba(47, 179, 221, 0.3));
+}
+
+.intro-convergence .emblem-graph path {
+    fill: none;
+    stroke: #94e8ff;
+    stroke-width: 2.3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.intro-convergence .emblem-nodes circle {
+    fill: #94e8ff;
+    stroke: #d9f8ff;
+    stroke-width: 1.2;
+}
+
+.intro-convergence.is-active {
+    opacity: 1;
+    animation: convergence-out 900ms ease-in-out both;
+}
+
+.intro-convergence.is-active svg {
+    animation: converge-form 900ms cubic-bezier(.3, .7, .2, 1) both;
+}
+
+@keyframes converge-form {
+    from { transform: scale(1.28); opacity: 0.08; }
+    to { transform: scale(1); opacity: 0.9; }
+}
+
+@keyframes convergence-out {
+    0%, 62% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.intro-lockup {
+    --logo-diameter: clamp(220px, 33vw, 390px);
+    gap: 0.45rem;
+    transform: translateY(5px);
+}
+
+.intro-lockup.is-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 300ms ease, transform 800ms cubic-bezier(.16, .65, .25, 1);
+}
+
+.intro-logo-mark {
+    position: relative;
+    width: var(--logo-diameter);
+    aspect-ratio: 1;
+    overflow: hidden;
+    opacity: 0;
+    clip-path: circle(0% at 50% 50%);
+    transform: scale(0.94);
+    filter: brightness(0.62) contrast(1.08);
+}
+
+.intro-lockup.is-active .intro-logo-mark {
+    animation: emblem-emerge 1450ms cubic-bezier(.18, .72, .22, 1) both;
+}
+
+.intro-logo-mark img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    filter: drop-shadow(0 0 20px rgba(65, 159, 193, 0.16));
+}
+
+.intro-logo-glint {
+    position: absolute;
+    inset: -18% -45%;
+    pointer-events: none;
+    background: linear-gradient(112deg,
+        transparent 45%,
+        rgba(82, 190, 235, 0.08) 48%,
+        rgba(202, 241, 255, 0.76) 50%,
+        rgba(241, 194, 104, 0.46) 52%,
+        transparent 56%);
+    opacity: 0;
+    transform: translateX(-58%);
+    mix-blend-mode: screen;
+}
+
+.intro-lockup.is-active .intro-logo-glint {
+    animation: emblem-reflection 1350ms cubic-bezier(.15, .65, .25, 1) 180ms both;
+}
+
+@keyframes emblem-emerge {
+    0% { opacity: 0.28; clip-path: circle(0% at 50% 50%); transform: scale(0.94); filter: brightness(0.48) contrast(1.12); }
+    58% { opacity: 0.95; clip-path: circle(58% at 50% 50%); transform: scale(1.015); filter: brightness(1.42) contrast(1.08); }
+    100% { opacity: 1; clip-path: circle(72% at 50% 50%); transform: scale(1); filter: brightness(1) contrast(1.04); }
+}
+
+@keyframes emblem-reflection {
+    0% { opacity: 0; transform: translateX(-58%); }
+    28% { opacity: 0.95; }
+    78% { opacity: 0.72; }
+    100% { opacity: 0; transform: translateX(58%); }
+}
+
+.intro-tagline {
+    width: var(--logo-diameter);
+    max-width: var(--logo-diameter);
+    margin: 0.15rem 0 0;
+    color: #a34fff;
+    font-family: var(--font-mono, "Courier New", monospace);
+    font-size: clamp(0.42rem, 0.55vw, 0.58rem);
+    letter-spacing: 0.12em;
+    line-height: 1.7;
+    text-align: center;
+    text-transform: uppercase;
+    text-wrap: balance;
+    opacity: 0;
+    transform: translateY(7px);
+    transition: opacity 650ms ease, transform 800ms ease;
+}
+
+.intro-lockup.is-active .intro-tagline {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 920ms;
+}
+
+.intro-tagline span {
+    padding-inline: 0.25em;
+    color: #ddb0ff;
+}
+
+.intro-skip {
+    position: absolute;
+    z-index: 5;
+    right: max(1.25rem, env(safe-area-inset-right));
+    bottom: max(1.15rem, env(safe-area-inset-bottom));
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 42px;
+    padding: 0.5rem 0.85rem;
+    color: rgba(223, 237, 241, 0.75);
+    border: 1px solid rgba(151, 203, 216, 0.28);
+    border-radius: 2px;
+    background: rgba(1, 8, 12, 0.72);
+    font: 0.72rem/1 var(--font-mono, "Courier New", monospace);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.intro-skip:hover,
+.intro-skip:focus-visible {
+    color: #fff;
+    border-color: rgba(131, 222, 243, 0.78);
+    background: rgba(8, 34, 43, 0.9);
+}
+
+html.intro-fading .cinematic-intro {
+    opacity: 0;
+    transition: opacity 900ms ease;
+}
+
+html.intro-fading .site-frame,
+html.intro-fading #back-to-top {
+    visibility: visible;
+}
+
+html.intro-fading .site-frame {
+    animation: site-emerge 900ms ease both;
+}
+
+@keyframes site-emerge {
+    from { opacity: 0.35; filter: brightness(0.7); }
+    to { opacity: 1; filter: brightness(1); }
+}
+
+html.intro-fading .intro-skip {
+    opacity: 0;
+    transition: opacity 300ms ease;
+}
+
+@media (max-width: 600px) {
+    .intro-convergence svg { width: min(74vw, 300px); }
+    .intro-lockup { --logo-diameter: min(74vw, 300px); }
+    .intro-logo-mark { width: var(--logo-diameter); }
+    .intro-tagline { font-size: 0.42rem; letter-spacing: 0.07em; }
+    .intro-caption { left: 0.85rem; bottom: max(1.2rem, env(safe-area-inset-bottom)); max-width: 68vw; gap: 0.5rem; font-size: 0.54rem; letter-spacing: 0.08em; }
+    .art-lit { stroke-width: 3.5; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html.intro-active .cinematic-intro { display: none; }
+}

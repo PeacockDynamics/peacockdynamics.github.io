@@ -1,0 +1,528 @@
+/* Single-screen instrument interface for the optional Modern experience. */
+:root {
+    --modern-bg: #080610;
+    --modern-bg-raised: #100b1c;
+    --modern-surface: #171126;
+    --modern-violet: #9875dd;
+    --modern-bright: #b99aff;
+    --modern-muted-violet: #75638f;
+    --modern-text: #f1edf8;
+    --modern-copy: #b8afc8;
+    --modern-line: rgba(198, 177, 232, .16);
+    --modern-line-soft: rgba(198, 177, 232, .09);
+}
+
+html.experience-modern {
+    color-scheme: dark;
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+    scroll-behavior: auto;
+    background: var(--modern-bg);
+}
+
+html.experience-modern body {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    overscroll-behavior: none;
+    color: var(--modern-text);
+    background: var(--modern-bg);
+    font-family: Inter, "Avenir Next", Avenir, "Segoe UI", sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+}
+
+html.experience-modern ::selection { color: #080610; background: var(--modern-bright); }
+html.experience-modern a { color: var(--modern-bright); }
+html.experience-modern :focus-visible {
+    outline: 2px solid var(--modern-bright);
+    outline-offset: 3px;
+}
+
+#modern-experience {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    height: 100svh;
+    min-height: 0;
+    overflow: hidden;
+    isolation: isolate;
+    color: var(--modern-text);
+    background:
+        radial-gradient(ellipse at 50% 46%, rgba(73, 52, 111, .16), transparent 34rem),
+        radial-gradient(ellipse at 12% 6%, rgba(54, 36, 83, .12), transparent 30rem),
+        var(--modern-bg);
+    opacity: 1;
+    transition: opacity 250ms ease;
+}
+
+#modern-experience[hidden] { display: none; }
+.site-frame { transition: opacity 250ms ease; }
+.experience-modern body.experience-transitioning .site-frame { display: block !important; }
+html:not(.experience-modern) body.experience-transitioning #modern-experience { display: block !important; }
+.experience-transitioning #modern-experience,
+.experience-transitioning .site-frame { opacity: 0; }
+
+.command-interface {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 50% 45%, rgba(86, 63, 127, .1), transparent 33rem),
+        linear-gradient(160deg, rgba(13, 9, 23, .48), rgba(8, 6, 16, .1) 52%);
+}
+
+html.experience-modern .command-ambient {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+.command-ambient svg { width: 100%; height: 100%; opacity: .72; }
+.ambient-points circle { fill: #b99aff; opacity: .3; }
+
+.command-header {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    min-height: 78px;
+    padding: max(.55rem, env(safe-area-inset-top)) clamp(1rem, 4vw, 3.5rem) .55rem;
+    border-bottom: 1px solid var(--modern-line-soft);
+    background: rgba(8, 6, 16, .42);
+}
+.command-brand {
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    min-width: 0;
+    color: var(--modern-text) !important;
+    text-decoration: none;
+}
+.command-brand img { width: 50px; height: 44px; object-fit: contain; }
+.command-wordmark { display: flex; flex-direction: column; color: #eee8f7; font-size: .77rem; font-weight: 500; letter-spacing: .18em; line-height: 1.45; white-space: nowrap; }
+.command-wordmark strong { color: var(--modern-bright); font-weight: 650; }
+.command-wordmark small { margin-top: .16rem; color: #897e9b; font: .53rem ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .11em; }
+
+.command-main {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    min-width: 0;
+    min-height: 0;
+    place-items: center;
+    padding: .6rem clamp(.8rem, 3.5vw, 3rem);
+}
+.command-view {
+    width: min(100%, 1120px);
+    height: 100%;
+    min-height: 0;
+    transition: opacity 180ms ease, transform 180ms ease;
+}
+.command-view.is-changing { opacity: 0; transform: translateY(5px) scale(.995); }
+
+.command-status {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .65rem;
+    min-height: 29px;
+    padding: 0 .75rem max(.25rem, env(safe-area-inset-bottom));
+    color: #756b83;
+    font: .56rem ui-monospace, SFMono-Regular, Consolas, monospace;
+    letter-spacing: .14em;
+}
+.command-status i { width: 3px; height: 3px; border-radius: 50%; background: #77629d; }
+.status-light { width: 5px; height: 5px; border-radius: 50%; background: #a98bdd; box-shadow: 0 0 9px rgba(185, 154, 255, .65); }
+
+/* Default screen: brand, dial, and the five navigation channels only. */
+.dial-screen {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    padding: .15rem 0 .3rem;
+}
+.dial-intro { align-self: end; text-align: center; }
+.dial-eyebrow {
+    margin: 0 0 .22rem;
+    color: #8f7daf;
+    font: .61rem ui-monospace, SFMono-Regular, Consolas, monospace;
+    letter-spacing: .2em;
+}
+.dial-title {
+    margin: 0;
+    color: #e7e0f1;
+    font-size: clamp(1.12rem, 2vw, 1.4rem);
+    font-weight: 400;
+    letter-spacing: .035em;
+}
+.sonar-dial {
+    position: relative;
+    align-self: center;
+    width: min(76vw, 490px, calc(100svh - 230px));
+    height: min(76vw, 490px, calc(100svh - 230px));
+    max-width: calc(100vw - 1.5rem);
+    aspect-ratio: 1;
+    margin: .1rem 0;
+    filter: drop-shadow(0 0 42px rgba(113, 82, 164, .08));
+}
+.dial-rings { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.dial-ring, .dial-center-rule {
+    fill: none;
+    stroke: rgba(178, 153, 217, .24);
+    stroke-width: 1;
+}
+.ring-outer { stroke: rgba(176, 148, 219, .35); }
+.ring-middle { stroke-dasharray: 1 5; }
+.ring-inner { stroke: rgba(176, 148, 219, .16); }
+.dial-center-rule { stroke: rgba(176, 148, 219, .12); }
+.dial-radials { fill: none; stroke: rgba(185, 154, 255, .34); stroke-width: 1; }
+.dial-crosshair { fill: none; stroke: rgba(192, 169, 229, .62); stroke-width: 1.2; }
+.dial-sweep {
+    fill: none;
+    stroke: rgba(185, 154, 255, .48);
+    stroke-width: 1.25;
+    stroke-dasharray: 5 1130;
+    stroke-linecap: round;
+    transform-origin: 260px 260px;
+    animation: dial-sweep 16s linear infinite;
+}
+.dial-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: grid;
+    justify-items: center;
+    width: 43%;
+    transform: translate(-50%, -50%);
+    color: #9a89b7;
+    font: .56rem ui-monospace, SFMono-Regular, Consolas, monospace;
+    letter-spacing: .16em;
+}
+.dial-center svg { width: 62px; height: 62px; overflow: visible; }
+.dial-mark-lines { fill: none; stroke: #a88bd4; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; }
+.dial-mark-nodes { fill: #c5adf2; stroke: #100b1c; stroke-width: 1.4; }
+.dial-center span { margin-top: .35rem; }
+.dial-nodes { position: absolute; inset: 0; }
+.dial-node {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    min-height: 42px;
+    padding: .25rem .3rem;
+    border: 0;
+    color: #bfb2d4;
+    background: transparent;
+    font: .64rem ui-monospace, SFMono-Regular, Consolas, monospace;
+    letter-spacing: .1em;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color 180ms ease, filter 180ms ease, transform 180ms ease;
+}
+.dial-node:hover, .dial-node:focus-visible { color: #f0e8ff; filter: drop-shadow(0 0 9px rgba(185, 154, 255, .72)); }
+.dial-node-index { color: #817394; font-size: .55rem; }
+.dial-node-dot { width: 7px; height: 7px; flex: 0 0 7px; border: 1px solid #b99aff; border-radius: 50%; background: #211832; box-shadow: 0 0 8px rgba(185, 154, 255, .28); }
+.dial-node-label { line-height: 1.2; }
+.node-mission { top: 5%; left: 50%; flex-direction: column; gap: .2rem; transform: translate(-50%, -25%); }
+.node-technology { top: 28%; right: 2.5%; flex-direction: row-reverse; transform: translate(0, -50%); }
+.node-projects { right: 7%; bottom: 10%; flex-direction: row-reverse; transform: translate(0, 30%); }
+.node-organization { bottom: 10%; left: 7%; transform: translate(0, 30%); }
+.node-contact { top: 28%; left: 2.5%; transform: translate(0, -50%); }
+.node-mission .dial-node-index { order: 2; }
+.dial-bearing { position: absolute; color: rgba(169, 148, 199, .44); font: .52rem ui-monospace, monospace; }
+.bearing-n { top: 15%; left: 50%; transform: translateX(-50%); }
+.bearing-e { top: 50%; right: 13%; transform: translateY(-50%); }
+.bearing-s { bottom: 14%; left: 50%; transform: translateX(-50%); }
+.bearing-w { top: 50%; left: 13%; transform: translateY(-50%); }
+.dial-instruction { align-self: start; margin: .15rem 0 0; color: #756b83; font: .53rem ui-monospace, monospace; letter-spacing: .14em; text-align: center; }
+.dial-instruction span { padding: 0 .3rem; color: #b99aff; }
+
+/* Selected channel screens. Every control is persistent in the same viewport. */
+.command-panel {
+    display: grid;
+    grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    padding: clamp(.15rem, 1vh, .7rem) clamp(0rem, 1vw, .55rem) 0;
+}
+.panel-toolbar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: .5rem;
+    min-height: 39px;
+    border-bottom: 1px solid var(--modern-line-soft);
+}
+.command-button {
+    border: 0;
+    color: var(--modern-copy);
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
+}
+.toolbar-back, .toolbar-home {
+    min-height: 38px;
+    padding: .35rem .45rem;
+    color: #a99abb;
+    font: .62rem ui-monospace, SFMono-Regular, Consolas, monospace;
+    letter-spacing: .09em;
+}
+.toolbar-back { justify-self: start; }
+.toolbar-home { justify-self: end; }
+.toolbar-back:hover, .toolbar-home:hover { color: #f3ebff; }
+.toolbar-context { color: #70647e; font: .56rem ui-monospace, monospace; letter-spacing: .15em; }
+.panel-heading { align-self: start; padding: clamp(.8rem, 2vh, 1.3rem) 0 .5rem; }
+.panel-kicker { margin: 0 0 .1rem; color: var(--modern-violet); font: .58rem ui-monospace, monospace; letter-spacing: .17em; }
+.panel-title { margin: 0; color: var(--modern-text); font-size: clamp(1.35rem, 3vw, 2.15rem); font-weight: 440; line-height: 1.2; letter-spacing: -.035em; }
+.panel-subtitle { margin: .25rem 0 0; color: #978da5; font-size: .78rem; }
+.panel-content { display: grid; min-height: 0; overflow: hidden; align-content: center; }
+.panel-tabs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .35rem;
+    min-height: 43px;
+    border-top: 1px solid var(--modern-line-soft);
+}
+.panel-tab {
+    min-height: 36px;
+    padding: .3rem .8rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    color: #92869f;
+    background: transparent;
+    font-size: .69rem;
+    cursor: pointer;
+}
+.panel-tab[aria-current="page"] { border-color: rgba(185, 154, 255, .24); color: #e7def5; background: rgba(69, 50, 97, .38); }
+.panel-tab:hover { color: #fff; }
+.page-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.35rem;
+    min-height: 43px;
+    border-top: 1px solid var(--modern-line-soft);
+}
+.page-step { min-height: 36px; padding: .35rem .55rem; color: #b5a4d0; font: .59rem ui-monospace, monospace; letter-spacing: .07em; }
+.page-step:disabled { opacity: .3; cursor: default; }
+.page-indicator { min-width: 3.2rem; color: #8d829b; font: .61rem ui-monospace, monospace; letter-spacing: .1em; text-align: center; }
+
+.list-view { display: grid; grid-template-rows: auto auto minmax(0, 1fr); gap: .65rem; min-height: 0; }
+.list-introduction { max-width: 78ch; margin: 0; color: #aaa0b8; font-size: .8rem; line-height: 1.55; }
+.lineage-count { margin-top: -.35rem; }
+.selection-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-content: center; gap: .55rem; min-height: 0; }
+.project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.compact-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.people-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.selection-item {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: .65rem;
+    min-width: 0;
+    min-height: 59px;
+    padding: .65rem .8rem;
+    border: 1px solid var(--modern-line-soft);
+    border-radius: 2px;
+    color: var(--modern-text);
+    background: linear-gradient(125deg, rgba(27, 19, 42, .88), rgba(13, 10, 21, .78));
+    text-align: left;
+    transition: border-color 170ms ease, background 170ms ease, transform 170ms ease;
+}
+.selection-item:hover, .selection-item:focus-visible { border-color: rgba(185, 154, 255, .52); background: rgba(37, 27, 55, .94); transform: translateY(-1px); }
+.selection-index, .detail-index { color: #907ab1; font: .58rem ui-monospace, monospace; letter-spacing: .11em; }
+.selection-copy { display: grid; gap: .1rem; min-width: 0; }
+.selection-title { color: #eee8f5; font-size: .84rem; font-weight: 500; line-height: 1.35; }
+.selection-meta { overflow: hidden; color: #857b91; font: .55rem ui-monospace, monospace; letter-spacing: .06em; text-overflow: ellipsis; white-space: nowrap; }
+.selection-arrow { color: #927bb8; font-size: .95rem; }
+
+.focus-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .7rem; }
+.focus-card { position: relative; display: grid; align-content: start; gap: .55rem; min-height: 150px; padding: 1rem; border: 1px solid var(--modern-line); background: rgba(20, 14, 31, .78); text-align: left; }
+.focus-card:hover { border-color: rgba(185, 154, 255, .55); }
+.focus-title { color: var(--modern-text); font-size: .86rem; font-weight: 500; }
+.focus-summary { color: var(--modern-copy); font-size: .73rem; line-height: 1.55; }
+.focus-card .selection-arrow { position: absolute; right: .8rem; bottom: .65rem; }
+.mission-reading, .detail-copy, .record-overview { width: min(100%, 850px); justify-self: center; }
+.paged-copy { margin: 0; color: #d0c8da; font-size: clamp(.93rem, 1.5vw, 1.08rem); line-height: 1.8; }
+.mission-copy { max-width: 76ch; }
+.mission-status-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem; margin-top: clamp(1.1rem, 3vh, 2rem); }
+.mission-status-unit { display: grid; gap: .25rem; padding: .8rem 1rem; border-left: 1px solid #8064aa; background: rgba(22, 16, 34, .62); }
+.status-label { color: #93879e; font: .56rem ui-monospace, monospace; letter-spacing: .12em; }
+.status-value { color: #ddd1ef; font-size: .74rem; font-weight: 500; }
+.inline-route { margin-top: 1rem; padding: .2rem 0; color: #baa1e5; font: .63rem ui-monospace, monospace; letter-spacing: .08em; }
+.detail-copy { display: grid; gap: 1rem; }
+
+.panel-content > .command-resources,
+.record-overview > .command-resources { justify-content: center; }
+.command-resources { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: .65rem; }
+.resource-link, .shortcut-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: .6rem .9rem;
+    border: 1px solid rgba(185, 154, 255, .29);
+    border-radius: 2px;
+    color: #d9c8f2 !important;
+    background: rgba(29, 21, 44, .82);
+    font-size: .76rem;
+    text-decoration: none;
+    cursor: pointer;
+}
+.resource-link:hover, .shortcut-link:hover { border-color: var(--modern-bright); background: rgba(57, 41, 81, .9); }
+.record-overview { display: grid; justify-items: start; align-content: center; gap: 1rem; }
+.record-image { display: grid; place-items: center; width: min(100%, 690px); max-height: 37svh; margin: 0 auto; overflow: hidden; border: 1px solid var(--modern-line); background: #0a0811; }
+.record-image img { width: 100%; height: 100%; max-height: 37svh; object-fit: contain; }
+.platform-image, .platform-image img { max-height: min(24svh, 190px); }
+.visual-view { display: grid; place-items: center; width: 100%; height: 100%; min-height: 0; }
+.architecture-view { display: grid; place-items: center; width: 100%; height: 100%; min-height: 0; }
+.architecture-view .product-architecture-panel { width: 100%; max-height: 100%; padding: .35rem; overflow: hidden; }
+.command-architecture-svg { display: none; max-width: 100%; max-height: min(45svh, 390px); margin: 0 auto; }
+.command-architecture-svg.command-architecture-active { display: block; }
+.command-architecture-svg-desktop { display: block; }
+.command-architecture-svg .architecture-block rect { fill: #171126; stroke: #75638f; stroke-width: 1.5; }
+.command-architecture-svg .architecture-block .architecture-core-block { fill: #2b2040; stroke: #b99aff; }
+.command-architecture-svg .architecture-flow,
+.command-architecture-svg .architecture-flow path { fill: none; stroke: #ad91d8; stroke-width: 2; }
+.command-architecture-svg .architecture-block text { fill: #eee7f7; font: 14px sans-serif; }
+.command-architecture-svg defs marker path { fill: #ad91d8; stroke: none; }
+.architecture-notes { display: grid; gap: 1rem; width: min(100%, 820px); margin: 0 auto; }
+.architecture-label-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .45rem; }
+.architecture-label-item { display: flex; align-items: center; min-height: 42px; padding: .5rem .7rem; border-left: 1px solid #8064aa; color: #e4dcef; background: rgba(22, 16, 34, .62); font-size: .78rem; }
+.architecture-caption { align-self: end; margin: .2rem 0 0; color: #857995; font: .54rem ui-monospace, monospace; letter-spacing: .12em; text-align: center; }
+
+.contact-view { display: grid; justify-items: center; gap: 1rem; text-align: center; }
+.contact-copy { max-width: 70ch; margin: 0; color: #c7bdcf; font-size: clamp(.92rem, 1.5vw, 1.05rem); }
+.contact-email { color: var(--modern-bright) !important; font-size: 1.1rem; text-decoration: none; }
+.contact-copyright { color: #80768e; font-size: .68rem; }
+.contact-shortcuts { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; margin-top: .6rem; }
+.shortcut-link { min-height: 38px; padding: .45rem .7rem; font-size: .68rem; }
+
+@keyframes dial-sweep { to { stroke-dashoffset: -1135; transform: rotate(360deg); } }
+
+@media (max-width: 850px) {
+    .selection-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 620px) {
+    .command-header { min-height: 67px; gap: .5rem; padding: max(.45rem, env(safe-area-inset-top)) .7rem .45rem; }
+    .command-brand { gap: .45rem; }
+    .command-brand img { width: 38px; height: 37px; }
+    .command-wordmark { font-size: .64rem; letter-spacing: .13em; }
+    .command-wordmark small { max-width: 46vw; overflow: hidden; font-size: .43rem; letter-spacing: .065em; text-overflow: ellipsis; }
+    .command-main { padding: .35rem .65rem; }
+    .command-status { min-height: 25px; gap: .4rem; font-size: .48rem; letter-spacing: .09em; }
+    .status-context { display: none; }
+    .dial-screen { padding-block: .15rem; }
+    .dial-eyebrow { font-size: .52rem; letter-spacing: .14em; }
+    .dial-title { font-size: 1rem; }
+    .sonar-dial { width: min(90vw, 410px, calc(100svh - 205px)); height: min(90vw, 410px, calc(100svh - 205px)); }
+    .dial-node { gap: .27rem; min-height: 40px; padding: .15rem .2rem; font-size: .52rem; letter-spacing: .055em; }
+    .dial-node-index { font-size: .48rem; }
+    .dial-node-dot { width: 6px; height: 6px; flex-basis: 6px; }
+    .node-mission { top: 4%; }
+    .node-technology { right: 1%; top: 29%; }
+    .node-projects { right: 3%; bottom: 10%; }
+    .node-organization { left: 3%; bottom: 10%; }
+    .node-contact { left: 1%; top: 29%; }
+    .dial-center svg { width: 49px; height: 49px; }
+    .dial-center { font-size: .49rem; }
+    .dial-instruction { font-size: .45rem; letter-spacing: .08em; }
+    .command-panel { padding-top: 0; }
+    .panel-toolbar { min-height: 35px; }
+    .toolbar-back, .toolbar-home { min-height: 40px; padding-inline: .2rem; font-size: .57rem; }
+    .toolbar-context { font-size: .48rem; letter-spacing: .1em; }
+    .panel-heading { padding: .65rem 0 .35rem; }
+    .panel-kicker { font-size: .51rem; }
+    .panel-title { font-size: clamp(1.16rem, 5vw, 1.55rem); }
+    .panel-subtitle { font-size: .69rem; }
+    .panel-tabs { justify-content: flex-start; gap: .1rem; min-height: 39px; overflow-x: auto; scrollbar-width: none; }
+    .panel-tabs::-webkit-scrollbar { display: none; }
+    .panel-tab { flex: 0 0 auto; min-height: 40px; padding-inline: .58rem; font-size: .65rem; }
+    .page-controls { min-height: 42px; gap: .9rem; }
+    .page-step { min-height: 40px; font-size: .55rem; }
+    .list-view { gap: .45rem; }
+    .list-introduction { font-size: .69rem; line-height: 1.45; }
+    .selection-grid, .project-grid, .compact-grid, .people-grid { gap: .38rem; }
+    .selection-item { grid-template-columns: 1.5rem minmax(0, 1fr) auto; gap: .38rem; min-height: 51px; padding: .45rem .48rem; }
+    .selection-index { font-size: .5rem; }
+    .selection-title { font-size: .72rem; line-height: 1.25; }
+    .selection-meta { font-size: .48rem; }
+    .selection-arrow { font-size: .77rem; }
+    .focus-grid { grid-template-columns: 1fr; gap: .35rem; }
+    .focus-card { grid-template-columns: 1.5rem minmax(0, 1fr) auto; align-items: center; gap: .4rem; min-height: 55px; padding: .48rem .6rem; }
+    .focus-title { font-size: .7rem; }
+    .focus-summary { grid-column: 2; font-size: .62rem; line-height: 1.35; }
+    .focus-card .selection-index { grid-row: 1 / span 2; }
+    .focus-card .selection-arrow { position: static; grid-column: 3; grid-row: 1 / span 2; }
+    .paged-copy { font-size: .88rem; line-height: 1.68; }
+    .mission-status-grid { gap: .4rem; margin-top: .8rem; }
+    .mission-status-unit { padding: .55rem .6rem; }
+    .status-label { font-size: .48rem; }
+    .status-value { font-size: .61rem; line-height: 1.3; }
+    .inline-route { margin-top: .6rem; font-size: .55rem; }
+    .detail-copy { gap: .7rem; }
+    .resource-link, .shortcut-link { min-height: 39px; padding: .5rem .65rem; font-size: .67rem; }
+    .record-image, .record-image img { max-height: 33svh; }
+    .command-architecture-svg-desktop { display: none; }
+    .command-architecture-svg-mobile { display: block; max-height: calc(100svh - 250px); }
+    .architecture-caption { font-size: .46rem; }
+    .contact-view { gap: .75rem; }
+    .contact-copy { font-size: .85rem; }
+    .contact-email { font-size: .98rem; }
+    .contact-shortcuts { gap: .35rem; margin-top: .25rem; }
+}
+
+@media (max-width: 380px) {
+    .command-wordmark small { display: none; }
+    .sonar-dial { width: min(92vw, 350px); height: min(92vw, 350px); max-height: calc(100svh - 195px); }
+    .dial-node { font-size: .54rem; }
+    .node-projects { right: 0; }
+    .node-organization { left: 0; }
+    .selection-item { grid-template-columns: 1.25rem minmax(0, 1fr) auto; gap: .3rem; padding-inline: .36rem; }
+    .selection-title { font-size: .69rem; }
+}
+
+@media (max-height: 650px) {
+    .command-header { min-height: 61px; }
+    .command-status { min-height: 22px; }
+    .panel-heading { padding-block: .45rem .25rem; }
+    .panel-tabs { min-height: 40px; }
+    .panel-tab { min-height: 38px; }
+    .page-controls { min-height: 39px; }
+    .selection-item { min-height: 48px; }
+    .focus-card { min-height: 130px; }
+    .mission-status-grid { margin-top: .75rem; }
+    .sonar-dial { width: min(60svh, 76vw, 370px); height: min(60svh, 76vw, 370px); }
+}
+
+@media (max-height: 520px) {
+    .sonar-dial { width: min(60svh, 92vw, 340px); height: min(60svh, 92vw, 340px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #modern-experience, #modern-experience *, #modern-experience *::before, #modern-experience *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+    }
+}
