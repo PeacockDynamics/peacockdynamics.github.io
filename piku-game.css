@@ -92,6 +92,18 @@
 .piku-introduction { margin: .8rem 0 1rem; color: #c9bfd4; font-size: .79rem; line-height: 1.62; }
 .piku-introduction p { margin: 0 0 .42rem; }
 .piku-introduction p:last-child { margin-bottom: 0; }
+.piku-controls-guide {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .55rem;
+    margin: .7rem 0 .85rem;
+    padding: .65rem .75rem;
+    border: 1px solid rgba(185, 154, 255, .2);
+    background: rgba(16, 11, 28, .76);
+}
+.piku-controls-guide div { display: grid; gap: .22rem; min-width: 0; }
+.piku-controls-guide strong { color: #c3a4eb; font: 600 .52rem ui-monospace, monospace; letter-spacing: .14em; }
+.piku-controls-guide span { color: #d2c6df; font-size: .64rem; line-height: 1.4; }
 .piku-intro-actions { display: flex; flex-wrap: wrap; gap: .65rem; }
 .piku-button {
     display: inline-flex;
@@ -210,6 +222,26 @@
 .piku-control-button:active, .piku-control-button.is-active { border-color: #f0bf35; color: #ffdc72; background: rgba(67, 49, 79, .92); }
 .piku-sonar-button { min-width: 68px; }
 .piku-orientation-note { display: none; }
+.piku-play-hint {
+    display: none;
+    position: absolute;
+    z-index: 2;
+    bottom: max(.85rem, env(safe-area-inset-bottom));
+    left: 50%;
+    width: max-content;
+    max-width: calc(100% - 11rem);
+    margin: 0;
+    padding: .42rem .65rem;
+    transform: translateX(-50%);
+    border: 1px solid rgba(185, 154, 255, .2);
+    border-radius: 3px;
+    color: #bcaad0;
+    background: rgba(9, 7, 17, .78);
+    font: .5rem/1.35 ui-monospace, monospace;
+    letter-spacing: .06em;
+    text-align: center;
+    pointer-events: none;
+}
 .piku-game-modal {
     position: absolute;
     z-index: 5;
@@ -242,9 +274,11 @@
 
 @media (pointer: coarse), (max-width: 850px) {
     .piku-touch-controls { display: flex; }
+    .piku-hint-touch { display: block; bottom: max(5.4rem, calc(env(safe-area-inset-bottom) + 4.8rem)); }
 }
 @media (pointer: fine) and (min-width: 851px) {
     .piku-touch-controls { display: none; }
+    .piku-hint-keyboard { display: block; }
 }
 @media (orientation: portrait) and (max-width: 850px) {
     .piku-orientation-note { position: absolute; z-index: 2; top: 4.4rem; left: 50%; display: block; max-width: calc(100% - 8rem); padding: .35rem .5rem; transform: translateX(-50%); border: 1px solid rgba(185, 154, 255, .2); color: #b9a8cb; background: rgba(9, 7, 17, .72); font: .5rem ui-monospace, monospace; letter-spacing: .07em; text-align: center; pointer-events: none; }
@@ -257,6 +291,10 @@
     .piku-intro-copy h1 { font-size: clamp(1.7rem, 8vw, 2.6rem); }
     .piku-subtitle { margin: .15rem 0 .35rem; }
     .piku-intro-art { grid-row: 4; width: min(100%, 580px); aspect-ratio: 1.8; }
+    .piku-controls-guide { grid-template-columns: 1fr; gap: .4rem; margin: .35rem 0 .45rem; padding: .5rem .6rem; }
+    .piku-controls-guide div { grid-template-columns: 4.2rem 1fr; align-items: baseline; gap: .35rem; }
+    .piku-controls-guide strong { font-size: .48rem; }
+    .piku-controls-guide span { font-size: .58rem; }
     .piku-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: .2rem; padding: .6rem .65rem; }
     .piku-facts div { font-size: .61rem; }
     .piku-introduction { margin: .25rem 0 .4rem; font-size: .73rem; line-height: 1.5; }
@@ -271,6 +309,7 @@
     .piku-topbar span { font-size: .48rem; }
     .piku-intro-screen { gap: .5rem; }
     .piku-intro-art { aspect-ratio: 1.9; }
+    .piku-controls-guide span { font-size: .54rem; }
     .piku-facts { gap: .25rem .45rem; }
     .piku-facts div { font-size: .56rem; }
     .piku-introduction { font-size: .69rem; }
@@ -294,6 +333,7 @@
     .piku-stat { min-height: 40px; padding: .28rem .45rem; }
     .piku-hull { min-height: 40px; padding: .28rem .45rem; }
     .piku-home-button, .piku-control-button { min-height: 40px; }
+    .piku-play-hint { bottom: .4rem; max-width: calc(100% - 9rem); font-size: .43rem; }
     .piku-move-pad { grid-template-columns: repeat(2, 42px); }
     .piku-control-button { min-width: 42px; }
 }

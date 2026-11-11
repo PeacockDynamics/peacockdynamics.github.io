@@ -302,6 +302,10 @@
                                     <p>Today, he is setting off on another underwater expedition.</p>
                                     <p>Would you like to join his adventure?</p>
                                 </div>
+                                <div class="piku-controls-guide" aria-label="Game controls">
+                                    <div><strong>KEYBOARD</strong><span>W / ↑ rise · S / ↓ dive · Space sonar · Esc pause</span></div>
+                                    <div><strong>TOUCH</strong><span>Drag up or down to steer · hold UP / DOWN · tap SONAR to scan</span></div>
+                                </div>
                                 <div class="piku-intro-actions">
                                     <button class="piku-button piku-button-primary" type="button" data-action="join">Join the Adventure</button>
                                     <button class="piku-button piku-button-quiet" type="button" data-action="home">Home</button>
@@ -321,6 +325,8 @@
                                 <button class="piku-pause-button" type="button" data-action="pause">PAUSE · ESC</button>
                             </div>
                             <p class="piku-orientation-note" aria-hidden="true">Landscape gives Piku more room to explore</p>
+                            <p class="piku-play-hint piku-hint-keyboard" aria-hidden="true">W / ↑ RISE · S / ↓ DIVE · SPACE SONAR · ESC PAUSE</p>
+                            <p class="piku-play-hint piku-hint-touch" aria-hidden="true">DRAG TO STEER · UP / DOWN TO MOVE · SONAR TO SCAN</p>
                             <button class="piku-home-button" type="button" data-action="home">HOME</button>
                             <div class="piku-touch-controls" aria-label="Touch controls">
                                 <div class="piku-move-pad">
@@ -608,7 +614,7 @@
             const up = this.input.keys.has("arrowup") || this.input.keys.has("w") || Array.from(this.input.pointers.values()).includes("up");
             const down = this.input.keys.has("arrowdown") || this.input.keys.has("s") || Array.from(this.input.pointers.values()).includes("down");
             let acceleration = (down ? 420 : 0) - (up ? 420 : 0);
-            if (this.input.dragY !== null) acceleration = clamp((this.input.dragY - game.y) * 7, -390, 390);
+            if (this.input.dragY !== null) acceleration = clamp((this.input.dragY - game.y) * 21, -1170, 1170);
             game.vy = (game.vy + acceleration * dt) * Math.exp(-4.1 * dt);
             game.vy = clamp(game.vy, -250, 250);
             game.y = clamp(game.y + game.vy * dt, bounds.top, bounds.bottom);
