@@ -87,6 +87,51 @@ html.experience-modern .command-ambient {
 }
 .command-ambient svg { width: 100%; height: 100%; opacity: .72; }
 .ambient-points circle { fill: #b99aff; opacity: .3; }
+.sonar-disturbance-layer {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+.sonar-disturbance,
+.sonar-disturbance::before,
+.sonar-disturbance::after {
+    position: absolute;
+    border: 1px solid rgba(185, 154, 255, .54);
+    border-radius: 50%;
+    pointer-events: none;
+}
+.sonar-disturbance {
+    width: 76px;
+    height: 76px;
+    opacity: 0;
+    background: radial-gradient(circle, rgba(185, 154, 255, .12), transparent 68%);
+    box-shadow: 0 0 22px rgba(151, 117, 221, .15), inset 0 0 18px rgba(151, 117, 221, .08);
+    transform: translate(-50%, -50%) scale(.12);
+    animation: sonar-disturbance-expand 1.22s ease-out forwards;
+}
+.sonar-disturbance::before,
+.sonar-disturbance::after {
+    inset: 12px;
+    content: "";
+    opacity: 0;
+    transform: scale(.22);
+    animation: sonar-disturbance-ring 1s ease-out .1s forwards;
+}
+.sonar-disturbance::after {
+    inset: 25px;
+    border-color: rgba(164, 133, 222, .42);
+    animation-delay: .2s;
+}
+@keyframes sonar-disturbance-expand {
+    14% { opacity: .5; }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(2.7); }
+}
+@keyframes sonar-disturbance-ring {
+    16% { opacity: .38; }
+    100% { opacity: 0; transform: scale(2.35); }
+}
 
 .command-header {
     position: relative;
@@ -200,20 +245,32 @@ html.experience-modern .command-ambient {
     animation: dial-sweep 16s linear infinite;
 }
 .dial-center {
+    --mark-size: 77.5px;
+    --mark-hit-size: 85.25px;
     position: absolute;
     top: 50%;
     left: 50%;
     display: grid;
-    justify-items: center;
-    width: 43%;
+    place-items: center;
+    width: var(--mark-hit-size);
+    height: var(--mark-hit-size);
+    border-radius: 50%;
+    touch-action: manipulation;
+    cursor: pointer;
     transform: translate(-50%, -50%);
     color: #9a89b7;
     font: .56rem ui-monospace, SFMono-Regular, Consolas, monospace;
     letter-spacing: .16em;
 }
-.dial-center svg { width: 62px; height: 62px; overflow: visible; }
+.dial-center svg { width: var(--mark-size); height: var(--mark-size); overflow: visible; transform-box: view-box; transform-origin: center; }
 .dial-mark-lines { fill: none; stroke: #a88bd4; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; }
-.dial-mark-nodes { fill: #c5adf2; stroke: #100b1c; stroke-width: 1.4; }
+.dial-mark-nodes { fill: #c5adf2; stroke: #100b1c; stroke-width: 1.4; transition: fill 130ms ease, filter 130ms ease; }
+.dial-mark-fan { transform-box: fill-box; transform-origin: center bottom; }
+.anger-mark { fill: rgba(255, 70, 77, .96); stroke: #ff999b; stroke-width: 1.8; stroke-linejoin: round; opacity: 0; transform-box: fill-box; transform-origin: center; }
+.dial-center.is-disturbed svg { filter: drop-shadow(0 0 7px rgba(185, 154, 255, .58)); animation: peacock-flinch 1s cubic-bezier(.2, .8, .25, 1) both; }
+.dial-center.is-disturbed .dial-mark-fan { animation: peacock-bristle 1s cubic-bezier(.2, .8, .25, 1) both; }
+.dial-center.is-disturbed .dial-mark-nodes { fill: #e4d8ff; filter: drop-shadow(0 0 4px rgba(196, 165, 255, .8)); }
+.dial-center.is-disturbed .anger-mark { animation: peacock-anger-mark 900ms ease-out both; }
 .dial-nodes { position: absolute; inset: 0; }
 .dial-node {
     position: absolute;
@@ -225,14 +282,13 @@ html.experience-modern .command-ambient {
     border: 0;
     color: #bfb2d4;
     background: transparent;
-    font: .64rem ui-monospace, SFMono-Regular, Consolas, monospace;
+    font: .544rem ui-monospace, SFMono-Regular, Consolas, monospace;
     letter-spacing: .1em;
     white-space: nowrap;
     cursor: pointer;
     transition: color 180ms ease, filter 180ms ease, transform 180ms ease;
 }
 .dial-node:hover, .dial-node:focus-visible { color: #f0e8ff; filter: drop-shadow(0 0 9px rgba(185, 154, 255, .72)); }
-.dial-node-index { color: #817394; font-size: .55rem; }
 .dial-node-dot { width: 7px; height: 7px; flex: 0 0 7px; border: 1px solid #b99aff; border-radius: 50%; background: #211832; box-shadow: 0 0 8px rgba(185, 154, 255, .28); }
 .dial-node-label { line-height: 1.2; }
 .node-mission { top: 5%; left: 50%; flex-direction: column; gap: .2rem; transform: translate(-50%, -25%); }
@@ -240,7 +296,6 @@ html.experience-modern .command-ambient {
 .node-projects { right: 7%; bottom: 10%; flex-direction: row-reverse; transform: translate(0, 30%); }
 .node-organization { bottom: 10%; left: 7%; transform: translate(0, 30%); }
 .node-contact { top: 28%; left: 2.5%; transform: translate(0, -50%); }
-.node-mission .dial-node-index { order: 2; }
 .dial-bearing { position: absolute; color: rgba(169, 148, 199, .44); font: .52rem ui-monospace, monospace; }
 .bearing-n { top: 15%; left: 50%; transform: translateX(-50%); }
 .bearing-e { top: 50%; right: 13%; transform: translateY(-50%); }
@@ -418,6 +473,29 @@ html.experience-modern .command-ambient {
 .shortcut-link { min-height: 38px; padding: .45rem .7rem; font-size: .68rem; }
 
 @keyframes dial-sweep { to { stroke-dashoffset: -1135; transform: rotate(360deg); } }
+@keyframes peacock-flinch {
+    0%, 100% { transform: rotate(0) scale(1); }
+    12% { transform: rotate(-7deg) scale(.94, 1.05); }
+    25% { transform: rotate(8deg) scale(1.04, .97); }
+    39% { transform: rotate(-5deg) scale(.98, 1.02); }
+    55% { transform: rotate(2.5deg) scale(1); }
+    72% { transform: rotate(-1deg) scale(1); }
+}
+@keyframes peacock-bristle {
+    0%, 100% { transform: rotate(0) scale(1); }
+    11% { transform: rotate(-3deg) scale(.64, .9); }
+    23% { transform: rotate(3deg) scale(.72, .94); }
+    38% { transform: rotate(-2deg) scale(.82, .97); }
+    54% { transform: rotate(1deg) scale(.92, .99); }
+    73% { transform: rotate(0) scale(1); }
+}
+@keyframes peacock-anger-mark {
+    0%, 100% { opacity: 0; transform: scale(.38) rotate(-12deg); }
+    15% { opacity: 1; transform: scale(1.12) rotate(7deg); }
+    32% { opacity: .96; transform: scale(1) rotate(-4deg); }
+    58% { opacity: .88; transform: scale(.96) rotate(2deg); }
+    82% { opacity: 0; transform: scale(.82) rotate(0); }
+}
 
 @media (max-width: 850px) {
     .selection-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -434,15 +512,14 @@ html.experience-modern .command-ambient {
     .dial-eyebrow { font-size: .52rem; letter-spacing: .14em; }
     .dial-title { font-size: 1rem; }
     .sonar-dial { width: min(90vw, 410px, calc(100svh - 205px)); height: min(90vw, 410px, calc(100svh - 205px)); }
-    .dial-node { gap: .27rem; min-height: 40px; padding: .15rem .2rem; font-size: .52rem; letter-spacing: .055em; }
-    .dial-node-index { font-size: .48rem; }
+    .dial-node { gap: .27rem; min-height: 40px; padding: .15rem .2rem; font-size: .442rem; letter-spacing: .055em; }
     .dial-node-dot { width: 6px; height: 6px; flex-basis: 6px; }
     .node-mission { top: 4%; }
     .node-technology { right: 1%; top: 29%; }
     .node-projects { right: 3%; bottom: 10%; }
     .node-organization { left: 3%; bottom: 10%; }
     .node-contact { left: 1%; top: 29%; }
-    .dial-center svg { width: 49px; height: 49px; }
+    .dial-center { --mark-size: 61.25px; --mark-hit-size: 67.375px; }
     .dial-center { font-size: .49rem; }
     .dial-instruction { font-size: .45rem; letter-spacing: .08em; }
     .command-panel { padding-top: 0; }
@@ -497,7 +574,7 @@ html.experience-modern .command-ambient {
 
 @media (max-width: 380px) {
     .sonar-dial { width: min(92vw, 350px); height: min(92vw, 350px); max-height: calc(100svh - 195px); }
-    .dial-node { font-size: .54rem; }
+    .dial-node { font-size: .459rem; }
     .node-projects { right: 0; }
     .node-organization { left: 0; }
     .selection-item { grid-template-columns: 1.25rem minmax(0, 1fr) auto; gap: .3rem; padding-inline: .36rem; }

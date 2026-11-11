@@ -19,6 +19,7 @@
     let currentRoute = "home";
     let routeTrail = [];
     let transitionTimer = 0;
+    let peacockResetTimer = 0;
     let lastHandledHash = "";
 
     if (!modernRoot || !classicFrame || !deviceChoice) return;
@@ -44,7 +45,7 @@
         stylesheetPromise = new Promise((resolve, reject) => {
             stylesheet = document.createElement("link");
             stylesheet.rel = "stylesheet";
-            stylesheet.href = "modern.css?v=20261110-3";
+            stylesheet.href = "modern.css?v=20261110-9";
             stylesheet.onload = resolve;
             stylesheet.onerror = () => {
                 stylesheet.remove();
@@ -291,11 +292,48 @@
             '<path d="M-128 708c165-112 300-146 452-103s242 57 377-28 275-104 472-12 246 74 395-6"/>',
             '</g><g class="ambient-points"><circle cx="238" cy="286" r="2"/><circle cx="1097" cy="210" r="2"/><circle cx="940" cy="590" r="2"/><circle cx="388" cy="738" r="2"/></g></svg>'
         ].join("");
+        const disturbanceLayer = el("div", "sonar-disturbance-layer");
+        disturbanceLayer.setAttribute("aria-hidden", "true");
         const status = el("div", "command-status");
         status.innerHTML = '<span class="status-light"></span><span>UUV AUTONOMY</span><i></i><span class="status-context">PEACOCK DYNAMICS RESEARCH</span>';
-        shell.append(ambient, header, main, status);
+        shell.append(ambient, disturbanceLayer, header, main, status);
         modernRoot.replaceChildren(shell);
         modernRoot.hidden = false;
+        shell.addEventListener("pointerdown", (event) => {
+            const target = event.target instanceof Element ? event.target : event.target.parentElement;
+            if (reducedMotion.matches || !event.isPrimary || event.button !== 0 || !target) return;
+
+            const centralMark = shell.querySelector(".dial-center");
+            if (centralMark) {
+                const markBounds = centralMark.getBoundingClientRect();
+                const radius = Math.min(markBounds.width, markBounds.height) / 2;
+                const offsetX = event.clientX - (markBounds.left + markBounds.width / 2);
+                const offsetY = event.clientY - (markBounds.top + markBounds.height / 2);
+                if (offsetX * offsetX + offsetY * offsetY <= radius * radius) {
+                    if (peacockResetTimer) window.clearTimeout(peacockResetTimer);
+                    centralMark.classList.remove("is-disturbed");
+                    void centralMark.offsetWidth;
+                    centralMark.classList.add("is-disturbed");
+                    peacockResetTimer = window.setTimeout(() => {
+                        centralMark.classList.remove("is-disturbed");
+                        peacockResetTimer = 0;
+                    }, 1050);
+                    return;
+                }
+            }
+
+            if (target.closest("button, a, input, select, textarea, summary, [role='button'], [role='link'], [contenteditable='true']")) return;
+
+            const bounds = modernRoot.getBoundingClientRect();
+            const ripple = el("span", "sonar-disturbance");
+            ripple.style.left = (event.clientX - bounds.left) + "px";
+            ripple.style.top = (event.clientY - bounds.top) + "px";
+            while (disturbanceLayer.childElementCount >= 4) disturbanceLayer.firstElementChild.remove();
+            disturbanceLayer.append(ripple);
+            ripple.addEventListener("animationend", (animationEvent) => {
+                if (animationEvent.target === ripple && animationEvent.animationName === "sonar-disturbance-expand") ripple.remove();
+            });
+        });
         shell.addEventListener("click", (event) => {
             const routeTarget = event.target.closest("[data-route]");
             if (routeTarget) {
@@ -346,20 +384,21 @@
             '<path class="dial-radials" d="M260 22V106M498 260H414M260 498V414M22 260H106M91.7 91.7l59.4 59.4M428.3 91.7l-59.4 59.4M428.3 428.3l-59.4-59.4M91.7 428.3l59.4-59.4"/>',
             '<path class="dial-crosshair" d="M260 125v31M260 364v31M125 260h31M364 260h31"/><circle class="dial-sweep" cx="260" cy="260" r="180"/></svg>',
             '<div class="dial-center" aria-hidden="true"><svg viewBox="34 35 192 193" role="presentation">',
-            '<g class="dial-mark-lines"><path d="M130 45V85 M91 57 118 111 M169 57 142 111 M63 87 112 122 M197 87 148 122 M54 126 112 132 M206 126 148 132 M130 92V117 M122 97 125 117 M138 97 135 117 M120 117H140L130 138Z M130 138V218 M119 218H141"/></g>',
-            '<g class="dial-mark-nodes"><circle cx="130" cy="45" r="5"/><circle cx="91" cy="57" r="5"/><circle cx="169" cy="57" r="5"/><circle cx="63" cy="87" r="5"/><circle cx="197" cy="87" r="5"/><circle cx="54" cy="126" r="5"/><circle cx="206" cy="126" r="5"/><circle cx="122" cy="97" r="3.4"/><circle cx="130" cy="92" r="4.2"/><circle cx="138" cy="97" r="3.4"/><circle cx="130" cy="138" r="4.2"/><circle cx="130" cy="218" r="4.2"/><circle cx="119" cy="218" r="3.3"/><circle cx="141" cy="218" r="3.3"/></g></svg></div>',
+            '<g class="dial-mark-fan"><path class="dial-mark-lines" d="M130 45V85 M91 57 118 111 M169 57 142 111 M63 87 112 122 M197 87 148 122 M54 126 112 132 M206 126 148 132"/><g class="dial-mark-nodes"><circle cx="130" cy="45" r="5"/><circle cx="91" cy="57" r="5"/><circle cx="169" cy="57" r="5"/><circle cx="63" cy="87" r="5"/><circle cx="197" cy="87" r="5"/><circle cx="54" cy="126" r="5"/><circle cx="206" cy="126" r="5"/></g></g>',
+            '<g class="dial-mark-body"><path class="dial-mark-lines" d="M130 92V117 M122 97 125 117 M138 97 135 117 M120 117H140L130 138Z M130 138V218 M119 218H141"/><g class="dial-mark-nodes"><circle cx="122" cy="97" r="3.4"/><circle cx="130" cy="92" r="4.2"/><circle cx="138" cy="97" r="3.4"/><circle cx="130" cy="218" r="4.2"/><circle cx="119" cy="218" r="3.3"/><circle cx="141" cy="218" r="3.3"/></g></g>',
+            '<path class="anger-mark" d="m198 53 9-10-1 13 14-5-8 12 13 5-15 5-3 13-9-10-12 5 6-13-10-9 14 3z"/></svg></div>',
             '<div class="dial-nodes"></div><span class="dial-bearing bearing-n">N</span><span class="dial-bearing bearing-e">E</span><span class="dial-bearing bearing-s">S</span><span class="dial-bearing bearing-w">W</span>'
         ].join("");
         [
-            ["01", "OVERVIEW", "mission/current/1", "node-mission"],
-            ["02", "METHODS & TOOLS", "technology", "node-technology"],
-            ["03", "RESEARCH", "projects", "node-projects"],
-            ["04", "FOUNDERS", "organization", "node-organization"],
-            ["05", "CONTACT", "contact", "node-contact"]
-        ].forEach(([number, label, route, position]) => {
+            ["OVERVIEW", "mission/current/1", "node-mission"],
+            ["METHODS & TOOLS", "technology", "node-technology"],
+            ["RESEARCH", "projects", "node-projects"],
+            ["FOUNDERS", "organization", "node-organization"],
+            ["CONTACT", "contact", "node-contact"]
+        ].forEach(([label, route, position]) => {
             const node = makeButton("", route, "dial-node " + position);
-            node.setAttribute("aria-label", number + ": " + label);
-            node.append(el("span", "dial-node-index", number), el("span", "dial-node-dot"), el("span", "dial-node-label", label));
+            node.setAttribute("aria-label", label);
+            node.append(el("span", "dial-node-dot"), el("span", "dial-node-label", label));
             dial.querySelector(".dial-nodes").append(node);
         });
         home.append(dial);
