@@ -155,6 +155,30 @@ html.experience-modern .command-ambient {
 }
 .command-brand img { width: 55px; height: 48px; object-fit: contain; }
 
+.piku-entry-button {
+    min-height: 38px;
+    padding: .5rem .85rem;
+    border: 1px solid rgba(185, 154, 255, .48);
+    border-radius: 2px;
+    color: #e9ddff;
+    background: rgba(35, 25, 51, .82);
+    font-family: Inter, "Avenir Next", Avenir, "Segoe UI", sans-serif;
+    font-size: .72rem;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background .18s ease, border-color .18s ease, color .18s ease;
+}
+.piku-entry-button:hover,
+.piku-entry-button:focus-visible {
+    color: #fff;
+    border-color: #c8aaff;
+    background: rgba(93, 65, 129, .55);
+}
+.piku-entry-button:focus-visible { outline: 2px solid #c8aaff; outline-offset: 3px; }
+
 .command-main {
     position: relative;
     z-index: 1;
@@ -505,6 +529,7 @@ html.experience-modern .command-ambient {
     .command-header { min-height: 67px; gap: .5rem; padding: max(.45rem, env(safe-area-inset-top)) .7rem .45rem; }
     .command-brand { gap: .45rem; }
     .command-brand img { width: 42px; height: 41px; }
+    .piku-entry-button { min-height: 36px; padding: .45rem .65rem; font-size: .63rem; }
     .command-main { padding: .35rem .65rem; }
     .command-status { min-height: 25px; gap: .4rem; font-size: .48rem; letter-spacing: .09em; }
     .status-context { display: none; }

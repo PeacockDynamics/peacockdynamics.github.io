@@ -1,0 +1,302 @@
+/* Loaded only after a visitor selects Meet Piku. */
+#piku-game-root, #piku-game-root * { box-sizing: border-box; }
+#piku-game-root {
+    position: fixed;
+    z-index: 2200;
+    inset: 0;
+    overflow: auto;
+    color: #f5f0fb;
+    background: #080610;
+    font-family: Inter, "Avenir Next", Avenir, "Segoe UI", sans-serif;
+    isolation: isolate;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    --piku-topbar-height: 58px;
+}
+#piku-game-root[hidden] { display: none; }
+#piku-game-root.piku-game-screen-active { overflow: hidden; }
+#piku-game-root.piku-game-screen-active .piku-shell {
+    height: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow: hidden;
+}
+#piku-game-root button { font: inherit; }
+#piku-game-root button:focus-visible { outline: 2px solid #f0bf35; outline-offset: 3px; }
+.piku-shell {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: 100%;
+    background:
+        radial-gradient(ellipse at 50% 40%, rgba(88, 62, 138, .2), transparent 44rem),
+        linear-gradient(180deg, #0b0713, #07050b 80%);
+}
+.piku-topbar {
+    position: sticky;
+    z-index: 8;
+    top: 0;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    min-height: 58px;
+    padding: max(.5rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) .5rem max(1rem, env(safe-area-inset-left));
+    border-bottom: 1px solid rgba(190, 163, 227, .14);
+    background: rgba(8, 6, 16, .9);
+    backdrop-filter: blur(12px);
+}
+.piku-topbar img { width: 34px; height: 34px; object-fit: contain; }
+.piku-topbar strong { color: #e8dcf6; font: 600 .68rem ui-monospace, monospace; letter-spacing: .16em; }
+.piku-topbar span { margin-left: auto; color: #a48ec2; font: .57rem ui-monospace, monospace; letter-spacing: .14em; }
+.piku-screen { width: 100%; min-height: 0; }
+.piku-screen [data-piku-screen][hidden] { display: none !important; }
+.piku-intro-screen {
+    display: grid;
+    grid-template-columns: minmax(280px, .82fr) minmax(360px, 1.18fr);
+    align-items: center;
+    gap: clamp(1rem, 3vw, 3rem);
+    width: min(100%, 1280px);
+    min-height: calc(100svh - 58px);
+    margin: 0 auto;
+    padding: clamp(1rem, 4vw, 3.5rem) clamp(1rem, 4vw, 3.5rem) max(1.5rem, env(safe-area-inset-bottom));
+}
+.piku-intro-copy { max-width: 600px; }
+.piku-kicker { margin: 0 0 .55rem; color: #bd93f6; font: .65rem ui-monospace, monospace; letter-spacing: .19em; }
+.piku-intro-copy h1 { margin: 0; color: #f7f2fc; font-size: clamp(2rem, 4.7vw, 4rem); font-weight: 450; letter-spacing: -.045em; line-height: 1; }
+.piku-subtitle { margin: .55rem 0 1.2rem; color: #e5b93c; font: 500 clamp(.92rem, 1.5vw, 1.15rem) ui-monospace, monospace; letter-spacing: .055em; }
+.piku-intro-art {
+    width: 100%;
+    max-width: 760px;
+    aspect-ratio: 1.72;
+    justify-self: center;
+    overflow: hidden;
+    border: 1px solid rgba(177, 144, 221, .2);
+    border-radius: 10px;
+    background:
+        radial-gradient(ellipse at 48% 58%, rgba(67, 52, 113, .48), transparent 58%),
+        linear-gradient(145deg, rgba(22, 15, 35, .9), rgba(7, 6, 14, .92));
+    box-shadow: 0 24px 70px rgba(0, 0, 0, .32), inset 0 0 44px rgba(130, 91, 192, .08);
+}
+.piku-intro-art canvas { display: block; width: 100%; height: 100%; }
+.piku-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .35rem .8rem;
+    margin: 0 0 .9rem;
+    padding: .8rem .9rem;
+    border-left: 2px solid #e1b42f;
+    background: rgba(23, 16, 36, .7);
+}
+.piku-facts div { display: grid; grid-template-columns: auto 1fr; gap: .25rem .38rem; min-width: 0; font-size: .68rem; line-height: 1.35; }
+.piku-facts dt { color: #c2a9e2; font-weight: 600; }
+.piku-facts dd { margin: 0; color: #ddd3e9; }
+.piku-introduction { margin: .8rem 0 1rem; color: #c9bfd4; font-size: .79rem; line-height: 1.62; }
+.piku-introduction p { margin: 0 0 .42rem; }
+.piku-introduction p:last-child { margin-bottom: 0; }
+.piku-intro-actions { display: flex; flex-wrap: wrap; gap: .65rem; }
+.piku-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    min-height: 44px;
+    padding: .65rem 1rem;
+    border: 1px solid rgba(185, 154, 255, .36);
+    border-radius: 3px;
+    color: #e8ddf5;
+    background: rgba(34, 24, 51, .82);
+    cursor: pointer;
+    transition: transform 150ms ease, border-color 150ms ease, background 150ms ease;
+}
+.piku-button:hover { transform: translateY(-1px); border-color: rgba(208, 182, 246, .75); background: rgba(53, 38, 77, .9); }
+.piku-button-primary { border-color: #d0a72a; color: #100c16; background: linear-gradient(135deg, #efc534, #c99514); font-weight: 750; }
+.piku-button-primary:hover { border-color: #f7d962; background: linear-gradient(135deg, #f5d34b, #d7a622); }
+.piku-button-quiet { color: #b9a9cb; background: transparent; }
+
+.piku-play-screen {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - var(--piku-topbar-height));
+    height: calc(100dvh - var(--piku-topbar-height));
+    min-height: 270px;
+    overflow: hidden;
+    background: #080610;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+.piku-gameover-screen {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: calc(100vh - var(--piku-topbar-height));
+    height: calc(100dvh - var(--piku-topbar-height));
+    min-height: 270px;
+    padding: clamp(1rem, 4vw, 2rem);
+    background: radial-gradient(ellipse at 50% 46%, rgba(65, 43, 99, .38), transparent 62%), #080610;
+}
+.piku-gameover-screen[hidden] { display: none !important; }
+.piku-world-canvas { display: block; width: 100%; height: 100%; }
+.piku-hud {
+    position: absolute;
+    z-index: 3;
+    top: max(.65rem, env(safe-area-inset-top));
+    left: max(.8rem, env(safe-area-inset-left));
+    right: max(.8rem, env(safe-area-inset-right));
+    display: flex;
+    align-items: flex-start;
+    gap: clamp(.45rem, 2vw, 1.3rem);
+    pointer-events: none;
+}
+.piku-stat {
+    display: grid;
+    gap: .12rem;
+    min-width: 72px;
+    padding: .45rem .6rem;
+    border: 1px solid rgba(185, 154, 255, .2);
+    border-radius: 3px;
+    background: rgba(9, 7, 17, .72);
+    backdrop-filter: blur(8px);
+}
+.piku-stat span { color: #9583ad; font: .5rem ui-monospace, monospace; letter-spacing: .13em; }
+.piku-stat strong { color: #f0e8fa; font: 600 .78rem ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+.piku-hull { display: flex; align-items: center; gap: .3rem; min-height: 49px; padding: .45rem .65rem; border: 1px solid rgba(185, 154, 255, .2); border-radius: 3px; background: rgba(9, 7, 17, .72); }
+.piku-hull-label { margin-right: .2rem; color: #9583ad; font: .5rem ui-monospace, monospace; letter-spacing: .12em; }
+.piku-hull i { display: block; width: 12px; height: 12px; border: 1px solid #efbf34; border-radius: 50%; background: #edb91f; box-shadow: 0 0 8px rgba(238, 190, 54, .3); }
+.piku-hull i.is-empty { border-color: #51435f; background: transparent; box-shadow: none; }
+.piku-pause-button { margin-left: auto; min-height: 44px; padding: .45rem .65rem; border: 1px solid rgba(185, 154, 255, .34); border-radius: 3px; color: #e3d5f2; background: rgba(13, 9, 23, .8); font: .58rem ui-monospace, monospace !important; letter-spacing: .1em; pointer-events: auto; cursor: pointer; }
+.piku-pause-button:hover { border-color: #c6a8ed; }
+.piku-home-button {
+    position: absolute;
+    z-index: 7;
+    bottom: max(.85rem, env(safe-area-inset-bottom));
+    left: max(.85rem, env(safe-area-inset-left));
+    min-width: 78px;
+    min-height: 44px;
+    padding: .6rem .75rem;
+    border: 1px solid rgba(185, 154, 255, .38);
+    border-radius: 3px;
+    color: #e5d9f3;
+    background: rgba(11, 8, 19, .9);
+    font: 600 .58rem ui-monospace, monospace !important;
+    letter-spacing: .11em;
+    cursor: pointer;
+}
+.piku-home-button:hover { border-color: #e2ba3c; color: #ffe18a; }
+.piku-touch-controls {
+    position: absolute;
+    z-index: 6;
+    right: max(.85rem, env(safe-area-inset-right));
+    bottom: max(.85rem, env(safe-area-inset-bottom));
+    display: flex;
+    align-items: end;
+    gap: .45rem;
+}
+.piku-move-pad { display: grid; grid-template-columns: repeat(2, 48px); gap: .35rem; }
+.piku-control-button {
+    display: grid;
+    place-items: center;
+    min-width: 48px;
+    min-height: 48px;
+    padding: .35rem;
+    border: 1px solid rgba(185, 154, 255, .36);
+    border-radius: 4px;
+    color: #e9ddf5;
+    background: rgba(21, 15, 33, .9);
+    font: 600 .56rem ui-monospace, monospace !important;
+    letter-spacing: .07em;
+    touch-action: none;
+    cursor: pointer;
+}
+.piku-control-button:active, .piku-control-button.is-active { border-color: #f0bf35; color: #ffdc72; background: rgba(67, 49, 79, .92); }
+.piku-sonar-button { min-width: 68px; }
+.piku-orientation-note { display: none; }
+.piku-game-modal {
+    position: absolute;
+    z-index: 5;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    background: rgba(4, 3, 8, .76);
+    backdrop-filter: blur(7px);
+}
+.piku-game-modal[hidden] { display: none; }
+.piku-modal-card {
+    width: min(100%, 440px);
+    padding: clamp(1.25rem, 5vw, 2.3rem);
+    border: 1px solid rgba(185, 154, 255, .32);
+    border-radius: 6px;
+    background: linear-gradient(145deg, rgba(22, 15, 34, .98), rgba(9, 7, 15, .98));
+    box-shadow: 0 24px 90px rgba(0, 0, 0, .5);
+    text-align: center;
+}
+.piku-modal-kicker { margin: 0 0 .45rem; color: #ba96ee; font: .57rem ui-monospace, monospace; letter-spacing: .18em; }
+.piku-modal-card h2 { margin: 0; color: #f5effb; font-size: clamp(1.5rem, 5vw, 2.2rem); font-weight: 450; line-height: 1.15; }
+.piku-modal-card > p:not(.piku-modal-kicker) { margin: .65rem 0 1.2rem; color: #c8bbd7; }
+.piku-modal-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .45rem; margin: 0 0 1.2rem; }
+.piku-modal-stats div { display: grid; gap: .2rem; padding: .55rem .35rem; border: 1px solid rgba(185, 154, 255, .13); background: rgba(25, 18, 37, .7); }
+.piku-modal-stats dt { color: #9382a9; font: .47rem ui-monospace, monospace; letter-spacing: .1em; }
+.piku-modal-stats dd { margin: 0; color: #eee5f6; font: 600 .73rem ui-monospace, monospace; }
+.piku-modal-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: .55rem; }
+.piku-hidden { display: none !important; }
+
+@media (pointer: coarse), (max-width: 850px) {
+    .piku-touch-controls { display: flex; }
+}
+@media (pointer: fine) and (min-width: 851px) {
+    .piku-touch-controls { display: none; }
+}
+@media (orientation: portrait) and (max-width: 850px) {
+    .piku-orientation-note { position: absolute; z-index: 2; top: 4.4rem; left: 50%; display: block; max-width: calc(100% - 8rem); padding: .35rem .5rem; transform: translateX(-50%); border: 1px solid rgba(185, 154, 255, .2); color: #b9a8cb; background: rgba(9, 7, 17, .72); font: .5rem ui-monospace, monospace; letter-spacing: .07em; text-align: center; pointer-events: none; }
+}
+@media (max-width: 720px) {
+    .piku-intro-screen { grid-template-columns: minmax(0, 1fr); gap: .7rem; align-content: start; padding: .9rem max(.9rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(.9rem, env(safe-area-inset-left)); }
+    .piku-intro-copy { display: contents; }
+    .piku-kicker, .piku-intro-copy h1, .piku-subtitle { grid-column: 1; }
+    .piku-kicker { margin-top: .1rem; }
+    .piku-intro-copy h1 { font-size: clamp(1.7rem, 8vw, 2.6rem); }
+    .piku-subtitle { margin: .15rem 0 .35rem; }
+    .piku-intro-art { grid-row: 4; width: min(100%, 580px); aspect-ratio: 1.8; }
+    .piku-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: .2rem; padding: .6rem .65rem; }
+    .piku-facts div { font-size: .61rem; }
+    .piku-introduction { margin: .25rem 0 .4rem; font-size: .73rem; line-height: 1.5; }
+    .piku-intro-actions { margin-top: .15rem; }
+    .piku-button { min-height: 46px; }
+}
+@media (max-width: 420px) {
+    #piku-game-root { --piku-topbar-height: 52px; }
+    .piku-topbar { min-height: 52px; }
+    .piku-topbar img { width: 30px; height: 30px; }
+    .piku-topbar strong { font-size: .6rem; }
+    .piku-topbar span { font-size: .48rem; }
+    .piku-intro-screen { gap: .5rem; }
+    .piku-intro-art { aspect-ratio: 1.9; }
+    .piku-facts { gap: .25rem .45rem; }
+    .piku-facts div { font-size: .56rem; }
+    .piku-introduction { font-size: .69rem; }
+    .piku-button { padding-inline: .75rem; font-size: .82rem; }
+    .piku-stat { min-width: 61px; padding: .38rem .45rem; }
+    .piku-stat strong { font-size: .68rem; }
+    .piku-hull { gap: .2rem; padding: .38rem .45rem; }
+    .piku-hull-label { font-size: .44rem; }
+    .piku-hull i { width: 10px; height: 10px; }
+    .piku-move-pad { grid-template-columns: repeat(2, 44px); }
+    .piku-control-button { min-width: 44px; min-height: 46px; font-size: .5rem !important; }
+    .piku-sonar-button { min-width: 58px; }
+    .piku-touch-controls { gap: .3rem; }
+    .piku-home-button { min-width: 64px; padding-inline: .55rem; font-size: .53rem !important; }
+}
+@media (max-height: 460px) and (orientation: landscape) {
+    #piku-game-root { --piku-topbar-height: 42px; }
+    .piku-topbar { min-height: 42px; padding-block: .25rem; }
+    .piku-topbar img { width: 27px; height: 27px; }
+    .piku-hud { top: .35rem; }
+    .piku-stat { min-height: 40px; padding: .28rem .45rem; }
+    .piku-hull { min-height: 40px; padding: .28rem .45rem; }
+    .piku-home-button, .piku-control-button { min-height: 40px; }
+    .piku-move-pad { grid-template-columns: repeat(2, 42px); }
+    .piku-control-button { min-width: 42px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    #piku-game-root *, #piku-game-root *::before, #piku-game-root *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}

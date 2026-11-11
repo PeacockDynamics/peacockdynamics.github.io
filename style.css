@@ -563,6 +563,19 @@ main {
     transition: background-color 150ms ease;
 }
 
+.piku-nav-button {
+    width: calc(100% - 1.4rem);
+    margin: 0.65rem 0.7rem 1rem;
+    text-align: left;
+    font: inherit;
+    color: var(--nav-text);
+    background: transparent;
+    border: 0;
+    border-left: 2px solid transparent;
+    appearance: none;
+    cursor: pointer;
+}
+
 .nav-link:hover,
 .nav-link:focus-visible,
 .nav-link.is-active {

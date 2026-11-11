@@ -45,7 +45,7 @@
         stylesheetPromise = new Promise((resolve, reject) => {
             stylesheet = document.createElement("link");
             stylesheet.rel = "stylesheet";
-            stylesheet.href = "modern.css?v=20261110-9";
+            stylesheet.href = "modern.css?v=20261110-10";
             stylesheet.onload = resolve;
             stylesheet.onerror = () => {
                 stylesheet.remove();
@@ -271,7 +271,8 @@
         header.innerHTML = [
             '<a class="command-brand" href="#pd/home" data-route="home" aria-label="Peacock Dynamics command home">',
             '<img src="assets/logo/dark_full.png" alt="Peacock Dynamics" width="80" height="50">',
-            '</a>'
+            '</a>',
+            '<button class="piku-entry-button" type="button" data-meet-piku aria-haspopup="dialog">Meet Piku</button>'
         ].join("");
         const main = el("main", "command-main");
         main.id = "modern-main";
@@ -731,6 +732,12 @@
         if (deviceChoiceError) deviceChoiceError.textContent = message || "";
         focusDeviceChoice();
     };
+    window.addEventListener("pd-return-to-device-choice", () => {
+        try { window.sessionStorage.removeItem("peacock-dynamics-device-choice"); } catch { /* The selector remains available for this page view. */ }
+        document.body.classList.remove("experience-transitioning", "nav-open");
+        document.querySelector(".menu-toggle")?.setAttribute("aria-expanded", "false");
+        showDeviceChoice();
+    });
     let choosingDevice = false;
     const chooseDevice = async (choice) => {
         if (choosingDevice || !["computer", "mobile"].includes(choice)) return;
