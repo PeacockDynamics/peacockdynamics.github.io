@@ -11,7 +11,7 @@
         stylesPromise = new Promise((resolve, reject) => {
             const link = document.createElement("link");
             link.rel = "stylesheet";
-            link.href = "piku-game.css?v=20261110-1";
+            link.href = "piku-game.css?v=20261110-2";
             link.dataset.pikuStyles = "true";
             link.onload = resolve;
             link.onerror = () => {
@@ -29,7 +29,7 @@
         if (gamePromise) return gamePromise;
         gamePromise = new Promise((resolve, reject) => {
             const script = document.createElement("script");
-            script.src = "piku-game.js?v=20261110-1";
+            script.src = "piku-game.js?v=20261110-2";
             script.onload = () => window.PikuDeepDive ? resolve(window.PikuDeepDive) : reject(new Error("Piku game did not initialize."));
             script.onerror = () => {
                 script.remove();
