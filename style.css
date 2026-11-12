@@ -450,6 +450,43 @@ main {
     display: inline;
 }
 
+.header-experience-controls {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.interface-switch {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    min-height: 42px;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid var(--gold-border);
+    color: var(--gold-text);
+    background: rgba(0, 0, 0, 0.72);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    cursor: pointer;
+    transition: color 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+
+.interface-switch:hover {
+    border-color: var(--gold-bright);
+    color: var(--white);
+    background: rgba(67, 0, 140, 0.82);
+}
+
+.interface-switch:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+}
+
 .menu-toggle {
     position: relative;
     z-index: 2;
@@ -2075,7 +2112,12 @@ main {
 
     .site-header {
         grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.5rem;
     }
+
+    .header-experience-controls { gap: 0.35rem; }
+    .interface-switch { min-height: 39px; padding-inline: 0.55rem; font-size: 0.57rem; letter-spacing: 0.035em; }
+    .interface-switch-label { max-width: 11ch; line-height: 1.25; text-align: center; }
 
     .brand-primary-row {
         gap: 0.7rem;

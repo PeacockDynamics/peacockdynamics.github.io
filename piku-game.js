@@ -388,10 +388,8 @@
 
             const site = document.querySelector(".site-frame");
             const modern = document.querySelector("#modern-experience");
-            const deviceChoice = document.querySelector("#device-choice");
             if (site) site.inert = true;
             if (modern) modern.inert = true;
-            if (deviceChoice) deviceChoice.inert = true;
             this.previousOverflow = document.body.style.overflow;
             document.body.style.overflow = "hidden";
             document.body.classList.remove("nav-open");
@@ -932,7 +930,7 @@
             document.documentElement.classList.remove("piku-game-active");
             this.root.remove();
             activeGame = null;
-            window.dispatchEvent(new Event("pd-return-to-device-choice"));
+            window.dispatchEvent(new Event("pd-experience-resume"));
         }
     }
 

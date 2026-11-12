@@ -298,35 +298,71 @@ html.experience-modern .command-ambient {
 .dial-nodes { position: absolute; inset: 0; }
 .dial-node {
     position: absolute;
-    display: inline-flex;
-    align-items: center;
-    gap: .45rem;
-    min-height: 42px;
-    padding: .25rem .3rem;
-    border: 0;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 1px solid rgba(185, 154, 255, .55);
+    border-radius: 50%;
     color: #bfb2d4;
-    background: transparent;
-    font: .544rem ui-monospace, SFMono-Regular, Consolas, monospace;
-    letter-spacing: .1em;
-    white-space: nowrap;
+    background: radial-gradient(circle, rgba(42, 31, 61, .92) 0 57%, rgba(16, 11, 25, .96) 60% 100%);
+    box-shadow: inset 0 0 0 3px rgba(185, 154, 255, .07), 0 0 12px rgba(185, 154, 255, .09);
     cursor: pointer;
-    transition: color 180ms ease, filter 180ms ease, transform 180ms ease;
+    touch-action: manipulation;
+    transition: color 180ms ease, border-color 180ms ease, background 180ms ease, filter 180ms ease;
 }
-.dial-node:hover, .dial-node:focus-visible { color: #f0e8ff; filter: drop-shadow(0 0 9px rgba(185, 154, 255, .72)); }
-.dial-node-dot { width: 7px; height: 7px; flex: 0 0 7px; border: 1px solid #b99aff; border-radius: 50%; background: #211832; box-shadow: 0 0 8px rgba(185, 154, 255, .28); }
-.dial-node-label { line-height: 1.2; }
-.node-mission { top: 5%; left: 50%; flex-direction: column; gap: .2rem; transform: translate(-50%, -25%); }
-.node-technology { top: 28%; right: 2.5%; flex-direction: row-reverse; transform: translate(0, -50%); }
-.node-projects { right: 7%; bottom: 10%; flex-direction: row-reverse; transform: translate(0, 30%); }
-.node-organization { bottom: 10%; left: 7%; transform: translate(0, 30%); }
-.node-contact { top: 28%; left: 2.5%; transform: translate(0, -50%); }
-.dial-bearing { position: absolute; color: rgba(169, 148, 199, .44); font: .52rem ui-monospace, monospace; }
-.bearing-n { top: 15%; left: 50%; transform: translateX(-50%); }
-.bearing-e { top: 50%; right: 13%; transform: translateY(-50%); }
-.bearing-s { bottom: 14%; left: 50%; transform: translateX(-50%); }
-.bearing-w { top: 50%; left: 13%; transform: translateY(-50%); }
+.dial-node:hover, .dial-node:focus-visible, .dial-node.is-revealed { z-index: 5; border-color: #d4c0ff; color: #f0e8ff; background: radial-gradient(circle, rgba(70, 51, 101, .98) 0 57%, rgba(29, 20, 43, .99) 60% 100%); box-shadow: inset 0 0 0 3px rgba(208, 186, 255, .15), 0 0 14px rgba(185, 154, 255, .45); filter: drop-shadow(0 0 9px rgba(185, 154, 255, .55)); }
+.dial-node-icon { display: block; width: 23px; height: 23px; color: #f2b600; fill: none; stroke: currentColor; stroke-width: 1.45; stroke-linecap: round; stroke-linejoin: round; }
+.dial-node-icon circle { fill: currentColor; stroke: none; }
+.dial-node-icon circle.node-open { fill: var(--modern-bg); stroke: currentColor; stroke-width: 1.35; }
+.dial-node-icon circle.node-historic { opacity: .4; }
+.dial-node-icon circle.node-active { fill: #fff0ae; filter: drop-shadow(0 0 2px rgba(255, 213, 74, .75)); }
+.dial-node-icon circle.node-rotor { fill: none; stroke: currentColor; stroke-width: 1.05; }
+.dial-node:hover .dial-node-icon, .dial-node:focus-visible .dial-node-icon, .dial-node.is-revealed .dial-node-icon { color: #ffd54a; }
+.dial-node-label {
+    position: absolute;
+    z-index: 6;
+    width: max-content;
+    max-width: 145px;
+    padding: .35rem .5rem;
+    border: 1px solid rgba(185, 154, 255, .3);
+    color: #e9e0f5;
+    background: rgba(12, 9, 20, .97);
+    font: .54rem/1.35 ui-monospace, SFMono-Regular, Consolas, monospace;
+    letter-spacing: .08em;
+    text-align: left;
+    white-space: normal;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 140ms ease, visibility 140ms ease;
+}
+.dial-node:hover .dial-node-label, .dial-node:focus-visible .dial-node-label, .dial-node.is-revealed .dial-node-label { opacity: 1; visibility: visible; }
+.node-mission { top: 5%; left: 50%; transform: translate(-50%, -50%); }
+.node-mission .dial-node-label { top: calc(100% + .35rem); left: 50%; transform: translateX(-50%); text-align: center; }
+.node-technology { top: 20%; right: 20%; transform: translate(50%, -50%); }
+.node-technology .dial-node-label { top: 50%; right: calc(100% + .35rem); transform: translateY(-50%); text-align: right; }
+.node-current { top: 50%; right: 7%; transform: translate(50%, -50%); }
+.node-current .dial-node-label { top: 50%; right: calc(100% + .35rem); transform: translateY(-50%); text-align: right; }
+.node-background { top: 80%; right: 20%; transform: translate(50%, -50%); }
+.node-background .dial-node-label { top: 50%; right: calc(100% + .35rem); transform: translateY(-50%); text-align: right; }
+.node-questions { top: 80%; left: 20%; transform: translate(-50%, -50%); }
+.node-questions .dial-node-label { top: 50%; left: calc(100% + .35rem); transform: translateY(-50%); }
+.node-organization { top: 50%; left: 7%; transform: translate(-50%, -50%); }
+.node-organization .dial-node-label { top: 50%; left: calc(100% + .35rem); transform: translateY(-50%); }
+.node-contact { top: 20%; left: 20%; transform: translate(-50%, -50%); }
+.node-contact .dial-node-label { top: 50%; left: calc(100% + .35rem); transform: translateY(-50%); }
+.node-classic { bottom: 4%; left: 50%; transform: translate(-50%, 50%); }
+.node-classic .dial-node-icon { stroke-width: 1.05; }
+.node-classic .dial-node-label { bottom: calc(100% + .35rem); left: 50%; transform: translateX(-50%); text-align: center; white-space: nowrap; }
 .dial-instruction { align-self: start; margin: .15rem 0 0; color: #756b83; font: .53rem ui-monospace, monospace; letter-spacing: .14em; text-align: center; }
-.dial-instruction span { padding: 0 .3rem; color: #b99aff; }
+.dial-instruction span { display: inline; }
+.dial-touch-hint { display: none !important; }
+@media (hover: none), (pointer: coarse) {
+    .dial-pointer-hint { display: none !important; }
+    .dial-touch-hint { display: inline !important; }
+}
 
 /* Selected channel screens. Every control is persistent in the same viewport. */
 .command-panel {
@@ -367,7 +403,16 @@ html.experience-modern .command-ambient {
 .panel-kicker { margin: 0 0 .1rem; color: var(--modern-violet); font: .58rem ui-monospace, monospace; letter-spacing: .17em; }
 .panel-title { margin: 0; color: var(--modern-text); font-size: clamp(1.35rem, 3vw, 2.15rem); font-weight: 440; line-height: 1.2; letter-spacing: -.035em; }
 .panel-subtitle { margin: .25rem 0 0; color: #978da5; font-size: .78rem; }
-.panel-content { display: grid; min-height: 0; overflow: hidden; align-content: center; }
+.panel-content {
+    display: grid;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    align-content: start;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(185, 154, 255, .3) transparent;
+}
 .panel-tabs {
     display: flex;
     align-items: center;
@@ -435,11 +480,14 @@ html.experience-modern .command-ambient {
 
 .focus-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .7rem; }
 .focus-card { position: relative; display: grid; align-content: start; gap: .55rem; min-height: 150px; padding: 1rem; border: 1px solid var(--modern-line); background: rgba(20, 14, 31, .78); text-align: left; }
-.focus-card:hover { border-color: rgba(185, 154, 255, .55); }
 .focus-title { color: var(--modern-text); font-size: .86rem; font-weight: 500; }
 .focus-summary { color: var(--modern-copy); font-size: .73rem; line-height: 1.55; }
-.focus-card .selection-arrow { position: absolute; right: .8rem; bottom: .65rem; }
-.mission-reading, .detail-copy, .record-overview { width: min(100%, 850px); justify-self: center; }
+.question-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: start; gap: .6rem; }
+.question-card { display: grid; grid-template-columns: 1.75rem minmax(0, 1fr); align-content: start; gap: .2rem .65rem; min-width: 0; padding: .8rem .9rem; border: 1px solid var(--modern-line-soft); background: rgba(20, 14, 31, .58); }
+.question-card-copy { display: grid; align-content: start; gap: .3rem; }
+.question-card-title { color: var(--modern-text); font-size: .8rem; font-weight: 500; line-height: 1.4; }
+.question-card-summary { margin: 0; color: var(--modern-copy); font-size: .7rem; line-height: 1.55; }
+.mission-reading, .detail-copy, .record-overview { width: min(100%, 1100px); justify-self: start; }
 .paged-copy { margin: 0; color: #d0c8da; font-size: clamp(.93rem, 1.5vw, 1.08rem); line-height: 1.8; }
 .mission-copy { max-width: 76ch; }
 .mission-status-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem; margin-top: clamp(1.1rem, 3vh, 2rem); }
@@ -450,7 +498,7 @@ html.experience-modern .command-ambient {
 .detail-copy { display: grid; gap: 1rem; }
 
 .panel-content > .command-resources,
-.record-overview > .command-resources { justify-content: center; }
+.record-overview > .command-resources { justify-content: flex-start; }
 .command-resources { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: .65rem; }
 .resource-link, .shortcut-link {
     display: inline-flex;
@@ -467,7 +515,20 @@ html.experience-modern .command-ambient {
     cursor: pointer;
 }
 .resource-link:hover, .shortcut-link:hover { border-color: var(--modern-bright); background: rgba(57, 41, 81, .9); }
-.record-overview { display: grid; justify-items: start; align-content: center; gap: 1rem; }
+.record-overview { display: grid; justify-items: start; align-content: start; gap: 1rem; }
+.founder-accordion-list { display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; gap: .55rem; width: min(100%, 1100px); }
+.founder-accordion { min-width: 0; border: 1px solid var(--modern-line-soft); background: rgba(20, 14, 31, .58); }
+.founder-accordion-summary { display: grid; grid-template-columns: 1.75rem minmax(0, 1fr) auto; align-items: center; gap: .65rem; min-height: 59px; padding: .65rem .8rem; cursor: pointer; list-style: none; }
+.founder-accordion-summary::-webkit-details-marker { display: none; }
+.founder-accordion-summary:hover { background: rgba(37, 27, 55, .5); }
+.founder-accordion-summary:focus-visible { outline: 2px solid var(--modern-bright); outline-offset: -2px; }
+.founder-accordion-summary .selection-meta { overflow: visible; text-overflow: clip; white-space: normal; line-height: 1.5; }
+.founder-accordion[open] > .founder-accordion-summary { border-bottom: 1px solid var(--modern-line-soft); }
+.founder-accordion[open] .selection-arrow { transform: rotate(180deg); }
+.founder-accordion-summary .selection-arrow { transition: transform 150ms ease; }
+.founder-inline-profile { display: grid; gap: .8rem; padding: .85rem .8rem 1rem; }
+.founder-inline-profile > .paged-copy { width: 100%; }
+.founder-inline-profile > .command-resources { justify-content: flex-start; }
 .project-record-image { justify-self: center; }
 .record-image { display: grid; place-items: center; width: min(100%, 690px); max-height: 37svh; margin: 0 auto; overflow: hidden; border: 1px solid var(--modern-line); background: #0a0811; }
 .record-image img { width: 100%; height: 100%; max-height: 37svh; object-fit: contain; }
@@ -489,11 +550,11 @@ html.experience-modern .command-ambient {
 .architecture-label-item { display: flex; align-items: center; min-height: 42px; padding: .5rem .7rem; border-left: 1px solid #8064aa; color: #e4dcef; background: rgba(22, 16, 34, .62); font-size: .78rem; }
 .architecture-caption { align-self: end; margin: .2rem 0 0; color: #857995; font: .54rem ui-monospace, monospace; letter-spacing: .12em; text-align: center; }
 
-.contact-view { display: grid; justify-items: center; gap: 1rem; text-align: center; }
-.contact-copy { max-width: 70ch; margin: 0; color: #c7bdcf; font-size: clamp(.92rem, 1.5vw, 1.05rem); }
+.contact-view { display: grid; justify-self: start; justify-items: start; align-content: start; width: min(100%, 1100px); gap: 1rem; text-align: left; }
+.contact-copy { max-width: 100%; margin: 0; color: #c7bdcf; font-size: clamp(.92rem, 1.5vw, 1.05rem); }
 .contact-email { color: var(--modern-bright) !important; font-size: 1.1rem; text-decoration: none; }
 .contact-copyright { color: #80768e; font-size: .68rem; }
-.contact-shortcuts { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; margin-top: .6rem; }
+.contact-shortcuts { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: .5rem; margin-top: .6rem; }
 .shortcut-link { min-height: 38px; padding: .45rem .7rem; font-size: .68rem; }
 
 @keyframes dial-sweep { to { stroke-dashoffset: -1135; transform: rotate(360deg); } }
@@ -537,13 +598,9 @@ html.experience-modern .command-ambient {
     .dial-eyebrow { font-size: .52rem; letter-spacing: .14em; }
     .dial-title { font-size: 1rem; }
     .sonar-dial { width: min(90vw, 410px, calc(100svh - 205px)); height: min(90vw, 410px, calc(100svh - 205px)); }
-    .dial-node { gap: .27rem; min-height: 40px; padding: .15rem .2rem; font-size: .442rem; letter-spacing: .055em; }
-    .dial-node-dot { width: 6px; height: 6px; flex-basis: 6px; }
-    .node-mission { top: 4%; }
-    .node-technology { right: 1%; top: 29%; }
-    .node-projects { right: 3%; bottom: 10%; }
-    .node-organization { left: 3%; bottom: 10%; }
-    .node-contact { left: 1%; top: 29%; }
+    .dial-node { width: 44px; height: 44px; }
+    .dial-node-icon { width: 21px; height: 21px; }
+    .dial-node-label { max-width: 125px; padding: .3rem .4rem; font-size: .47rem; letter-spacing: .045em; }
     .dial-center { --mark-size: 61.25px; --mark-hit-size: 67.375px; }
     .dial-center { font-size: .49rem; }
     .dial-instruction { font-size: .45rem; letter-spacing: .08em; }
@@ -572,11 +629,19 @@ html.experience-modern .command-ambient {
     .selection-meta { font-size: .48rem; }
     .selection-arrow { font-size: .77rem; }
     .focus-grid { grid-template-columns: 1fr; gap: .35rem; }
-    .focus-card { grid-template-columns: 1.5rem minmax(0, 1fr) auto; align-items: center; gap: .4rem; min-height: 55px; padding: .48rem .6rem; }
+    .focus-card { grid-template-columns: 1.5rem minmax(0, 1fr); align-items: center; gap: .4rem; min-height: 55px; padding: .48rem .6rem; }
     .focus-title { font-size: .7rem; }
     .focus-summary { grid-column: 2; font-size: .62rem; line-height: 1.35; }
     .focus-card .selection-index { grid-row: 1 / span 2; }
-    .focus-card .selection-arrow { position: static; grid-column: 3; grid-row: 1 / span 2; }
+    .question-grid { grid-template-columns: 1fr; gap: .4rem; }
+    .question-card { grid-template-columns: 1.4rem minmax(0, 1fr); gap: .2rem .45rem; padding: .58rem .65rem; }
+    .question-card-title { font-size: .72rem; }
+    .question-card-summary { font-size: .64rem; line-height: 1.42; }
+    .founder-accordion-list { gap: .4rem; }
+    .founder-accordion-summary { grid-template-columns: 1.4rem minmax(0, 1fr) auto; gap: .45rem; min-height: 54px; padding: .55rem .65rem; }
+    .founder-accordion-summary .selection-title { font-size: .72rem; }
+    .founder-accordion-summary .selection-meta { font-size: .48rem; }
+    .founder-inline-profile { gap: .65rem; padding: .65rem; }
     .paged-copy { font-size: .88rem; line-height: 1.68; }
     .mission-status-grid { gap: .4rem; margin-top: .8rem; }
     .mission-status-unit { padding: .55rem .6rem; }
@@ -599,9 +664,8 @@ html.experience-modern .command-ambient {
 
 @media (max-width: 380px) {
     .sonar-dial { width: min(92vw, 350px); height: min(92vw, 350px); max-height: calc(100svh - 195px); }
-    .dial-node { font-size: .459rem; }
-    .node-projects { right: 0; }
-    .node-organization { left: 0; }
+    .dial-node { width: 42px; height: 42px; }
+    .dial-node-label { max-width: 112px; font-size: .44rem; }
     .selection-item { grid-template-columns: 1.25rem minmax(0, 1fr) auto; gap: .3rem; padding-inline: .36rem; }
     .selection-title { font-size: .69rem; }
 }

@@ -1,12 +1,10 @@
 "use strict";
 
-/* Modern command interface. The Classic page remains the content source. */
+/* Underwater command interface. The Classic page remains the content source. */
 (() => {
     const root = document.documentElement;
     const modernRoot = document.querySelector("#modern-experience");
     const classicFrame = document.querySelector(".site-frame");
-    const deviceChoice = document.querySelector("#device-choice");
-    const deviceChoiceError = document.querySelector("#device-choice-error");
     const skipLink = document.querySelector(".skip-link");
     const themeColor = document.querySelector('meta[name="theme-color"]');
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -17,12 +15,11 @@
     let shell = null;
     let view = null;
     let currentRoute = "home";
-    let routeTrail = [];
     let transitionTimer = 0;
     let peacockResetTimer = 0;
     let lastHandledHash = "";
 
-    if (!modernRoot || !classicFrame || !deviceChoice) return;
+    if (!modernRoot || !classicFrame) return;
 
     const slug = (value) => value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
     const text = (node) => node && node.textContent ? node.textContent.replace(/\s+/g, " ").trim() : "";
@@ -45,7 +42,7 @@
         stylesheetPromise = new Promise((resolve, reject) => {
             stylesheet = document.createElement("link");
             stylesheet.rel = "stylesheet";
-            stylesheet.href = "modern.css?v=20261110-10";
+            stylesheet.href = "modern.css?v=20261112-18";
             stylesheet.onload = resolve;
             stylesheet.onerror = () => {
                 stylesheet.remove();
@@ -130,24 +127,7 @@
         email: source("contact").querySelector(".footer-announcement a").getAttribute("href")
     };
 
-    const splitText = (value, limit) => {
-        const pages = [];
-        let page = "";
-        value.split(/\s+/).filter(Boolean).forEach((word) => {
-            const next = page ? page + " " + word : word;
-            if (page && next.length > limit) {
-                pages.push(page);
-                page = word;
-            } else page = next;
-        });
-        if (page) pages.push(page);
-        return pages.length ? pages : [""];
-    };
-    const textPage = (value, page, limit) => {
-        const pages = splitText(value, limit || 280);
-        const current = Math.min(Math.max(1, Number(page) || 1), pages.length);
-        return { pages, current, content: el("p", "paged-copy", pages[current - 1]) };
-    };
+    const fullText = (value, className) => el("p", className || "paged-copy", value);
     const routeButton = (label, route, className) => makeButton(label, route, className);
     const appendLinks = (parent, links) => {
         const list = el("div", "command-resources");
@@ -263,6 +243,64 @@
         });
         return list;
     };
+    const researchAreaGrid = () => {
+        const grid = el("div", "focus-grid");
+        facts.forEach((item) => {
+            const card = el("article", "focus-card");
+            card.append(
+                el("span", "selection-index", item.index),
+                el("strong", "focus-title", item.title),
+                el("span", "focus-summary", item.description)
+            );
+            grid.append(card);
+        });
+        return grid;
+    };
+    const researchQuestionGrid = () => {
+        const grid = el("div", "question-grid");
+        challenges.forEach((item) => {
+            const card = el("article", "question-card");
+            card.append(el("span", "selection-index", item.index));
+            const copy = el("div", "question-card-copy");
+            copy.append(
+                el("strong", "question-card-title", item.title),
+                el("p", "question-card-summary", item.description)
+            );
+            card.append(copy);
+            grid.append(card);
+        });
+        return grid;
+    };
+    const founderAccordionList = (openId) => {
+        const list = el("div", "founder-accordion-list");
+        people.forEach((person) => {
+            const details = el("details", "founder-accordion");
+            details.open = person.id === openId;
+            details.addEventListener("toggle", () => {
+                if (!details.open) return;
+                list.querySelectorAll(".founder-accordion[open]").forEach((other) => {
+                    if (other !== details) other.open = false;
+                });
+            });
+            const summary = el("summary", "founder-accordion-summary");
+            summary.append(el("span", "selection-index", person.index));
+            const identity = el("span", "selection-copy");
+            identity.append(
+                el("strong", "selection-title", person.name),
+                el("small", "selection-meta", person.role)
+            );
+            const arrow = el("span", "selection-arrow", "⌄");
+            arrow.setAttribute("aria-hidden", "true");
+            summary.append(identity, arrow);
+
+            const profile = el("div", "founder-inline-profile");
+            person.paragraphs.forEach((paragraph) => profile.append(fullText(paragraph)));
+            if (person.links && person.links.length) appendLinks(profile, person.links);
+            details.append(summary, profile);
+            list.append(details);
+        });
+        return list;
+    };
 
     const makeShell = () => {
         if (shell) return;
@@ -336,6 +374,16 @@
             });
         });
         shell.addEventListener("click", (event) => {
+            const dialNode = event.target.closest(".dial-node");
+            if (dialNode && event.detail > 0 && window.matchMedia("(hover: none), (pointer: coarse)").matches) {
+                if (!dialNode.classList.contains("is-revealed")) {
+                    shell.querySelectorAll(".dial-node.is-revealed").forEach((node) => node.classList.remove("is-revealed"));
+                    dialNode.classList.add("is-revealed");
+                    event.stopPropagation();
+                    return;
+                }
+                dialNode.classList.remove("is-revealed");
+            }
             const routeTarget = event.target.closest("[data-route]");
             if (routeTarget) {
                 if (routeTarget.tagName === "A") event.preventDefault();
@@ -348,8 +396,7 @@
             }
             const back = event.target.closest("[data-command-back]");
             if (back) {
-                if (routeTrail.length) window.history.back();
-                else go(back.dataset.fallback || "home");
+                go(back.dataset.fallback || "home");
             }
         });
         shell.addEventListener("keydown", (event) => {
@@ -388,67 +435,73 @@
             '<g class="dial-mark-fan"><path class="dial-mark-lines" d="M130 45V85 M91 57 118 111 M169 57 142 111 M63 87 112 122 M197 87 148 122 M54 126 112 132 M206 126 148 132"/><g class="dial-mark-nodes"><circle cx="130" cy="45" r="5"/><circle cx="91" cy="57" r="5"/><circle cx="169" cy="57" r="5"/><circle cx="63" cy="87" r="5"/><circle cx="197" cy="87" r="5"/><circle cx="54" cy="126" r="5"/><circle cx="206" cy="126" r="5"/></g></g>',
             '<g class="dial-mark-body"><path class="dial-mark-lines" d="M130 92V117 M122 97 125 117 M138 97 135 117 M120 117H140L130 138Z M130 138V218 M119 218H141"/><g class="dial-mark-nodes"><circle cx="122" cy="97" r="3.4"/><circle cx="130" cy="92" r="4.2"/><circle cx="138" cy="97" r="3.4"/><circle cx="130" cy="218" r="4.2"/><circle cx="119" cy="218" r="3.3"/><circle cx="141" cy="218" r="3.3"/></g></g>',
             '<path class="anger-mark" d="m198 53 9-10-1 13 14-5-8 12 13 5-15 5-3 13-9-10-12 5 6-13-10-9 14 3z"/></svg></div>',
-            '<div class="dial-nodes"></div><span class="dial-bearing bearing-n">N</span><span class="dial-bearing bearing-e">E</span><span class="dial-bearing bearing-s">S</span><span class="dial-bearing bearing-w">W</span>'
+            '<div class="dial-nodes"></div>'
         ].join("");
+        const iconPaths = {
+            overview: '<path d="M12 12V3.5M12 12 5.5 6M12 12l6.5-6M12 12 3.5 12M12 12h8.5M12 12v8.5"/><circle cx="12" cy="12" r="1.9"/><circle cx="12" cy="3.5" r="1.35"/><circle cx="5.5" cy="6" r="1.35"/><circle cx="18.5" cy="6" r="1.35"/><circle cx="3.5" cy="12" r="1.35"/><circle cx="20.5" cy="12" r="1.35"/><circle cx="12" cy="20.5" r="1.35"/>',
+            methods: '<path d="M12 10 9 8 6.5 4.5 9 3l3 4 3-4 2.5 1.5L15 8l-3 2v10m0-7-2 2m2-2 2 2"/><circle cx="12" cy="7" r="1.1"/><circle cx="9" cy="8" r=".95"/><circle cx="6.5" cy="4.5" r=".95"/><circle cx="9" cy="3" r=".95"/><circle cx="15" cy="3" r=".95"/><circle cx="17.5" cy="4.5" r=".95"/><circle cx="15" cy="8" r=".95"/><circle cx="12" cy="10" r="1.2"/><circle cx="12" cy="14" r=".95"/><circle cx="10" cy="15" r=".9"/><circle cx="14" cy="15" r=".9"/><circle cx="12" cy="20" r="1.05"/>',
+            current: '<path d="M3 10h14l5 2-5 2H3l-2-2ZM9 10V7h4v3m-5 4v2h4v-2M1 10V7m0 7v3M7 12h1m2 0h1m2 0h1"/><circle cx="3" cy="10" r="1"/><circle cx="17" cy="10" r="1"/><circle cx="22" cy="12" r="1.15"/><circle cx="17" cy="14" r="1"/><circle cx="3" cy="14" r="1"/><circle cx="1" cy="12" r="1"/><circle cx="9" cy="7" r=".9"/><circle cx="13" cy="7" r=".9"/><circle cx="9" cy="16" r=".9"/><circle cx="7" cy="12" r=".75"/><circle cx="10" cy="12" r=".75"/><circle cx="13" cy="12" r=".75"/>',
+            background: '<path d="M12 12 5 5m7 7 7-7m-7 7-7 7m7-7 7 7M2 5h6m8 0h6M2 19h6m8 0h6"/><circle class="node-rotor" cx="5" cy="5" r="2.25"/><circle class="node-rotor" cx="19" cy="5" r="2.25"/><circle class="node-rotor" cx="5" cy="19" r="2.25"/><circle class="node-rotor" cx="19" cy="19" r="2.25"/><circle cx="5" cy="5" r=".9"/><circle cx="19" cy="5" r=".9"/><circle cx="5" cy="19" r=".9"/><circle cx="19" cy="19" r=".9"/><circle class="node-active" cx="12" cy="12" r="1.8"/>',
+            questions: '<path d="m5 8 1-3 2-1 2 1 1 2-1 2-2 1v2m7-4 1-3 2-1 2 1 1 2-1 2-2 1v2"/><circle cx="5" cy="8" r=".85"/><circle cx="6" cy="5" r=".85"/><circle cx="8" cy="4" r=".85"/><circle cx="10" cy="5" r=".85"/><circle cx="11" cy="7" r=".85"/><circle cx="10" cy="9" r=".85"/><circle cx="8" cy="10" r=".85"/><circle cx="8" cy="13" r=".85"/><circle cx="8" cy="18" r=".9"/><circle cx="15" cy="8" r=".85"/><circle cx="16" cy="5" r=".85"/><circle cx="18" cy="4" r=".85"/><circle cx="20" cy="5" r=".85"/><circle cx="21" cy="7" r=".85"/><circle cx="20" cy="9" r=".85"/><circle cx="18" cy="10" r=".85"/><circle cx="18" cy="13" r=".85"/><circle cx="18" cy="18" r=".9"/>',
+            founders: '<path d="M7 6v6m0-4-3 3m3-3 3 3m-3 1-3 5m3-5 3 5m7-10v6m0-4-3 3m3-3 3 3m-3 1-3 5m3-5 3 5"/><circle cx="7" cy="4" r="1.45"/><circle cx="17" cy="4" r="1.45"/><circle cx="7" cy="6" r=".9"/><circle cx="4" cy="11" r=".9"/><circle cx="10" cy="11" r=".9"/><circle cx="7" cy="12" r=".9"/><circle cx="4" cy="17" r=".9"/><circle cx="10" cy="17" r=".9"/><circle cx="17" cy="6" r=".9"/><circle cx="14" cy="11" r=".9"/><circle cx="20" cy="11" r=".9"/><circle cx="17" cy="12" r=".9"/><circle cx="14" cy="17" r=".9"/><circle cx="20" cy="17" r=".9"/>',
+            contact: '<path d="M5 2.5h14v19H5zM8 5h8v12H8zM10 19h4"/><circle cx="5" cy="2.5" r=".9"/><circle cx="19" cy="2.5" r=".9"/><circle cx="5" cy="21.5" r=".9"/><circle cx="19" cy="21.5" r=".9"/><circle cx="8" cy="5" r=".9"/><circle cx="16" cy="5" r=".9"/><circle cx="8" cy="17" r=".9"/><circle cx="16" cy="17" r=".9"/><circle cx="12" cy="19" r=".9"/>',
+            classic: '<path d="M3 3h18v13H3zM12 16v3m-4 1h8M3 22h18M5 5h14v9H5zM8 18h2m2 0h2m2 0h2"/><circle cx="3" cy="3" r=".8"/><circle cx="21" cy="3" r=".8"/><circle cx="3" cy="16" r=".8"/><circle cx="21" cy="16" r=".8"/><circle cx="5" cy="5" r=".65"/><circle cx="19" cy="5" r=".65"/><circle cx="5" cy="14" r=".65"/><circle cx="19" cy="14" r=".65"/><circle cx="12" cy="19" r=".65"/><circle cx="8" cy="18" r=".65"/><circle cx="12" cy="18" r=".65"/><circle cx="16" cy="18" r=".65"/>'
+        };
+        const makeDialIcon = (name) => {
+            const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            icon.setAttribute("class", "dial-node-icon");
+            icon.setAttribute("viewBox", "0 0 24 24");
+            icon.setAttribute("aria-hidden", "true");
+            icon.setAttribute("focusable", "false");
+            icon.innerHTML = iconPaths[name];
+            return icon;
+        };
         [
-            ["OVERVIEW", "mission/current/1", "node-mission"],
-            ["METHODS & TOOLS", "technology", "node-technology"],
-            ["RESEARCH", "projects", "node-projects"],
-            ["FOUNDERS", "organization", "node-organization"],
-            ["CONTACT", "contact", "node-contact"]
-        ].forEach(([label, route, position]) => {
+            ["OVERVIEW", "mission/current/1", "node-mission", "overview"],
+            ["METHODS & TOOLS", "technology", "node-technology", "methods"],
+            ["CURRENT RESEARCH", "projects/current", "node-current", "current"],
+            ["RESEARCH BACKGROUND", "projects/lineage", "node-background", "background"],
+            ["RESEARCH QUESTIONS", "projects/challenges", "node-questions", "questions"],
+            ["FOUNDERS", "organization", "node-organization", "founders"],
+            ["CONTACT", "contact", "node-contact", "contact"]
+        ].forEach(([label, route, position, iconName]) => {
             const node = makeButton("", route, "dial-node " + position);
             node.setAttribute("aria-label", label);
-            node.append(el("span", "dial-node-dot"), el("span", "dial-node-label", label));
+            node.append(makeDialIcon(iconName), el("span", "dial-node-label", label));
             dial.querySelector(".dial-nodes").append(node);
         });
+        const classicNode = makeButton("", null, "dial-node node-classic");
+        classicNode.dataset.switchMode = "classic";
+        classicNode.setAttribute("aria-label", "Switch to Classic Interface");
+        classicNode.append(makeDialIcon("classic"), el("span", "dial-node-label", "CLASSIC INTERFACE"));
+        dial.querySelector(".dial-nodes").append(classicNode);
         home.append(dial);
         const instruction = el("p", "dial-instruction");
-        instruction.innerHTML = 'CHOOSE A SECTION <span>·</span> ESC TO RETURN HOME';
+        instruction.innerHTML = '<span class="dial-pointer-hint">HOVER / FOCUS TO REVEAL · SELECT TO OPEN</span><span class="dial-touch-hint">TAP TO REVEAL · TAP AGAIN TO OPEN</span>';
         home.append(instruction);
         return home;
     };
 
     const renderMission = (parts) => {
-        const section = parts[1] || "current";
-        if (section === "progress") {
-            const page = textPage(mission.progress, parts[2], 285);
-            const content = el("div", "detail-copy");
-            content.append(el("span", "detail-index", "CURRENT PHASE / " + mission.status[1]), page.content);
-            const panel = makePanel({ category: "Research / Next steps", title: "Current work and next steps", back: "mission/current/1", content });
-            const pages = pager(page.current, page.pages.length, (n) => "mission/progress/" + n);
-            if (pages) panel.append(pages);
-            return panel;
-        }
+        let section = parts[1] || "current";
+        if (section === "progress") section = "current";
         if (section === "focus") {
-            const content = el("div", "focus-grid");
-            facts.forEach((item) => {
-                const card = makeButton("", "technology/capability/" + item.id, "focus-card");
-                card.append(el("span", "selection-index", item.index), el("strong", "focus-title", item.title), el("span", "focus-summary", item.description), el("span", "selection-arrow", "↗"));
-                content.append(card);
-            });
+            const content = researchAreaGrid();
             const panel = makePanel({ category: "Research", title: "Research areas", back: "mission/current/1", content });
             panel.append(makeTabs([{ id: "current", label: "Overview", route: "mission/current/1" }, { id: "focus", label: "Research areas", route: "mission/focus" }, { id: "constraints", label: "Research questions", route: "mission/constraints" }], "focus"));
             return panel;
         }
-        if (section === "constraints" && parts[2]) {
-            const item = challenges.find((record) => record.id === parts[2]);
-            if (!item) return renderMission(["mission", "constraints"]);
-            const content = el("div", "detail-copy");
-            content.append(el("span", "detail-index", "RESEARCH QUESTION " + item.index + " / 04"), el("p", "paged-copy", item.description));
-            return makePanel({ category: "Research question", title: item.title, back: "mission/constraints", content });
-        }
         if (section === "constraints") {
             const content = el("div", "list-view");
-            content.append(el("p", "list-introduction", mission.challengeIntro));
-            content.append(selectionList(challenges, (item) => "mission/constraints/" + item.id, "selection-grid compact-grid"));
+            if (mission.challengeIntro) content.append(el("p", "list-introduction", mission.challengeIntro));
+            content.append(researchQuestionGrid());
             const panel = makePanel({ category: "Research questions", title: mission.challengeTitle, back: "mission/current/1", content });
             panel.append(makeTabs([{ id: "current", label: "Overview", route: "mission/current/1" }, { id: "focus", label: "Research areas", route: "mission/focus" }, { id: "constraints", label: "Research questions", route: "mission/constraints" }], "constraints"));
             return panel;
         }
-        const page = textPage(mission.lead, parts[2], 285);
         const content = el("div", "mission-reading");
-        content.append(page.content);
+        content.append(fullText(mission.lead));
+        content.append(fullText(mission.progress));
         const status = el("div", "mission-status-grid");
         [["RESEARCH AREA", mission.status[0]], ["CURRENT PHASE", mission.status[1]]].forEach(([label, value]) => {
             const item = el("div", "mission-status-unit");
@@ -458,9 +511,6 @@
         content.append(status);
         const panel = makePanel({ category: "Research program", title: mission.title, subtitle: "Autonomy for UUV teams operating with limited sensing and communication.", back: "home", content });
         panel.append(makeTabs([{ id: "current", label: "Overview", route: "mission/current/1" }, { id: "focus", label: "Research areas", route: "mission/focus" }, { id: "constraints", label: "Research questions", route: "mission/constraints" }], "current"));
-        const pages = pager(page.current, page.pages.length, (n) => "mission/current/" + n);
-        if (pages) panel.append(pages);
-        panel.querySelector(".panel-content").append(makeButton("CURRENT WORK & NEXT STEPS ↗", "mission/progress/1", "inline-route"));
         return panel;
     };
 
@@ -487,14 +537,8 @@
     };
 
     const renderTechnology = (parts) => {
-        if (parts[1] === "progress") return renderMission(["mission", "progress", parts[2]]);
-        if (parts[1] === "capability" && parts[2]) {
-            const item = facts.find((record) => record.id === parts[2]);
-            if (!item) return renderTechnology(["technology", "capabilities"]);
-            const content = el("div", "detail-copy");
-            content.append(el("span", "detail-index", "RESEARCH AREA / " + item.index), el("p", "paged-copy", item.description));
-            return makePanel({ category: "Research area", title: item.title, back: "technology/capabilities", content });
-        }
+        if (parts[1] === "progress") return renderMission(["mission", "current"]);
+        if (parts[1] === "capability") return renderTechnology(["technology", "capabilities"]);
         if (parts[1] === "platform") return renderPlatform(parts.slice(2));
         if (parts[1] === "access") {
             const content = el("div", "detail-copy");
@@ -508,7 +552,7 @@
         const content = el("div", "list-view");
         if (tab === "capabilities") {
             content.append(el("p", "list-introduction", "Current research areas."));
-            content.append(selectionList(facts, (item) => "technology/capability/" + item.id, "selection-grid"));
+            content.append(researchAreaGrid());
         } else {
             content.append(el("p", "list-introduction", mission.productsIntro));
             content.append(selectionList(products, (item) => "technology/platform/" + item.id + "/overview/1", "selection-grid"));
@@ -528,12 +572,9 @@
         const content = el("div", "record-overview");
         let pages = null;
         if (tab === "overview") {
-            const compact = window.matchMedia("(max-width: 620px), (max-height: 650px)").matches;
-            const data = textPage(item.description, page, compact ? 195 : 275);
             content.append(el("span", "detail-index", item.label));
             if (item.image) appendImage(content, item.image, "record-image platform-image");
-            content.append(data.content);
-            pages = pager(data.current, data.pages.length, (n) => base + "/overview/" + n);
+            content.append(fullText(item.description));
         } else if (tab === "architecture") {
             const compact = window.matchMedia("(max-width: 620px), (max-height: 650px)").matches;
             const diagramPage = Math.min(2, Math.max(1, page));
@@ -572,8 +613,8 @@
     };
     const challengesIndex = () => {
         const content = el("div", "list-view");
-        content.append(el("p", "list-introduction", mission.challengeIntro));
-        content.append(selectionList(challenges, (item) => "mission/constraints/" + item.id, "selection-grid compact-grid"));
+        if (mission.challengeIntro) content.append(el("p", "list-introduction", mission.challengeIntro));
+        content.append(researchQuestionGrid());
         const panel = makePanel({ category: "Research questions", title: mission.challengeTitle, back: "home", content });
         panel.append(makeTabs([{ id: "current", label: "Current research", route: "projects/current" }, { id: "lineage", label: "Research background", route: "projects/lineage" }, { id: "challenges", label: "Research questions", route: "projects/challenges" }], "challenges"));
         return panel;
@@ -584,47 +625,28 @@
         const item = records.find((record) => record.id === parts[1]);
         if (!item) return projectIndex(kind);
         // Older deep links with /visual or /resources resolve to the unified project view.
-        const page = Number(parts[3]) || 1;
-        const base = "projects/" + kind + "/" + item.id;
         const content = el("div", "record-overview");
-        const compact = window.matchMedia("(max-width: 620px), (max-height: 650px)").matches;
-        const data = textPage(item.description, page, compact ? 250 : 430);
         content.append(el("span", "detail-index", (kind === "lineage" ? "RESEARCH BACKGROUND" : item.label) + " / " + item.index));
         if (item.image) appendImage(content, item.image, "record-image project-record-image");
-        content.append(data.content);
+        content.append(fullText(item.description));
         if (item.links && item.links.length) appendLinks(content, item.links);
-        const panel = makePanel({ category: kind === "lineage" ? "Research / Background" : "Research / Current study", title: item.title, back: "projects/" + kind, content });
-        const pages = pager(data.current, data.pages.length, (n) => base + "/overview/" + n);
-        if (pages) panel.append(pages);
-        return panel;
+        return makePanel({ category: kind === "lineage" ? "Research / Background" : "Research / Current study", title: item.title, back: "projects/" + kind, content });
     };
 
-    const organizationIndex = () => {
+    const organizationIndex = (openId) => {
         const content = el("div", "list-view organization-index");
         content.append(el("p", "list-introduction", "Meet the founders."));
-        content.append(selectionList(people, (person) => "organization/" + person.id + "/profile/1", "selection-grid people-grid"));
+        content.append(founderAccordionList(openId));
         return makePanel({ category: "Founders", title: mission.organizationTitle, back: "home", content });
     };
     const renderPerson = (parts) => {
         const person = people.find((record) => record.id === parts[0]);
-        if (!person) return organizationIndex();
-        const page = Number(parts[2]) || 1;
-        const pages = person.paragraphs.flatMap((paragraph) => splitText(paragraph, 270));
-        const current = Math.min(Math.max(1, page), pages.length);
-        const content = el("div", "record-overview person-profile");
-        content.append(el("span", "detail-index", person.role), el("p", "paged-copy", pages[current - 1]));
-        if (person.links && person.links.length) appendLinks(content, person.links);
-        const panel = makePanel({ category: "Founder", title: person.name, back: "organization", content });
-        const controls = pager(current, pages.length, (n) => "organization/" + person.id + "/profile/" + n);
-        if (controls) panel.append(controls);
-        return panel;
+        return organizationIndex(person && person.id);
     };
 
     const renderContact = (parts) => {
-        const compact = window.matchMedia("(max-width: 620px), (max-height: 650px)").matches;
-        const statement = textPage(mission.partnership, parts[1], compact ? 185 : 320);
         const content = el("div", "contact-view");
-        content.append(el("p", "contact-copy", statement.content.textContent));
+        content.append(fullText(mission.partnership, "contact-copy"));
         const email = el("a", "contact-email", mission.email.replace(/^mailto:/i, ""));
         email.href = mission.email;
         content.append(email);
@@ -633,10 +655,7 @@
         shortcuts.setAttribute("aria-label", "Interface sections");
         [["Overview", "mission/current/1"], ["Methods & tools", "technology"], ["Research", "projects"], ["Founders", "organization"]].forEach(([label, route]) => shortcuts.append(routeButton(label, route, "shortcut-link")));
         content.append(shortcuts);
-        const panel = makePanel({ category: "Contact", title: "Contact Peacock Dynamics", subtitle: "Research collaboration · Technical partnerships · Investment", back: "home", content });
-        const controls = pager(statement.current, statement.pages.length, (n) => "contact/" + n);
-        if (controls) panel.append(controls);
-        return panel;
+        return makePanel({ category: "Contact", title: "Contact Peacock Dynamics", subtitle: "Research collaboration · Technical partnerships · Investment", back: "home", content });
     };
 
     const routeView = (route) => {
@@ -683,7 +702,6 @@
     const go = (route, options = {}) => {
         const next = normalizeRoute(route);
         if (options.push !== false && next !== currentRoute) {
-            routeTrail.push(currentRoute);
             const hash = "#pd/" + next;
             window.history.pushState({ pdRoute: next }, "", hash);
             lastHandledHash = hash;
@@ -693,8 +711,6 @@
     const syncRoute = () => {
         if (active !== "modern" || !shell || window.location.hash === lastHandledHash) return;
         const next = routeFromHash() || "home";
-        if (routeTrail[routeTrail.length - 1] === next) routeTrail.pop();
-        else if (next !== currentRoute) routeTrail.push(currentRoute);
         lastHandledHash = window.location.hash;
         renderRoute(next, true);
     };
@@ -706,43 +722,18 @@
     const applyMode = (mode) => {
         active = mode;
         root.classList.toggle("experience-modern", mode === "modern");
-        root.classList.remove("device-choice-active");
         setModeMetadata(mode);
-        deviceChoice.setAttribute("aria-hidden", "true");
-        deviceChoice.inert = true;
         classicFrame.inert = mode === "modern";
         modernRoot.inert = mode !== "modern";
         if (mode === "classic" && window.location.hash.startsWith("#pd/")) {
             window.history.replaceState({}, "", window.location.pathname + window.location.search);
-            routeTrail = [];
             lastHandledHash = "";
         }
     };
-    const focusDeviceChoice = () => {
-        if (root.classList.contains("device-choice-active")) {
-            deviceChoice.querySelector(".device-choice-panel")?.focus({ preventScroll: true });
-        }
-    };
-    const showDeviceChoice = (message) => {
-        root.classList.add("device-choice-active");
-        deviceChoice.setAttribute("aria-hidden", "false");
-        deviceChoice.inert = false;
-        classicFrame.inert = true;
-        modernRoot.inert = true;
-        if (deviceChoiceError) deviceChoiceError.textContent = message || "";
-        focusDeviceChoice();
-    };
-    window.addEventListener("pd-return-to-device-choice", () => {
-        try { window.sessionStorage.removeItem("peacock-dynamics-device-choice"); } catch { /* The selector remains available for this page view. */ }
-        document.body.classList.remove("experience-transitioning", "nav-open");
-        document.querySelector(".menu-toggle")?.setAttribute("aria-expanded", "false");
-        showDeviceChoice();
-    });
-    let choosingDevice = false;
-    const chooseDevice = async (choice) => {
-        if (choosingDevice || !["computer", "mobile"].includes(choice)) return;
-        choosingDevice = true;
-        const mode = choice === "mobile" ? "modern" : "classic";
+    let switchingMode = false;
+    const switchExperience = async (mode) => {
+        if (switchingMode || !["classic", "modern"].includes(mode) || mode === active) return;
+        switchingMode = true;
         if (mode === "modern") {
             try {
                 await loadStyles();
@@ -751,62 +742,41 @@
                 if (/^#pd\//.test(initialHash)) window.history.replaceState({ pdRoute: route }, "", initialHash);
                 renderRoute(route, false);
             } catch {
-                choosingDevice = false;
-                if (deviceChoiceError) deviceChoiceError.textContent = "The mobile interface could not load. Please try again.";
+                switchingMode = false;
                 return;
             }
         }
         if (!reducedMotion.matches) document.body.classList.add("experience-transitioning");
         applyMode(mode);
-        try { window.sessionStorage.setItem("peacock-dynamics-device-choice", choice); } catch { /* This page view still changes. */ }
         if (!reducedMotion.matches) window.requestAnimationFrame(() => window.setTimeout(() => document.body.classList.remove("experience-transitioning"), 300));
         const destination = document.querySelector(mode === "modern" ? "#modern-main" : "#main-content");
         if (destination) {
             destination.tabIndex = -1;
             destination.focus({ preventScroll: true });
         }
-        choosingDevice = false;
+        switchingMode = false;
     };
+    document.addEventListener("click", (event) => {
+        const modeTarget = event.target.closest("[data-switch-mode]");
+        if (modeTarget) switchExperience(modeTarget.dataset.switchMode);
+    });
+    window.addEventListener("pd-experience-resume", () => {
+        document.body.classList.remove("experience-transitioning", "nav-open");
+        document.querySelector(".menu-toggle")?.setAttribute("aria-expanded", "false");
+        classicFrame.inert = active === "modern";
+        modernRoot.inert = active !== "modern";
+    });
     window.addEventListener("popstate", syncRoute);
     window.addEventListener("hashchange", syncRoute);
-    deviceChoice.addEventListener("click", (event) => {
-        const option = event.target.closest("[data-device-choice]");
-        if (option) chooseDevice(option.dataset.deviceChoice);
-    });
-    deviceChoice.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") {
-            event.preventDefault();
-            return;
-        }
-        if (event.key !== "Tab") return;
-        const options = Array.from(deviceChoice.querySelectorAll("[data-device-choice]:not(:disabled)"));
-        const first = options[0];
-        const last = options[options.length - 1];
-        const panel = deviceChoice.querySelector(".device-choice-panel");
-        if (event.shiftKey && (document.activeElement === first || document.activeElement === panel)) {
-            event.preventDefault();
-            last?.focus();
-        } else if (!event.shiftKey && document.activeElement === last) {
-            event.preventDefault();
-            first?.focus();
-        }
-    });
     window.addEventListener("resize", () => {
         if (active === "modern" && currentRoute.includes("/architecture/")) renderRoute(currentRoute, false);
     });
 
     const directRoute = /^#pd\//.test(initialHash);
     setModeMetadata(active);
-    const awaitingChoice = root.classList.contains("device-choice-active");
-    if (awaitingChoice) {
-        showDeviceChoice();
-        if (root.classList.contains("intro-active")) window.addEventListener("pd-intro-dismissed", focusDeviceChoice, { once: true });
-    } else {
-        classicFrame.inert = active === "modern";
-        modernRoot.inert = active !== "modern";
-        deviceChoice.inert = true;
-    }
-    if (!awaitingChoice && active === "modern") {
+    classicFrame.inert = active === "modern";
+    modernRoot.inert = active !== "modern";
+    if (active === "modern") {
         loadStyles().then(() => {
             makeShell();
             const route = routeFromHash() || "home";
@@ -816,7 +786,8 @@
             root.classList.remove("experience-modern");
             active = "classic";
             setModeMetadata(active);
-            showDeviceChoice("The mobile interface could not load. Please choose an experience again.");
+            classicFrame.inert = false;
+            modernRoot.inert = true;
         });
     }
     window.__pdExperienceReady = true;
