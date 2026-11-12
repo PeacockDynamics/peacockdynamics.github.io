@@ -310,8 +310,8 @@ main {
     align-items: center;
     gap: 1.5rem;
 
-    min-height: 155px;
-    padding: 1rem 2rem;
+    min-height: 212px;
+    padding: 1rem 2rem 1rem 0;
 
     overflow: hidden;
 
@@ -418,14 +418,14 @@ main {
     align-items: center;
     justify-content: center;
 
-    width: 152px;
-    min-width: 152px;
-    min-height: 130px;
+    width: 180px;
+    min-width: 180px;
+    min-height: 180px;
 }
 
 .brand-logo {
     width: 100%;
-    max-height: 130px;
+    max-height: 180px;
 
     object-fit: contain;
     object-position: center;
