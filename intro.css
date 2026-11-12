@@ -40,7 +40,7 @@ html.intro-active #back-to-top {
     height: 100%;
     opacity: 0;
     overflow: visible;
-    transition: opacity 110ms linear;
+    transition: opacity 90ms linear;
 }
 
 .intro-scene.is-active {
@@ -98,7 +98,7 @@ html.intro-active #back-to-top {
 }
 
 .intro-scene.is-active .art-lit {
-    animation: intro-sweep-ltr 800ms cubic-bezier(.35, 0, .2, 1) both;
+    animation: intro-sweep-ltr 640ms cubic-bezier(.35, 0, .2, 1) both;
 }
 
 .intro-scene[data-direction="rtl"].is-active .art-lit {
@@ -174,7 +174,7 @@ html.intro-active #back-to-top {
     text-transform: uppercase;
     opacity: 0;
     transform: translateY(5px);
-    transition: opacity 220ms ease, transform 300ms ease;
+    transition: opacity 176ms ease, transform 240ms ease;
     pointer-events: none;
 }
 
@@ -243,11 +243,11 @@ html.intro-active #back-to-top {
 
 .intro-convergence.is-active {
     opacity: 1;
-    animation: convergence-out 900ms ease-in-out both;
+    animation: convergence-out 720ms ease-in-out both;
 }
 
 .intro-convergence.is-active svg {
-    animation: converge-form 900ms cubic-bezier(.3, .7, .2, 1) both;
+    animation: converge-form 720ms cubic-bezier(.3, .7, .2, 1) both;
 }
 
 @keyframes converge-form {
@@ -270,7 +270,7 @@ html.intro-active #back-to-top {
 .intro-lockup.is-active {
     opacity: 1;
     transform: translateY(0);
-    transition: opacity 300ms ease, transform 800ms cubic-bezier(.16, .65, .25, 1);
+    transition: opacity 240ms ease, transform 640ms cubic-bezier(.16, .65, .25, 1);
 }
 
 .intro-logo-mark {
@@ -285,7 +285,7 @@ html.intro-active #back-to-top {
 }
 
 .intro-lockup.is-active .intro-logo-mark {
-    animation: emblem-emerge 1450ms cubic-bezier(.18, .72, .22, 1) both;
+    animation: emblem-emerge 1160ms cubic-bezier(.18, .72, .22, 1) both;
 }
 
 .intro-logo-mark img {
@@ -314,7 +314,7 @@ html.intro-active #back-to-top {
 }
 
 .intro-lockup.is-active .intro-logo-glint {
-    animation: emblem-reflection 1350ms cubic-bezier(.15, .65, .25, 1) 180ms both;
+    animation: emblem-reflection 1080ms cubic-bezier(.15, .65, .25, 1) 144ms both;
 }
 
 @keyframes emblem-emerge {
@@ -344,13 +344,13 @@ html.intro-active #back-to-top {
     text-wrap: balance;
     opacity: 0;
     transform: translateY(7px);
-    transition: opacity 650ms ease, transform 800ms ease;
+    transition: opacity 520ms ease, transform 640ms ease;
 }
 
 .intro-lockup.is-active .intro-tagline {
     opacity: 1;
     transform: translateY(0);
-    transition-delay: 920ms;
+    transition-delay: 736ms;
 }
 
 .intro-tagline span {
@@ -388,7 +388,7 @@ html.intro-active #back-to-top {
 
 html.intro-fading .cinematic-intro {
     opacity: 0;
-    transition: opacity 900ms ease;
+    transition: opacity 720ms ease;
 }
 
 html.intro-fading .site-frame,
@@ -397,7 +397,7 @@ html.intro-fading #back-to-top {
 }
 
 html.intro-fading .site-frame {
-    animation: site-emerge 900ms ease both;
+    animation: site-emerge 720ms ease both;
 }
 
 @keyframes site-emerge {
@@ -407,7 +407,7 @@ html.intro-fading .site-frame {
 
 html.intro-fading .intro-skip {
     opacity: 0;
-    transition: opacity 300ms ease;
+    transition: opacity 240ms ease;
 }
 
 @media (max-width: 600px) {

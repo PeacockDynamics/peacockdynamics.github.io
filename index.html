@@ -18,35 +18,46 @@
 
     <title>Peacock Dynamics | UUV Autonomy Research</title>
 
+    <style>
+        html.intro-active,
+        html.intro-active body { overflow: hidden; background: #000; }
+        html.intro-active .site-frame,
+        html.intro-active #back-to-top { visibility: hidden; }
+        html.intro-active .cinematic-intro {
+            position: fixed;
+            z-index: 1100;
+            inset: 0;
+            display: grid;
+            overflow: hidden;
+            place-items: center;
+            color: #f1f3f5;
+            background: #000;
+        }
+    </style>
+
     <script>
         (() => {
-            try {
-                const key = "peacock-dynamics-intro-played";
-                const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-                if (reducedMotion || window.sessionStorage.getItem(key) === "true") return;
-                window.sessionStorage.setItem(key, "true");
-                document.documentElement.classList.add("intro-active");
-                window.__pdIntroFailsafe = window.setTimeout(() => {
-                    document.documentElement.classList.remove("intro-active");
-                    document.querySelector("#cinematic-intro")?.setAttribute("aria-hidden", "true");
-                    const site = document.querySelector(".site-frame");
-                    if (site) site.inert = false;
-                    document.body?.style.removeProperty("overflow");
-                    window.dispatchEvent(new Event("pd-intro-dismissed"));
-                }, 9800);
-            } catch {
-                // Storage or motion preference access can fail; show the site immediately.
-            }
+            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+            const root = document.documentElement;
+            root.classList.add("intro-active");
+            window.__pdIntroFailsafe = window.setTimeout(() => {
+                root.classList.remove("intro-active");
+                document.querySelector("#cinematic-intro")?.setAttribute("aria-hidden", "true");
+                const site = document.querySelector(".site-frame");
+                if (site) site.inert = false;
+                document.body?.style.removeProperty("overflow");
+                window.dispatchEvent(new Event("pd-intro-dismissed"));
+            }, 9800);
         })();
     </script>
 
     <link rel="icon" type="image/png" href="assets/logo/icon_dark.png">
     <link rel="stylesheet" href="style.css?v=20261112-4">
-    <link rel="stylesheet" href="intro.css?v=20261112-1">
+    <link rel="stylesheet" href="intro.css?v=20261112-2">
 
     <script src="script.js?v=20261112-1" defer></script>
-    <script src="intro.js?v=20261112-1" defer></script>
-    <script src="piku-launcher.js?v=20261112-5" defer></script>
+    <script src="intro.js?v=20261112-4" defer></script>
+    <script src="piku-launcher.js?v=20261112-7" defer></script>
 
     <style>
         .team-card.founder-card {
@@ -141,7 +152,7 @@
 
             <div class="header-controls">
                 <button class="piku-header-button" type="button" data-meet-piku aria-haspopup="dialog">
-                    <img src="assets/icons/piku.svg" alt="" aria-hidden="true">
+                    <img src="assets/icons/piku.svg?v=20261112-2" alt="" aria-hidden="true">
                     <span>Meet Piku</span>
                 </button>
                 <button

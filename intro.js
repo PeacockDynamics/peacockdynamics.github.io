@@ -178,11 +178,6 @@
     };
     scenes.forEach((scene, index) => buildScene(scene, shotGeometry[index]));
 
-    site.inert = true;
-    overlay.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-    skip.focus({ preventScroll: true });
-
     const later = (callback, delay) => {
         const timer = window.setTimeout(() => {
             timers.delete(timer);
@@ -222,7 +217,7 @@
         clearTimers();
         root.classList.add("intro-fading");
         site.inert = false;
-        later(release, 920);
+        later(release, 736);
     };
 
     const startScene = (index) => {
@@ -240,29 +235,49 @@
         caption.classList.add("is-active");
     };
 
-    // Timing from first paint: 0.5s dark, six 0.8s shots, 0.9s convergence,
-    // 1.9s logo hold, and a 0.9s dissolve. Total: exactly 9.0 seconds.
-    later(() => {
-        let shot = 0;
-        const advance = () => {
-            if (finished) return;
-            if (shot < 6) {
-                startScene(shot);
-                shot += 1;
-                later(advance, 800);
-                return;
-            }
-            scenes.forEach((scene) => scene.classList.remove("is-active"));
-            caption.classList.remove("is-active");
-            convergence.classList.add("is-active");
-            later(() => {
-                convergence.classList.remove("is-active");
-                lockup.classList.add("is-active");
-                later(beginDismiss, 1900);
-            }, 900);
-        };
-        advance();
-    }, 500);
+    const playIntro = () => {
+        if (reducedMotion.matches) return;
+        clearTimers();
+        finished = false;
+        scenes.forEach((scene) => scene.classList.remove("is-active"));
+        caption.classList.remove("is-active");
+        convergence.classList.remove("is-active");
+        lockup.classList.remove("is-active");
+        root.classList.remove("intro-fading");
+        root.classList.add("intro-active");
+        site.inert = true;
+        overlay.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        skip.focus({ preventScroll: true });
+
+        window.__pdIntroFailsafe = window.setTimeout(() => {
+            if (!finished) release();
+        }, 9800);
+
+        // The sequence runs at 1.25x; the final logo/tagline hold includes one
+        // extra second so the Sanskrit line has time to be read.
+        later(() => {
+            let shot = 0;
+            const advance = () => {
+                if (finished) return;
+                if (shot < 6) {
+                    startScene(shot);
+                    shot += 1;
+                    later(advance, 640);
+                    return;
+                }
+                scenes.forEach((scene) => scene.classList.remove("is-active"));
+                caption.classList.remove("is-active");
+                convergence.classList.add("is-active");
+                later(() => {
+                    convergence.classList.remove("is-active");
+                    lockup.classList.add("is-active");
+                    later(beginDismiss, 2520);
+                }, 720);
+            };
+            advance();
+        }, 400);
+    };
 
     skip.addEventListener("click", beginDismiss);
     document.addEventListener("keydown", (event) => {
@@ -273,4 +288,5 @@
         if (event.matches) beginDismiss();
     };
     reducedMotion.addEventListener?.("change", onMotionChange);
+    playIntro();
 })();

@@ -283,19 +283,9 @@
                                 <p class="piku-kicker">PEACOCK DYNAMICS PRESENTS</p>
                                 <h1 id="piku-dialog-title">MEET BABY PIKU</h1>
                                 <p class="piku-subtitle">The Tiny Captain of the Deep</p>
-                                <dl class="piku-facts">
-                                    <div><dt>Name:</dt><dd>Baby Piku</dd></div>
-                                    <div><dt>Age:</dt><dd>Baby</dd></div>
-                                    <div><dt>Species:</dt><dd>Peacock</dd></div>
-                                    <div><dt>Role:</dt><dd>Official Mascot of Peacock Dynamics</dd></div>
-                                    <div><dt>Personality:</dt><dd>Curious, adventurous, and extremely grumpy.</dd></div>
-                                    <div><dt>Favorite Activity:</dt><dd>Exploring the deep ocean aboard autonomous submarines.</dd></div>
-                                    <div><dt>Biggest Annoyance:</dt><dd>Being poked or disturbed.</dd></div>
-                                </dl>
                                 <div class="piku-introduction">
                                     <p>Meet Baby Piku, the tiniest explorer at Peacock Dynamics!</p>
                                     <p>He is a curious little peacock with a very big personality. He loves exploring mysterious underwater worlds aboard his self-driving submarine.</p>
-                                    <p>He might be adorable, but be careful. Baby Piku gets very grumpy when disturbed!</p>
                                     <p>Today, he is setting off on another underwater expedition.</p>
                                     <p>Would you like to join his adventure?</p>
                                 </div>
@@ -312,25 +302,28 @@
                                 <div class="piku-front-view-window">
                                     <button class="piku-mascot-button" type="button" data-piku-mascot aria-label="Gently tap Baby Piku to ruffle his feathers">
                                         <svg class="piku-peacock" viewBox="190 160 770 820" role="img" aria-label="The Peacock Dynamics peacock graph mark, reproduced as gold balls and sticks without the outer ring or wordmark.">
-                                            <g class="piku-tail-fan" fill="none" stroke="#edb91f" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M236 552 490 583 M278 385 500 543 M403 255 520 499 M572 195 572 374 M740 255 624 499 M864 385 644 543 M905 552 653 583" />
-                                                <path d="M538 427 571 510 M571 404 571 510 M606 427 571 510" />
-                                            </g>
-                                            <g class="piku-mark-nodes" fill="#edb91f">
-                                                <circle cx="236" cy="552" r="14"/><circle cx="278" cy="385" r="14"/><circle cx="403" cy="255" r="14"/><circle cx="572" cy="195" r="14"/><circle cx="740" cy="255" r="14"/><circle cx="864" cy="385" r="14"/><circle cx="905" cy="552" r="14"/>
-                                                <circle cx="538" cy="427" r="12"/><circle cx="571" cy="404" r="12"/><circle cx="606" cy="427" r="12"/>
-                                            </g>
-                                            <g class="piku-peacock-body" fill="none" stroke="#edb91f" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M531 512 H612 L572 590 Z M572 590 V954 M524 954 H620" />
+                                            <g class="piku-graph-mark">
+                                                <g class="piku-tail-fan" fill="none" stroke="#edb91f" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M236 552 490 583 M278 385 500 543 M403 255 520 499 M572 195 572 374 M740 255 624 499 M864 385 644 543 M905 552 653 583" />
+                                                    <path d="M538 427 571 510 M571 404 571 510 M606 427 571 510" />
+                                                </g>
+                                                <g class="piku-mark-nodes" fill="#edb91f">
+                                                    <circle cx="236" cy="552" r="14"/><circle cx="278" cy="385" r="14"/><circle cx="403" cy="255" r="14"/><circle cx="572" cy="195" r="14"/><circle cx="740" cy="255" r="14"/><circle cx="864" cy="385" r="14"/><circle cx="905" cy="552" r="14"/>
+                                                    <circle cx="538" cy="427" r="12"/><circle cx="571" cy="404" r="12"/><circle cx="606" cy="427" r="12"/>
+                                                </g>
+                                                <g class="piku-peacock-body" fill="none" stroke="#edb91f" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M531 512 H612 L572 590 Z M572 590 V954 M524 954 H620" />
+                                                </g>
                                             </g>
                                         </svg>
                                         <span class="piku-huff-emoji" aria-hidden="true">💢</span>
+                                        <span class="piku-nose-huff" aria-hidden="true"><i></i><i></i><i></i></span>
+                                        <span class="piku-huff-message" aria-hidden="true">Psst… he’s adorable, but don’t make him angry!</span>
                                     </button>
-                                    <p class="piku-art-caption">FRONT VIEW · PEACOCK MARK</p>
                                 </div>
                                 <div class="piku-side-view-window">
                                     <canvas id="piku-side-view-art" aria-label="Baby Piku in side profile, riding inside his small autonomous submarine." role="img"></canvas>
-                                    <p class="piku-art-caption">SIDE PROFILE · DEEP-SEA SUBMARINE</p>
+                                    <p class="piku-art-caption">Deep Sea Submarine</p>
                                 </div>
                             </div>
                         </section>
@@ -559,7 +552,7 @@
             this.mascotTimer = window.setTimeout(() => {
                 mascot.classList.remove("is-ruffled");
                 this.mascotTimer = 0;
-            }, 1150);
+            }, 3600);
         }
 
         setDragTarget(clientY) {
@@ -961,13 +954,22 @@
             this.clearInput();
             this.game?.objects.splice(0);
             this.game = null;
-            document.body.style.overflow = this.previousOverflow;
-            if (this.site) this.site.inert = this.previousSiteInert;
             document.body.classList.remove("nav-open");
             document.querySelector(".menu-toggle")?.setAttribute("aria-expanded", "false");
-            document.documentElement.classList.remove("piku-game-active");
-            this.root.remove();
-            activeGame = null;
+
+            const finishHome = () => {
+                document.body.style.overflow = this.previousOverflow;
+                if (this.site) this.site.inert = this.previousSiteInert;
+                document.documentElement.classList.remove("piku-game-active");
+                this.root.remove();
+                activeGame = null;
+            };
+            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+                finishHome();
+                return;
+            }
+            this.root.classList.add("is-dissolving");
+            window.setTimeout(finishHome, 580);
         }
     }
 
