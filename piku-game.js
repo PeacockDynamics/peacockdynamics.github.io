@@ -211,7 +211,7 @@
         ctx.restore();
     };
 
-    const drawIntroArt = (canvas) => {
+    const drawSideViewArt = (canvas) => {
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
         const rect = canvas.getBoundingClientRect();
@@ -223,14 +223,10 @@
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         ctx.clearRect(0, 0, width, height);
         ctx.save();
-        const scale = Math.min(width / 380, height / 205);
-        ctx.translate(width / 2, height / 2 + 3);
+        const scale = Math.min(width / 360, height / 118);
+        ctx.translate(width / 2, height / 2 + 2);
         drawSubmarine(ctx, 0, 0, scale, "normal", .25, false);
         ctx.restore();
-        ctx.fillStyle = "rgba(196, 178, 218, .62)";
-        ctx.font = "10px ui-monospace, monospace";
-        ctx.textAlign = "center";
-        ctx.fillText("AUTONOMOUS DEEP-OCEAN EXPEDITION", width / 2, height - 10);
     };
 
     const makeRockVertices = (radius, seed) => {
@@ -248,7 +244,8 @@
         constructor() {
             this.abort = new AbortController();
             this.root = null;
-            this.introCanvas = null;
+            this.mascotTimer = 0;
+            this.sideViewCanvas = null;
             this.worldCanvas = null;
             this.worldCtx = null;
             this.playScreen = null;
@@ -312,7 +309,29 @@
                                 </div>
                             </div>
                             <div class="piku-intro-art">
-                                <canvas id="piku-intro-art" aria-label="Baby Piku, a gold graph-feathered peacock, sits inside a small purple autonomous submarine. The submarine has a transparent cockpit, lights, fins and a rear propeller." role="img"></canvas>
+                                <div class="piku-front-view-window">
+                                    <button class="piku-mascot-button" type="button" data-piku-mascot aria-label="Gently tap Baby Piku to ruffle his feathers">
+                                        <svg class="piku-peacock" viewBox="190 160 770 820" role="img" aria-label="The Peacock Dynamics peacock graph mark, reproduced as gold balls and sticks without the outer ring or wordmark.">
+                                            <g class="piku-tail-fan" fill="none" stroke="#edb91f" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M236 552 490 583 M278 385 500 543 M403 255 520 499 M572 195 572 374 M740 255 624 499 M864 385 644 543 M905 552 653 583" />
+                                                <path d="M538 427 571 510 M571 404 571 510 M606 427 571 510" />
+                                            </g>
+                                            <g class="piku-mark-nodes" fill="#edb91f">
+                                                <circle cx="236" cy="552" r="14"/><circle cx="278" cy="385" r="14"/><circle cx="403" cy="255" r="14"/><circle cx="572" cy="195" r="14"/><circle cx="740" cy="255" r="14"/><circle cx="864" cy="385" r="14"/><circle cx="905" cy="552" r="14"/>
+                                                <circle cx="538" cy="427" r="12"/><circle cx="571" cy="404" r="12"/><circle cx="606" cy="427" r="12"/>
+                                            </g>
+                                            <g class="piku-peacock-body" fill="none" stroke="#edb91f" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M531 512 H612 L572 590 Z M572 590 V954 M524 954 H620" />
+                                            </g>
+                                        </svg>
+                                        <span class="piku-huff-emoji" aria-hidden="true">💢</span>
+                                    </button>
+                                    <p class="piku-art-caption">FRONT VIEW · PEACOCK MARK</p>
+                                </div>
+                                <div class="piku-side-view-window">
+                                    <canvas id="piku-side-view-art" aria-label="Baby Piku in side profile, riding inside his small autonomous submarine." role="img"></canvas>
+                                    <p class="piku-art-caption">SIDE PROFILE · DEEP-SEA SUBMARINE</p>
+                                </div>
                             </div>
                         </section>
                         <section class="piku-play-screen" data-piku-screen="play" aria-label="Underwater expedition" hidden>
@@ -368,8 +387,8 @@
                 </div>`;
             document.body.append(node);
             this.root = node;
-            this.introCanvas = node.querySelector("#piku-intro-art");
             this.worldCanvas = node.querySelector(".piku-world-canvas");
+            this.sideViewCanvas = node.querySelector("#piku-side-view-art");
             this.worldCtx = this.worldCanvas.getContext("2d", { alpha: false });
             this.introScreen = node.querySelector('[data-piku-screen="intro"]');
             this.playScreen = node.querySelector(".piku-play-screen");
@@ -386,10 +405,9 @@
                 resultDistance: node.querySelector('[data-result="distance"]')
             };
 
-            const site = document.querySelector(".site-frame");
-            const modern = document.querySelector("#modern-experience");
-            if (site) site.inert = true;
-            if (modern) modern.inert = true;
+            this.site = document.querySelector(".site-frame");
+            this.previousSiteInert = this.site ? this.site.inert : false;
+            if (this.site) this.site.inert = true;
             this.previousOverflow = document.body.style.overflow;
             document.body.style.overflow = "hidden";
             document.body.classList.remove("nav-open");
@@ -406,6 +424,11 @@
         bindInput() {
             const signal = this.abort.signal;
             this.root.addEventListener("click", (event) => {
+                const mascot = event.target instanceof Element ? event.target.closest("[data-piku-mascot]") : null;
+                if (mascot && this.state === "intro") {
+                    this.ruffleMascot(mascot);
+                    return;
+                }
                 const control = event.target instanceof Element ? event.target.closest("[data-action]") : null;
                 if (!control) return;
                 const action = control.dataset.action;
@@ -495,7 +518,7 @@
                 this.resizeObserver = new ResizeObserver(() => this.resize());
                 this.resizeObserver.observe(this.root);
                 this.resizeObserver.observe(this.playScreen);
-                this.resizeObserver.observe(this.introCanvas.parentElement);
+                this.resizeObserver.observe(this.sideViewCanvas.parentElement);
             }
         }
 
@@ -518,7 +541,7 @@
 
         resize() {
             if (this.closed || !this.root) return;
-            drawIntroArt(this.introCanvas);
+            drawSideViewArt(this.sideViewCanvas);
             const world = this.resizeCanvas(this.worldCanvas);
             if (world) {
                 this.width = world.width;
@@ -526,6 +549,17 @@
                 this.worldCtx = world.ctx;
                 if (this.game) this.drawFrame();
             }
+        }
+
+        ruffleMascot(mascot) {
+            if (this.mascotTimer) window.clearTimeout(this.mascotTimer);
+            mascot.classList.remove("is-ruffled");
+            void mascot.offsetWidth;
+            mascot.classList.add("is-ruffled");
+            this.mascotTimer = window.setTimeout(() => {
+                mascot.classList.remove("is-ruffled");
+                this.mascotTimer = 0;
+            }, 1150);
         }
 
         setDragTarget(clientY) {
@@ -923,14 +957,17 @@
             this.stopFrame();
             this.abort.abort();
             if (this.resizeObserver) this.resizeObserver.disconnect();
+            if (this.mascotTimer) window.clearTimeout(this.mascotTimer);
             this.clearInput();
             this.game?.objects.splice(0);
             this.game = null;
             document.body.style.overflow = this.previousOverflow;
+            if (this.site) this.site.inert = this.previousSiteInert;
+            document.body.classList.remove("nav-open");
+            document.querySelector(".menu-toggle")?.setAttribute("aria-expanded", "false");
             document.documentElement.classList.remove("piku-game-active");
             this.root.remove();
             activeGame = null;
-            window.dispatchEvent(new Event("pd-experience-resume"));
         }
     }
 

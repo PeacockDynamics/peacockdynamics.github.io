@@ -16,21 +16,6 @@
 
     <meta name="theme-color" content="#050505">
 
-    <script>
-        (() => {
-            const root = document.documentElement;
-            root.classList.add("experience-modern");
-            window.__pdExperienceFailsafe = window.setTimeout(() => {
-                if (window.__pdExperienceReady) return;
-                root.classList.remove("experience-modern");
-                const site = document.querySelector(".site-frame");
-                if (site) site.inert = false;
-                const modern = document.querySelector("#modern-experience");
-                if (modern) modern.inert = true;
-            }, 12000);
-        })();
-    </script>
-
     <title>Peacock Dynamics | UUV Autonomy Research</title>
 
     <script>
@@ -45,7 +30,7 @@
                     document.documentElement.classList.remove("intro-active");
                     document.querySelector("#cinematic-intro")?.setAttribute("aria-hidden", "true");
                     const site = document.querySelector(".site-frame");
-                    if (site) site.inert = document.documentElement.classList.contains("experience-modern");
+                    if (site) site.inert = false;
                     document.body?.style.removeProperty("overflow");
                     window.dispatchEvent(new Event("pd-intro-dismissed"));
                 }, 9800);
@@ -56,21 +41,12 @@
     </script>
 
     <link rel="icon" type="image/png" href="assets/logo/icon_dark.png">
-    <link rel="stylesheet" href="style.css?v=20261112-1">
+    <link rel="stylesheet" href="style.css?v=20261112-4">
     <link rel="stylesheet" href="intro.css?v=20261112-1">
 
-    <style>
-        html.experience-modern .site-frame,
-        html.experience-modern #back-to-top { display: none !important; }
-        html:not(.experience-modern) #modern-experience,
-        #modern-experience[hidden] { display: none !important; }
-        html.intro-active #modern-experience { visibility: hidden !important; }
-    </style>
-
-    <script src="script.js" defer></script>
-    <script src="intro.js?v=20261110-5" defer></script>
-    <script src="experience.js?v=20261112-19" defer></script>
-    <script src="piku-launcher.js?v=20261110-1" defer></script>
+    <script src="script.js?v=20261112-1" defer></script>
+    <script src="intro.js?v=20261112-1" defer></script>
+    <script src="piku-launcher.js?v=20261112-5" defer></script>
 
     <style>
         .team-card.founder-card {
@@ -163,9 +139,10 @@
                 </div>
             </div>
 
-            <div class="header-experience-controls">
-                <button class="interface-switch" type="button" data-switch-mode="modern">
-                    <span class="interface-switch-label">UNDERWATER INTERFACE</span> <span aria-hidden="true">↗</span>
+            <div class="header-controls">
+                <button class="piku-header-button" type="button" data-meet-piku aria-haspopup="dialog">
+                    <img src="assets/icons/piku.svg" alt="" aria-hidden="true">
+                    <span>Meet Piku</span>
                 </button>
                 <button
                     class="menu-toggle"
@@ -382,10 +359,6 @@
                     </div>
                 </div>
 
-                <button class="nav-link piku-nav-button" type="button" data-meet-piku aria-haspopup="dialog">
-                    <span class="nav-symbol" aria-hidden="true"><img src="assets/icons/piku.svg" alt=""></span>
-                    <span class="nav-copy"><strong>Meet Piku</strong><small>A deep-ocean adventure</small></span>
-                </button>
             </aside>
             </div>
 
@@ -1479,8 +1452,6 @@
             </main>
         </div>
     </div>
-
-    <div id="modern-experience" hidden></div>
 
     <a
         class="back-to-top"

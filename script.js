@@ -45,6 +45,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const backToTopButton =
         document.querySelector("#back-to-top");
 
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const rippleLayer = document.createElement("div");
+    rippleLayer.className = "underwater-ripple-layer";
+    rippleLayer.setAttribute("aria-hidden", "true");
+    document.body.append(rippleLayer);
+
+    document.addEventListener("pointerdown", (event) => {
+        if (reducedMotion.matches || !event.isPrimary || event.button !== 0) return;
+        const ripple = document.createElement("span");
+        ripple.className = "underwater-ripple";
+        ripple.style.left = event.clientX + "px";
+        ripple.style.top = event.clientY + "px";
+        rippleLayer.append(ripple);
+        ripple.addEventListener("animationend", () => ripple.remove(), { once: true });
+        while (rippleLayer.childElementCount > 6) rippleLayer.firstElementChild.remove();
+    }, { capture: true, passive: true });
+
 
     /* ============================================================
        2. CURRENT YEAR

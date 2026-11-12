@@ -211,7 +211,7 @@
         lockup.classList.remove("is-active");
         root.classList.remove("intro-active", "intro-fading");
         overlay.setAttribute("aria-hidden", "true");
-        site.inert = root.classList.contains("device-choice-active");
+        site.inert = false;
         document.body.style.removeProperty("overflow");
         if (overlay.contains(document.activeElement)) skip.blur();
         window.dispatchEvent(new Event("pd-intro-dismissed"));
@@ -221,7 +221,7 @@
         if (finished || root.classList.contains("intro-fading")) return;
         clearTimers();
         root.classList.add("intro-fading");
-        site.inert = root.classList.contains("device-choice-active");
+        site.inert = false;
         later(release, 920);
     };
 
