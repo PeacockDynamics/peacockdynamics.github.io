@@ -72,6 +72,58 @@ document.addEventListener("DOMContentLoaded", () => {
             String(new Date().getFullYear());
     }
 
+    const contactEmail = document.querySelector('meta[name="pd-contact-email"]')?.content.trim();
+    if (contactEmail) {
+        document.querySelectorAll("[data-contact-link]").forEach((link) => {
+            const query = new URLSearchParams();
+            if (link.dataset.contactSubject) query.set("subject", link.dataset.contactSubject);
+            if (link.dataset.contactBody) query.set("body", link.dataset.contactBody);
+            const queryString = query.toString();
+            link.href = `mailto:${contactEmail}${queryString ? `?${queryString}` : ""}`;
+            if (link.hasAttribute("data-contact-label")) link.textContent = contactEmail;
+        });
+    }
+
+    const briefingForm = document.querySelector("[data-briefing-form]");
+    if (briefingForm && contactEmail) {
+        briefingForm.method = "POST";
+        briefingForm.action = `https://formsubmit.co/ajax/${encodeURIComponent(contactEmail)}`;
+
+        briefingForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const submitButton = briefingForm.querySelector('[type="submit"]');
+            const status = briefingForm.querySelector("[data-briefing-status]");
+            if (!submitButton || !status) return;
+
+            submitButton.disabled = true;
+            status.textContent = "Sending your inquiry…";
+
+            try {
+                const response = await fetch(briefingForm.action, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify(Object.fromEntries(new FormData(briefingForm)))
+                });
+                const result = await response.json();
+
+                if (!response.ok || result.success === false || result.success === "false") {
+                    throw new Error(result.message || "The message could not be sent.");
+                }
+
+                briefingForm.reset();
+                status.textContent = "Your inquiry has been submitted. Thank you.";
+            } catch (error) {
+                status.textContent = "We couldn't send that just now. Please try again or email us directly.";
+            } finally {
+                submitButton.disabled = false;
+            }
+        });
+    }
+
 
     /* ============================================================
        3. IMAGE FALLBACKS
