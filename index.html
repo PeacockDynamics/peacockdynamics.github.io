@@ -53,19 +53,13 @@
     </script>
 
     <link rel="icon" type="image/png" href="assets/logo/icon_dark.png">
-    <link rel="stylesheet" href="style.css?v=20261112-10">
+    <link rel="stylesheet" href="style.css?v=20261112-13">
     <link rel="stylesheet" href="intro.css?v=20261112-2">
 
     <script src="script.js?v=20261112-3" defer></script>
     <script src="intro.js?v=20261112-4" defer></script>
     <script src="piku-launcher.js?v=20261112-7" defer></script>
 
-    <style>
-        .team-card.founder-card {
-            grid-column: 1 / -1;
-            display: block;
-        }
-    </style>
 </head>
 
 <body>
@@ -915,9 +909,10 @@
                                     opportunities.
                                 </p>
                             </div>
-                            <details class="briefing-request">
-                                <summary class="primary-button engagement-cta">REQUEST A RESEARCH BRIEFING</summary>
-                                <form class="briefing-form" data-briefing-form>
+                            <div class="engagement-contact-actions">
+                                <details class="briefing-request">
+                                    <summary class="primary-button engagement-cta">REQUEST A RESEARCH BRIEFING</summary>
+                                    <form class="briefing-form" data-briefing-form>
                                     <div class="briefing-form-grid">
                                         <label>
                                             Name
@@ -950,8 +945,15 @@
                                     <button class="primary-button" type="submit">SEND INQUIRY</button>
                                     <p class="briefing-form-note">Your message is sent through FormSubmit for delivery to Peacock Dynamics.</p>
                                     <p class="briefing-form-status" data-briefing-status role="status" aria-live="polite"></p>
-                                </form>
-                            </details>
+                                    </form>
+                                </details>
+                                <p class="briefing-email-fallback">
+                                    If the briefing form doesn’t work, email
+                                    <a data-contact-link data-contact-label
+                                       data-contact-subject="Peacock Dynamics | Research &amp; Strategic Engagement Inquiry"
+                                       href="#">aymisxx@proton.me</a> directly.
+                                </p>
+                            </div>
                         </div>
                         <p class="engagement-confidentiality">
                             Additional technical materials may be shared selectively, subject to
@@ -1300,14 +1302,19 @@
         <!-- Ayushman Mishra -->
 
         <article class="team-card founder-card">
+            <figure class="founder-photo">
+                <img
+                    src="assets/images/founders/ayushman-mishra.jpg"
+                    alt="Ayushman Mishra seated beside a river in a black T-shirt"
+                    loading="lazy"
+                >
+            </figure>
             <div class="team-card-copy">
 
                 <span class="team-role">
                     FOUNDER · MODELING · SIMULATION · AUTONOMY · SWARM CONTROL
                 </span>
 
-                <br>
-                
                 <h3>
                     Ayushman Mishra
                 </h3>
@@ -1320,8 +1327,6 @@
                     visual servoing, and terrain reconstruction.
                 </p>
 
-                <br>
-                
                 <p>
                     At Peacock Dynamics, he leads research on UUV autonomy,
                     simulation, and swarm coordination. His current focus is
@@ -1329,8 +1334,6 @@
                     uncertain dynamics, and incomplete sensing. His work has
                     used ROS2, Gazebo, and PX4.
                 </p>
-
-                <br>
 
                 <div class="project-links">
                     <a
@@ -1367,13 +1370,18 @@
         <!-- Rajeev Tidke -->
 
         <article class="team-card founder-card">
+            <figure class="founder-photo">
+                <img
+                    src="assets/images/founders/rajeev-tidke.jpeg"
+                    alt="Rajeev Tidke standing outdoors beneath a wooden cross"
+                    loading="lazy"
+                >
+            </figure>
             <div class="team-card-copy">
 
                 <span class="team-role">
                     CO-FOUNDER · MODELING · SIMULATION · AERODYNAMICS · R&amp;D
                 </span>
-
-                <br>
 
                 <h3>
                     Rajeev Tidke
@@ -1388,16 +1396,12 @@
                     dynamometers, and solid rocket motor systems.
                 </p>
 
-                <br>
-
                 <p>
                     At Peacock Dynamics, he leads mechanical engineering and
                     R&amp;D, taking concepts through design, simulation,
                     prototyping, and testing. This work connects the autonomy
                     software to the physical vehicle and its hardware.
                 </p>
-
-                <br>
 
                 <div class="project-links">
                     <a
