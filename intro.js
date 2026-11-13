@@ -24,6 +24,8 @@
         "UUV Control"
     ];
     let finished = false;
+    let flightLogo = null;
+    let flightAnimation = null;
 
     if (!overlay || !site || !skip || !caption || !captionIndex || !captionTitle || scenes.length !== 6) {
         root.classList.remove("intro-active");
@@ -200,11 +202,15 @@
         if (finished) return;
         finished = true;
         clearTimers();
+        flightAnimation?.cancel();
+        flightAnimation = null;
+        flightLogo?.remove();
+        flightLogo = null;
         scenes.forEach((scene) => scene.classList.remove("is-active"));
         caption.classList.remove("is-active");
         convergence.classList.remove("is-active");
         lockup.classList.remove("is-active");
-        root.classList.remove("intro-active", "intro-fading");
+        root.classList.remove("intro-active", "intro-fading", "intro-handoff");
         overlay.setAttribute("aria-hidden", "true");
         site.inert = false;
         document.body.style.removeProperty("overflow");
@@ -212,11 +218,58 @@
         window.dispatchEvent(new Event("pd-intro-dismissed"));
     };
 
-    const beginDismiss = () => {
+    const createLogoFlight = () => {
+        const source = lockup.querySelector(".intro-logo-mark");
+        const target = document.querySelector(".brand-logo-shell");
+        if (!source || !target || typeof source.animate !== "function") return null;
+
+        const from = source.getBoundingClientRect();
+        const to = target.getBoundingClientRect();
+        if (!from.width || !from.height || !to.width || !to.height) return null;
+
+        const flight = source.cloneNode(true);
+        flight.className = "intro-flight-logo";
+        flight.setAttribute("aria-hidden", "true");
+        flight.querySelector(".intro-logo-glint")?.remove();
+        Object.assign(flight.style, {
+            left: `${from.left}px`,
+            top: `${from.top}px`,
+            width: `${from.width}px`,
+            height: `${from.height}px`
+        });
+        document.body.append(flight);
+
+        try {
+            const animation = flight.animate([
+                { left: `${from.left}px`, top: `${from.top}px`, width: `${from.width}px`, height: `${from.height}px` },
+                { left: `${to.left}px`, top: `${to.top}px`, width: `${to.width}px`, height: `${to.height}px` }
+            ], {
+                duration: 1120,
+                easing: "cubic-bezier(.2, .72, .2, 1)",
+                fill: "forwards"
+            });
+            return { element: flight, animation };
+        } catch (error) {
+            flight.remove();
+            return null;
+        }
+    };
+
+    const beginDismiss = ({ handoff = false } = {}) => {
         if (finished || root.classList.contains("intro-fading")) return;
         clearTimers();
+        const logoFlight = handoff && !reducedMotion.matches ? createLogoFlight() : null;
         root.classList.add("intro-fading");
         site.inert = false;
+        if (logoFlight) {
+            flightLogo = logoFlight.element;
+            flightAnimation = logoFlight.animation;
+            root.classList.add("intro-handoff");
+            overlay.setAttribute("aria-hidden", "true");
+            flightAnimation.onfinish = () => release();
+            later(release, 1500);
+            return;
+        }
         later(release, 736);
     };
 
@@ -272,7 +325,7 @@
                 later(() => {
                     convergence.classList.remove("is-active");
                     lockup.classList.add("is-active");
-                    later(beginDismiss, 2520);
+                    later(() => beginDismiss({ handoff: true }), 2520);
                 }, 720);
             };
             advance();

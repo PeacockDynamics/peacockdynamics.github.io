@@ -410,6 +410,54 @@ html.intro-fading .intro-skip {
     transition: opacity 240ms ease;
 }
 
+/* During the automatic exit, carry the splash emblem into its header position. */
+.intro-flight-logo {
+    position: fixed;
+    z-index: 1201;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    pointer-events: none;
+    transform-origin: top left;
+    will-change: left, top, width, height;
+}
+
+.intro-flight-logo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    border-radius: 50%;
+    object-fit: contain;
+    clip-path: circle(49.5% at center);
+}
+
+html.intro-handoff .cinematic-intro {
+    opacity: 0;
+    transition: opacity 720ms ease;
+}
+
+html.intro-handoff .intro-lockup,
+html.intro-handoff .intro-caption {
+    opacity: 0;
+    transition: opacity 360ms ease;
+}
+
+html.intro-handoff .brand-logo {
+    opacity: 0;
+}
+
+html.intro-handoff .site-frame {
+    animation: site-handoff-emerge 1120ms ease both;
+}
+
+@keyframes site-handoff-emerge {
+    from { opacity: 0; filter: blur(5px) brightness(0.68); }
+    72% { opacity: 0.82; filter: blur(1px) brightness(0.9); }
+    to { opacity: 1; filter: blur(0) brightness(1); }
+}
+
 @media (max-width: 600px) {
     .intro-convergence svg { width: min(74vw, 300px); }
     .intro-lockup { --logo-diameter: min(74vw, 300px); --tagline-width: min(59.2vw, 240px); }
@@ -421,4 +469,5 @@ html.intro-fading .intro-skip {
 
 @media (prefers-reduced-motion: reduce) {
     html.intro-active .cinematic-intro { display: none; }
+    .intro-flight-logo { display: none; }
 }

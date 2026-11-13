@@ -2447,39 +2447,70 @@ main {
 .underwater-ripple::before,
 .underwater-ripple::after {
     position: absolute;
-    border: 1px solid rgba(242, 182, 0, .58);
-    border-radius: 50%;
     pointer-events: none;
 }
 
 .underwater-ripple {
-    width: 68px;
-    height: 68px;
-    background: radial-gradient(circle, rgba(155, 66, 255, .12), transparent 70%);
-    box-shadow: 0 0 22px rgba(155, 66, 255, .16), inset 0 0 16px rgba(242, 182, 0, .08);
-    transform: translate(-50%, -50%) scale(.12);
-    animation: underwater-ripple-expand 1.15s ease-out forwards;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(
+        ellipse,
+        rgba(129, 205, 225, .12) 0%,
+        rgba(95, 181, 208, .06) 15%,
+        transparent 38%
+    );
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    animation: underwater-ripple-core 1.8s ease-out forwards;
 }
 
 .underwater-ripple::before,
 .underwater-ripple::after {
     content: "";
     opacity: 0;
-    transform: scale(.2);
-    animation: underwater-ripple-ring 1s ease-out .08s forwards;
 }
 
-.underwater-ripple::before { inset: 12px; }
-.underwater-ripple::after { inset: 25px; border-color: rgba(155, 66, 255, .48); animation-delay: .18s; }
-
-@keyframes underwater-ripple-expand {
-    12% { opacity: .66; }
-    100% { opacity: 0; transform: translate(-50%, -50%) scale(2.8); }
+.underwater-ripple::before {
+    inset: 28%;
+    border: 1.5px solid rgba(95, 204, 238, .9);
+    border-radius: 50% 48% 53% 47% / 48% 54% 46% 52%;
+    box-shadow: 0 0 8px rgba(73, 176, 207, .24);
+    animation: underwater-ripple-wave 1.8s cubic-bezier(.18, .46, .36, 1) forwards;
 }
 
-@keyframes underwater-ripple-ring {
-    16% { opacity: .45; }
-    100% { opacity: 0; transform: scale(2.4); }
+.underwater-ripple::after {
+    inset: 27% 17% 25% 19%;
+    border: 1px solid rgba(168, 226, 240, .2);
+    border-radius: 47% 53% 49% 51% / 52% 46% 54% 48%;
+    filter: blur(1.2px);
+    animation: underwater-ripple-trail 1.9s cubic-bezier(.2, .48, .38, 1) .12s forwards;
+}
+
+@keyframes underwater-ripple-core {
+    12% { opacity: .94; }
+    48% { opacity: .52; }
+    100% { opacity: 0; }
+}
+
+@keyframes underwater-ripple-wave {
+    0% {
+        opacity: 0;
+        transform: scale(.28) rotate(-2deg);
+        border-radius: 50% 48% 53% 47% / 48% 54% 46% 52%;
+    }
+    16% { opacity: .82; }
+    100% {
+        opacity: 0;
+        transform: scale(1.72) rotate(2deg);
+        border-radius: 53% 47% 49% 51% / 52% 48% 54% 46%;
+    }
+}
+
+@keyframes underwater-ripple-trail {
+    0% { opacity: 0; transform: translate(2px, -2px) scale(.22); }
+    24% { opacity: .19; }
+    100% { opacity: 0; transform: translate(-2px, 3px) scale(1.55); }
 }
 
 /* ================================================================
