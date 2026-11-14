@@ -62,14 +62,8 @@ html.intro-active #back-to-top {
 }
 
 .graph-points circle {
-    fill: currentColor;
     stroke: #061018;
     stroke-width: 1.5;
-}
-
-.uuv-graph path,
-.uuv-graph-nodes circle {
-    vector-effect: non-scaling-stroke;
 }
 
 .art-lit {
@@ -83,7 +77,34 @@ html.intro-active #back-to-top {
 
 .art-lit .graph-points circle {
     stroke: #d9f8ff;
-    stroke-width: 1;
+    stroke-width: 0.9;
+}
+
+.graph-lines-back path {
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.3;
+    stroke-width: 1.25;
+}
+
+.graph-links path {
+    fill: none;
+    stroke: #b58be5;
+    stroke-width: 1.4;
+    stroke-dasharray: 3 8;
+    opacity: 0.6;
+}
+
+.graph-lines-accent path {
+    fill: none;
+    stroke: #efc85f;
+    stroke-width: 1.9;
+}
+
+.art-lit .graph-node-back {
+    opacity: 0.56;
 }
 
 .art-lit {
@@ -105,26 +126,6 @@ html.intro-active #back-to-top {
     animation-name: intro-sweep-rtl;
 }
 
-/* Alternate cool and restrained red light across the same graph language. */
-.intro-scene:nth-child(2) .art-lit {
-    color: #b85c70;
-    filter: drop-shadow(0 0 6px rgba(202, 58, 79, 0.26));
-}
-
-.intro-scene:nth-child(3) .art-lit {
-    color: #82c8ff;
-    filter: drop-shadow(0 0 6px rgba(57, 137, 236, 0.3));
-}
-
-.intro-scene:nth-child(4) .art-lit {
-    color: #c16670;
-    filter: drop-shadow(0 0 6px rgba(210, 58, 69, 0.28));
-}
-
-.intro-scene:nth-child(6) .art-lit {
-    filter: drop-shadow(0 0 7px rgba(86, 186, 226, 0.32));
-}
-
 @keyframes intro-sweep-ltr {
     from { -webkit-mask-position: -48vw 0; mask-position: -48vw 0; }
     to { -webkit-mask-position: 148vw 0; mask-position: 148vw 0; }
@@ -133,18 +134,6 @@ html.intro-active #back-to-top {
 @keyframes intro-sweep-rtl {
     from { -webkit-mask-position: 148vw 0; mask-position: 148vw 0; }
     to { -webkit-mask-position: -48vw 0; mask-position: -48vw 0; }
-}
-
-/* A few restrained warm nodes mark hazards and feedback junctions. */
-.intro-scene:nth-child(5) .art-lit .graph-points circle:nth-child(3n),
-.intro-scene:nth-child(6) .art-lit .graph-points circle:nth-child(4n) {
-    fill: #d99076;
-    stroke: #ffd0b8;
-}
-
-.intro-scene:nth-child(5) .art-base .graph-points circle:nth-child(3n),
-.intro-scene:nth-child(6) .art-base .graph-points circle:nth-child(4n) {
-    color: #634237;
 }
 
 .intro-vignette {

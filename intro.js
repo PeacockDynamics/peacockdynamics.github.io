@@ -33,152 +33,281 @@
         return;
     }
 
-    // Every frame uses connected graph geometry. A shared UUV outline keeps
-    // each scene immediately recognizable while the surrounding graph changes
-    // to show sensing, simulation, coordination, navigation, or control.
-    const uuvProfile = {
-        paths: [
-            "M-58 0 -46 -11 -27 -18 18 -18 43 -12 58 0 43 12 18 18 -27 18 -46 11Z",
-            "M-48 0 -27 -18 M-48 0 -27 18 M-27 -18 -16 0 -27 18 M-16 0 18 -18 M-16 0 18 18 M18 -18 31 0 18 18 M-46 0 43 0",
-            "M-51 -9 -62 -21 -30 -16 M-51 9 -62 21 -30 16 M-58 0 -69 -8 M-58 0 -69 8 M-68 -8V8",
-            "M43 -7V7 M49 -5V5 M58 0Q70 -10 78 0 M58 0Q70 10 78 0"
-        ],
-        nodes: [[-58,0],[-46,-11],[-46,11],[-27,-18],[-27,18],[-16,0],[18,-18],[18,18],[31,0],[43,-12],[43,0],[43,12],[58,0],[-62,-21],[-62,21],[-69,-8],[-69,8],[78,0]]
+    // Each shot is a small 3D wireframe projected into the SVG viewBox. The
+    // vertices are the balls; the edges are the sticks. Far-side edges dim
+    // naturally, giving the models depth without adding decorative clutter.
+    const createGraph = () => ({ vertices: [], edges: [] });
+    const addVertex = (graph, x, y, z, options = {}) => {
+        graph.vertices.push({ x, y, z, radius: options.radius || 4.6, accent: Boolean(options.accent) });
+        return graph.vertices.length - 1;
+    };
+    const addEdge = (graph, a, b, kind = "model") => graph.edges.push({ a, b, kind });
+    const addChain = (graph, points, kind = "model", options = {}) => {
+        const vertices = points.map(([x, y, z], index) => addVertex(graph, x, y, z, {
+            radius: options.radius || (index === 0 || index === points.length - 1 ? 5.4 : 4.2),
+            accent: options.accent
+        }));
+        for (let index = 1; index < vertices.length; index += 1) addEdge(graph, vertices[index - 1], vertices[index], kind);
+        return vertices;
     };
 
-    // The same UUV is framed differently in each shot. Fine graph edges and
-    // sampled points keep the artwork light and consistent with the brand.
-    const shotGeometry = [
-        {
-            paths: [
-                // Close vehicle profile, bottom contours and sonar returns.
-                "M170 448Q330 416 475 448T770 444T1050 408 M190 480Q350 452 500 479T790 476T1040 443 M250 512Q405 485 558 511T830 507T1015 479",
-                "M866 288Q940 330 866 372 M879 268Q980 330 879 392 M891 246Q1020 330 891 414 M842 330 866 288 M842 330 866 372 M842 330 879 268 M842 330 879 392",
-                "M260 208 350 230 440 214 530 236 M950 218 1010 194 1080 220 M230 270 300 252 M980 470 1060 488"
-            ],
-            nodes: [[170,448],[330,416],[475,448],[620,438],[770,444],[910,422],[1050,408],[190,480],[350,452],[500,479],[650,468],[790,476],[930,456],[1040,443],[250,512],[405,485],[558,511],[700,500],[830,507],[1015,479],[866,288],[866,372],[879,268],[879,392],[891,246],[891,414],[940,330],[980,330],[1020,330],[350,230],[440,214],[530,236],[1010,194],[1080,220],[300,252],[1060,488]],
-            vehicles: [{ x: 590, y: 330, scale: 4.5 }]
-        },
-        {
-            paths: [
-                // Forward-looking sonar from a surveying UUV to a sampled seabed.
-                "M830 260 690 438 M830 260 770 455 M830 260 870 455 M830 260 980 438",
-                "M735 335Q830 270 925 335 M700 360Q830 260 960 360 M670 390Q830 250 990 390",
-                "M100 490 190 458 285 474 380 432 475 448 570 410 665 428 760 394 855 410 950 376 1095 394",
-                "M90 528 180 498 275 514 370 472 465 488 560 450 655 468 750 434 845 450 940 416 1105 434",
-                "M130 566 220 536 315 552 410 510 505 526 600 488 695 506 790 472 885 488 980 454 1110 472",
-                "M190 458 180 498 220 536 M285 474 275 514 315 552 M380 432 370 472 410 510 M475 448 465 488 505 526 M570 410 560 450 600 488 M665 428 655 468 695 506 M760 394 750 434 790 472 M855 410 845 450 885 488 M950 376 940 416 980 454"
-            ],
-            nodes: [[100,490],[190,458],[285,474],[380,432],[475,448],[570,410],[665,428],[760,394],[855,410],[950,376],[1095,394],[90,528],[180,498],[275,514],[370,472],[465,488],[560,450],[655,468],[750,434],[845,450],[940,416],[1105,434],[130,566],[220,536],[315,552],[410,510],[505,526],[600,488],[695,506],[790,472],[885,488],[980,454],[1110,472],[690,438],[770,455],[870,455],[980,438],[830,260],[735,335],[925,335],[700,360],[960,360],[670,390],[990,390]],
-            vehicles: [{ x: 660, y: 248, scale: 2.35 }]
-        },
-        {
-            paths: [
-                // Virtual test volume, coordinate axes and vehicle trajectory.
-                "M250 205 520 150 950 205 680 262Z M250 205V475L680 545V262 M680 262V545L950 475V205 M250 475 520 418 950 475",
-                "M330 188V492 M415 171V506 M520 150V522 M800 178V510 M250 295 680 352 950 295 M250 385 680 442 950 385",
-                "M180 570 360 540 520 562 710 526 900 548 1080 516 M185 605 365 575 525 597 715 561 905 583 1085 551",
-                "M335 365Q420 305 500 340T650 364T790 300T900 318 M335 365 352 345 M335 365 359 369",
-                "M520 340 530 322 M650 364 660 345 M790 300 800 281 M900 318 910 299",
-                "M1000 255V355 M1000 255 988 277 M1000 255 1012 277 M1025 280H1090 M1090 280 1070 268 M1090 280 1070 292"
-            ],
-            nodes: [[250,205],[520,150],[950,205],[680,262],[250,475],[680,545],[950,475],[330,188],[415,171],[800,178],[250,295],[680,352],[950,295],[250,385],[680,442],[950,385],[180,570],[360,540],[520,562],[710,526],[900,548],[1080,516],[185,605],[365,575],[525,597],[715,561],[905,583],[1085,551],[335,365],[420,305],[500,340],[650,364],[790,300],[900,318],[1000,255],[1090,280]],
-            vehicles: [{ x: 625, y: 360, scale: 2.25 }]
-        },
-        {
-            paths: [
-                // Six UUVs share state over a symmetric cycle graph.
-                "M600 160 830 250 830 425 600 515 370 425 370 250Z",
-                "M600 160 600 515 M830 250 370 425 M830 425 370 250",
-                "M125 552Q300 520 465 550T790 548T1080 516 M145 584Q320 554 485 582T810 580T1060 550 M180 615Q350 586 515 612T830 610T1035 582"
-            ],
-            nodes: [[600,160],[830,250],[830,425],[600,515],[370,425],[370,250],[600,338],[715,205],[830,338],[715,470],[485,470],[370,338],[485,205]],
-            nodeRadii: [8,8,8,8,8,8,3.3,3.3,3.3,3.3,3.3,3.3,3.3],
-            vehicles: [
-                { x: 600, y: 160, scale: 0.92 },{ x: 830, y: 250, scale: 0.92 },
-                { x: 830, y: 425, scale: 0.92 },{ x: 600, y: 515, scale: 0.92 },
-                { x: 370, y: 425, scale: 0.92 },{ x: 370, y: 250, scale: 0.92 }
-            ]
-        },
-        {
-            paths: [
-                // Planned route curves around two mapped obstacles.
-                "M370 365Q490 365 540 315T680 285T820 315T970 270T1090 270",
-                "M370 365 395 350 M370 365 395 380 M540 315 526 323 M540 315 553 327 M680 285 666 293 M680 285 693 297 M820 315 806 323 M820 315 833 327 M970 270 956 278 M970 270 983 282",
-                "M110 492 220 468 330 484 440 450 550 466 660 432 770 448 880 414 990 430 1100 396",
-                "M90 530 200 506 310 522 420 488 530 504 640 470 750 486 860 452 970 468 1080 434",
-                "M170 570 280 546 390 562 500 528 610 544 720 510 830 526 940 492 1050 508",
-                "M650 348 675 328 700 348 675 368Z M870 385 897 363 924 385 897 407Z M650 348V432 M675 328V432 M700 348V432 M870 385V455 M897 363V440 M924 385V430",
-                "M405 365 485 422 M405 365 520 400 M405 365 480 335"
-            ],
-            nodes: [[110,492],[220,468],[330,484],[440,450],[550,466],[660,432],[770,448],[880,414],[990,430],[1100,396],[90,530],[200,506],[310,522],[420,488],[530,504],[640,470],[750,486],[860,452],[970,468],[1080,434],[170,570],[280,546],[390,562],[500,528],[610,544],[720,510],[830,526],[940,492],[1050,508],[675,328],[650,348],[700,348],[675,368],[897,363],[870,385],[924,385],[897,407],[370,365],[540,315],[680,285],[820,315],[970,270],[1090,270],[485,422],[520,400],[480,335]],
-            vehicles: [{ x: 340, y: 365, scale: 2.05 }]
-        },
-        {
-            paths: [
-                // Vehicle motion, attitude axes, thrust vectors and feedback loop.
-                "M220 330Q320 230 430 270T610 330T800 282T1000 320 M235 350Q330 260 430 292",
-                "M600 225V270 M600 225 585 247 M600 225 615 247 M600 410V455 M600 455 585 433 M600 455 615 433",
-                "M470 340H520 M470 340 492 327 M470 340 492 353 M690 340H745 M745 340 723 327 M745 340 723 353",
-                "M315 465H440V430Q440 405 465 405H520 M680 405H735Q760 405 760 430V465H885 M315 465V500H885V465",
-                "M315 465 295 450 M315 465 295 480 M885 465 905 450 M885 465 905 480",
-                "M520 205Q600 160 680 205 M495 220Q600 145 705 220 M520 475Q600 520 680 475"
-            ],
-            nodes: [[220,330],[320,230],[430,270],[610,330],[800,282],[1000,320],[235,350],[430,292],[600,225],[600,270],[600,410],[600,455],[470,340],[520,340],[690,340],[745,340],[315,465],[440,430],[520,405],[680,405],[760,430],[885,465],[315,500],[885,500],[520,205],[600,160],[680,205],[495,220],[705,220],[520,475],[600,520],[680,475]],
-            vehicles: [{ x: 600, y: 340, scale: 2.95 }]
+    const addUuv = (graph, { x = 0, y = 0, z = 0, scale = 1, yaw = 0, simple = false, hexagonal = false, tailFin = true } = {}) => {
+        const ring = (station) => [
+            ...(hexagonal
+                ? [[station, 0.3, 0], [station, 0.15, 0.27], [station, -0.15, 0.27], [station, -0.3, 0], [station, -0.15, -0.27], [station, 0.15, -0.27]]
+                : [[station, 0.29, 0], [station, 0.08, 0.32], [station, -0.27, 0], [station, 0.08, -0.32]])
+        ].map(([localX, localY, localZ], index) => {
+            const rotatedX = localX * Math.cos(yaw) + localZ * Math.sin(yaw);
+            const rotatedZ = -localX * Math.sin(yaw) + localZ * Math.cos(yaw);
+            const rearTaper = !simple && station < 0 ? 0.82 : 1;
+            const depthScale = hexagonal ? rearTaper : 1;
+            return addVertex(graph, x + rotatedX * scale, y + localY * scale * depthScale, z + rotatedZ * scale * depthScale, { radius: 4.4 });
+        });
+
+        const rear = ring(simple ? -0.35 : -0.78);
+        const front = simple ? rear : ring(0.66);
+        (simple ? [rear] : [rear, front]).forEach((loop) => loop.forEach((vertex, index) => addEdge(graph, vertex, loop[(index + 1) % loop.length])));
+        if (!simple) rear.forEach((vertex, index) => addEdge(graph, vertex, front[index]));
+
+        const nose = addVertex(graph, x + 1.22 * scale * Math.cos(yaw), y, z - 1.22 * scale * Math.sin(yaw), { radius: 5.6, accent: true });
+        const tail = addVertex(graph, x - 1.25 * scale * Math.cos(yaw), y, z + 1.25 * scale * Math.sin(yaw), { radius: 5.1 });
+        front.forEach((vertex) => addEdge(graph, vertex, nose));
+        rear.forEach((vertex) => addEdge(graph, vertex, tail));
+
+        if (tailFin) {
+            const addStabilizer = (side) => {
+                const localX = -1.28;
+                const localZ = side * 0.66;
+                const finTip = addVertex(
+                    graph,
+                    x + (localX * Math.cos(yaw) + localZ * Math.sin(yaw)) * scale,
+                    y,
+                    z + (-localX * Math.sin(yaw) + localZ * Math.cos(yaw)) * scale,
+                    { radius: 3.9 }
+                );
+                addEdge(graph, rear[side > 0 ? (hexagonal ? 2 : 1) : (hexagonal ? 4 : 3)], finTip);
+                addEdge(graph, finTip, tail);
+            };
+            addStabilizer(-1);
+            addStabilizer(1);
         }
-    ];
+        return { nose, tail };
+    };
+
+    const addArrow = (graph, from, to, kind = "accent") => {
+        const start = addVertex(graph, ...from, { radius: 4.5 });
+        const tip = addVertex(graph, ...to, { radius: 6, accent: true });
+        addEdge(graph, start, tip, kind);
+        const [dx, dy, dz] = [to[0] - from[0], to[1] - from[1], to[2] - from[2]];
+        const length = Math.hypot(dx, dy, dz) || 1;
+        const side = [dy / length, -dx / length, 0];
+        const wingA = addVertex(graph, to[0] - dx / length * 0.22 + side[0] * 0.15, to[1] - dy / length * 0.22 + side[1] * 0.15, to[2] - dz / length * 0.22 + side[2] * 0.15, { radius: 3.5 });
+        const wingB = addVertex(graph, to[0] - dx / length * 0.22 - side[0] * 0.15, to[1] - dy / length * 0.22 - side[1] * 0.15, to[2] - dz / length * 0.22 - side[2] * 0.15, { radius: 3.5 });
+        addEdge(graph, tip, wingA, kind);
+        addEdge(graph, tip, wingB, kind);
+    };
+
+    const addBowViewUuv = (graph, scale = 1) => {
+        const makeRing = (depth, width, height) => [
+            [0, height], [width * 0.86, height * 0.5],
+            [width * 0.86, -height * 0.5], [0, -height],
+            [-width * 0.86, -height * 0.5], [-width * 0.86, height * 0.5]
+        ].map(([x, y]) => addVertex(graph, x * scale, y * scale, depth * scale, { radius: 4.6 }));
+
+        const bow = makeRing(0.62, 0.42, 0.36);
+        const stern = makeRing(-0.78, 0.3, 0.26);
+        bow.forEach((vertex, index) => addEdge(graph, vertex, bow[(index + 1) % bow.length]));
+        stern.forEach((vertex, index) => addEdge(graph, vertex, stern[(index + 1) % stern.length]));
+        bow.forEach((vertex, index) => addEdge(graph, vertex, stern[index]));
+
+        const nose = addVertex(graph, 0, 0, 1.18 * scale, { radius: 6, accent: true });
+        const tail = addVertex(graph, 0, 0, -1.25 * scale, { radius: 5.2 });
+        bow.forEach((vertex) => addEdge(graph, vertex, nose));
+        stern.forEach((vertex) => addEdge(graph, vertex, tail));
+
+        // Two compact fins and a short propeller bar clarify the vehicle's stern.
+        [-1, 1].forEach((side) => {
+            const fin = addVertex(graph, side * 0.58 * scale, 0, -1.02 * scale, { radius: 4 });
+            addEdge(graph, stern[side < 0 ? 5 : 1], fin);
+            addEdge(graph, fin, tail);
+        });
+        const propA = addVertex(graph, -0.2 * scale, 0, -1.42 * scale, { radius: 3.8 });
+        const propB = addVertex(graph, 0.2 * scale, 0, -1.42 * scale, { radius: 3.8 });
+        addEdge(graph, tail, propA);
+        addEdge(graph, tail, propB);
+    };
+
+    const shotGeometry = (() => {
+        // 1. Show the UUV's bow and tapered hull from a three-quarter view.
+        const vehicle = createGraph();
+        addBowViewUuv(vehicle, 2.65);
+
+        // 2. A small UUV maps a patch of seabed with a simple sonar fan.
+        const sonar = createGraph();
+        addUuv(sonar, { y: 1.25, scale: 1.45 });
+        const seabed = [
+            [-3, -1.7, -1.4], [3, -1.7, -1.4],
+            [3, -1.7, 1.4], [-3, -1.7, 1.4]
+        ].map(([px, py, pz], index) => addVertex(sonar, px, py, pz, { radius: 5.2, accent: index === 1 || index === 3 }));
+        seabed.forEach((vertex, index) => addEdge(sonar, vertex, seabed[(index + 1) % seabed.length], "seabed"));
+        const scanHits = [
+            [-1.3, -1.7, -0.6], [0, -1.7, 0], [1.3, -1.7, 0.6]
+        ].map((point, index) => addVertex(sonar, ...point, { radius: 6.5, accent: true }));
+        const sensor = addVertex(sonar, 0.45, 0.85, 0, { radius: 4.8 });
+        scanHits.forEach((hit) => addEdge(sonar, sensor, hit, "sonar"));
+
+        // 3. A vehicle inside a transparent, perspective simulation volume.
+        const simulation = createGraph();
+        const box = [];
+        for (const yy of [-1.4, 1.4]) {
+            for (const zz of [-1.8, 1.8]) {
+                for (const xx of [-2.2, 2.2]) box.push(addVertex(simulation, xx, yy, zz, { radius: 4.1 }));
+            }
+        }
+        // Index order: y plane, z plane, x side. Connect the box's 12 edges.
+        [[0,1],[2,3],[4,5],[6,7],[0,2],[1,3],[4,6],[5,7],[0,4],[1,5],[2,6],[3,7]].forEach(([a,b]) => addEdge(simulation, box[a], box[b], "volume"));
+        addUuv(simulation, { y: 0.05, z: 0.1, scale: 1.05, yaw: 0.16 });
+        addChain(simulation, [[-1.2, -0.65, 0.15], [-0.25, -0.1, 0.25], [0.75, 0.25, 0.1]], "trajectory", { radius: 4.8, accent: true });
+
+        // 4. Three UUVs form a legible, connected team.
+        const fleet = createGraph();
+        const fleetPositions = [
+            { x: -1.9, y: 0.35, z: 0, yaw: 0.05 },
+            { x: 1, y: 0.35, z: -1.5, yaw: -0.6 },
+            { x: 1, y: 0.35, z: 1.5, yaw: 0.6 }
+        ];
+        const fleetCenters = fleetPositions.map((position) => addVertex(fleet, position.x, position.y + 0.45, position.z, { radius: 7.2, accent: true }));
+        addEdge(fleet, fleetCenters[0], fleetCenters[1], "network");
+        addEdge(fleet, fleetCenters[1], fleetCenters[2], "network");
+        addEdge(fleet, fleetCenters[2], fleetCenters[0], "network");
+        fleetPositions.forEach((position) => addUuv(fleet, { ...position, scale: 0.68, simple: true }));
+
+        // 5. A sparse seabed grid and a single, readable lawnmower survey path.
+        const survey = createGraph();
+        const gridX = [-2.4, 0, 2.4];
+        const gridZ = [-1.5, 0, 1.5];
+        gridX.forEach((xx) => addChain(survey, gridZ.map((zz) => [xx, -1.25, zz]), "seabed"));
+        gridZ.forEach((zz) => addChain(survey, gridX.map((xx) => [xx, -1.25, zz]), "seabed"));
+        const route = [
+            [-2, -0.98, -1.05], [2, -0.98, -1.05],
+            [2, -0.98, 0], [-2, -0.98, 0],
+            [-2, -0.98, 1.05], [2, -0.98, 1.05]
+        ];
+        addChain(survey, route, "route", { radius: 6.2, accent: true });
+        addUuv(survey, { x: -2.15, y: -0.35, z: -1.05, scale: 0.72, simple: true });
+
+        // 6. A UUV follows a 3D course with a small stern-control vector,
+        // distinguishing active control from the standalone vehicle shot.
+        const control = createGraph();
+        addChain(control, [
+            [-3.6, -0.38, 1.25], [-2.2, -0.05, 0.72],
+            [-0.6, 0.22, 0.28], [1.2, 0.5, -0.28], [3.1, 0.68, -0.92]
+        ], "trajectory");
+        addUuv(control, { y: 0.18, z: 0.05, scale: 1.85, yaw: 0.4, hexagonal: true });
+        addArrow(control, [-1.9, 0.12, 0.82], [-2.6, 0.68, 1.18]);
+
+        return [vehicle, sonar, simulation, fleet, survey, control];
+    })();
+
     const svgNS = "http://www.w3.org/2000/svg";
-    const buildScene = (scene, geometry) => {
-        const appendLayer = (className) => {
+    const projection = (vertex) => [
+        600 + (vertex.x - vertex.z) * 75,
+        338 + ((vertex.x + vertex.z) * 0.46 - vertex.y) * 82
+    ];
+    const buildScene = (scene, graph, index) => {
+        // Fit every domain graphic into the same invisible stage. This keeps
+        // the fleet and other compact subjects as present as the larger models.
+        const projectedVertices = graph.vertices.map(projection);
+        const bounds = projectedVertices.reduce((current, [x, y]) => ({
+            left: Math.min(current.left, x),
+            right: Math.max(current.right, x),
+            top: Math.min(current.top, y),
+            bottom: Math.max(current.bottom, y)
+        }), { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity });
+        const frame = { x: 600, y: 338, width: 740, height: 460 };
+        const fitScale = Math.min(
+            frame.width / Math.max(1, bounds.right - bounds.left),
+            frame.height / Math.max(1, bounds.bottom - bounds.top)
+        );
+        const boundsCenterX = (bounds.left + bounds.right) / 2;
+        const boundsCenterY = (bounds.top + bounds.bottom) / 2;
+        const fitPosition = (vertex) => {
+            const [x, y] = projection(vertex);
+            return [
+                frame.x + (x - boundsCenterX) * fitScale,
+                frame.y + (y - boundsCenterY) * fitScale
+            ];
+        };
+
+        const appendLayer = (className, suffix) => {
             const layer = document.createElementNS(svgNS, "g");
             layer.setAttribute("class", className);
-            const lines = document.createElementNS(svgNS, "g");
-            lines.setAttribute("class", "graph-lines");
-            geometry.paths.forEach((d) => {
-                const path = document.createElementNS(svgNS, "path");
-                path.setAttribute("d", d);
-                lines.append(path);
+            const defs = document.createElementNS(svgNS, "defs");
+            const ball = document.createElementNS(svgNS, "radialGradient");
+            ball.setAttribute("id", `graph-ball-${index}-${suffix}`);
+            ball.setAttribute("cx", "29%");
+            ball.setAttribute("cy", "23%");
+            ball.setAttribute("r", "78%");
+            [["0%", "#effdff"], ["28%", "#83ddf2"], ["100%", "#2d668f"]].forEach(([offset, color]) => {
+                const stop = document.createElementNS(svgNS, "stop");
+                stop.setAttribute("offset", offset);
+                stop.setAttribute("stop-color", color);
+                ball.append(stop);
             });
-            (geometry.vehicles || []).forEach((vehicle) => {
-                const group = document.createElementNS(svgNS, "g");
-                group.setAttribute("class", "uuv-graph");
-                group.setAttribute("transform", `translate(${vehicle.x} ${vehicle.y}) rotate(${vehicle.angle || 0}) scale(${vehicle.scale || 1})`);
-                uuvProfile.paths.forEach((d) => {
-                    const path = document.createElementNS(svgNS, "path");
-                    path.setAttribute("d", d);
-                    group.append(path);
-                });
-                lines.append(group);
+            const gold = document.createElementNS(svgNS, "radialGradient");
+            gold.setAttribute("id", `graph-gold-${index}-${suffix}`);
+            gold.setAttribute("cx", "29%");
+            gold.setAttribute("cy", "23%");
+            [["0%", "#fff2ae"], ["34%", "#f4c950"], ["100%", "#9c6520"]].forEach(([offset, color]) => {
+                const stop = document.createElementNS(svgNS, "stop");
+                stop.setAttribute("offset", offset);
+                stop.setAttribute("stop-color", color);
+                gold.append(stop);
             });
+            defs.append(ball, gold);
+            const back = document.createElementNS(svgNS, "g");
+            back.setAttribute("class", "graph-lines-back");
+            const front = document.createElementNS(svgNS, "g");
+            front.setAttribute("class", "graph-lines");
+            const accents = document.createElementNS(svgNS, "g");
+            accents.setAttribute("class", "graph-lines-accent");
+            const links = document.createElementNS(svgNS, "g");
+            links.setAttribute("class", "graph-links");
+
+            graph.edges.forEach((edge) => {
+                const a = graph.vertices[edge.a];
+                const b = graph.vertices[edge.b];
+                const [x1, y1] = fitPosition(a);
+                const [x2, y2] = fitPosition(b);
+                const line = document.createElementNS(svgNS, "path");
+                line.setAttribute("d", `M${x1.toFixed(1)} ${y1.toFixed(1)}L${x2.toFixed(1)} ${y2.toFixed(1)}`);
+                if (edge.kind === "network") links.append(line);
+                else if (edge.kind === "accent" || edge.kind === "route") accents.append(line);
+                else if ((a.z + b.z) < -0.04) back.append(line);
+                else front.append(line);
+            });
+
             const points = document.createElementNS(svgNS, "g");
             points.setAttribute("class", "graph-points");
-            geometry.nodes.forEach(([cx, cy], index) => {
-                const circle = document.createElementNS(svgNS, "circle");
-                circle.setAttribute("cx", cx);
-                circle.setAttribute("cy", cy);
-                circle.setAttribute("r", geometry.nodeRadii?.[index] || (index % 5 === 0 ? "5.5" : "3.4"));
-                points.append(circle);
-            });
-            (geometry.vehicles || []).forEach((vehicle) => {
-                const group = document.createElementNS(svgNS, "g");
-                group.setAttribute("class", "uuv-graph-nodes");
-                group.setAttribute("transform", `translate(${vehicle.x} ${vehicle.y}) rotate(${vehicle.angle || 0}) scale(${vehicle.scale || 1})`);
-                uuvProfile.nodes.forEach(([cx, cy]) => {
+            graph.vertices
+                .map((vertex) => ({ vertex, position: fitPosition(vertex) }))
+                .sort((a, b) => a.vertex.z - b.vertex.z)
+                .forEach(({ vertex, position: [cx, cy] }) => {
                     const circle = document.createElementNS(svgNS, "circle");
-                    circle.setAttribute("cx", cx);
-                    circle.setAttribute("cy", cy);
-                    circle.setAttribute("r", "1.45");
-                    group.append(circle);
+                    circle.setAttribute("cx", cx.toFixed(1));
+                    circle.setAttribute("cy", cy.toFixed(1));
+                    circle.setAttribute("r", String(vertex.radius * fitScale));
+                    circle.setAttribute("class", `graph-node${vertex.accent ? " graph-node-accent" : ""}${vertex.z < -0.04 ? " graph-node-back" : ""}`);
+                    circle.setAttribute("fill", `url(#graph-${vertex.accent ? "gold" : "ball"}-${index}-${suffix})`);
+                    points.append(circle);
                 });
-                points.append(group);
-            });
-            layer.append(lines, points);
+
+            layer.append(defs, links, back, front, accents, points);
             return layer;
         };
-        scene.replaceChildren(appendLayer("art-base"), appendLayer("art-lit"));
+        scene.replaceChildren(appendLayer("art-base", "base"), appendLayer("art-lit", "lit"));
     };
-    scenes.forEach((scene, index) => buildScene(scene, shotGeometry[index]));
+    scenes.forEach((scene, index) => buildScene(scene, shotGeometry[index], index));
 
     const later = (callback, delay) => {
         const timer = window.setTimeout(() => {
