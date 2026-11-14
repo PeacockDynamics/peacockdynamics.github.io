@@ -46,21 +46,182 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelector("#back-to-top");
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const rippleLayer = document.createElement("div");
-    rippleLayer.className = "underwater-ripple-layer";
-    rippleLayer.setAttribute("aria-hidden", "true");
-    document.body.append(rippleLayer);
+    if (!reducedMotion.matches) {
+        const waterSurface = document.createElement("canvas");
+        waterSurface.className = "water-surface";
+        waterSurface.setAttribute("aria-hidden", "true");
+        document.body.append(waterSurface);
 
-    document.addEventListener("pointerdown", (event) => {
-        if (reducedMotion.matches || !event.isPrimary || event.button !== 0) return;
-        const ripple = document.createElement("span");
-        ripple.className = "underwater-ripple";
-        ripple.style.left = event.clientX + "px";
-        ripple.style.top = event.clientY + "px";
-        rippleLayer.append(ripple);
-        ripple.addEventListener("animationend", () => ripple.remove(), { once: true });
-        while (rippleLayer.childElementCount > 6) rippleLayer.firstElementChild.remove();
-    }, { capture: true, passive: true });
+        const context = waterSurface.getContext("2d", { alpha: true });
+        const cellSize = 5;
+        const damping = 0.965;
+        let columns = 0;
+        let rows = 0;
+        let previous = new Float32Array(0);
+        let current = new Float32Array(0);
+        let next = new Float32Array(0);
+        let pixels = null;
+        let lastPointer = null;
+        let lastFrame = 0;
+        let frameRequested = false;
+        let activeEnergy = 0;
+
+        const resizeSurface = () => {
+            const width = Math.max(1, window.innerWidth);
+            const height = Math.max(1, window.innerHeight);
+            const nextColumns = Math.ceil(width / cellSize) + 2;
+            const nextRows = Math.ceil(height / cellSize) + 2;
+            waterSurface.style.width = width + "px";
+            waterSurface.style.height = height + "px";
+            if (nextColumns !== columns || nextRows !== rows) {
+                columns = nextColumns;
+                rows = nextRows;
+                waterSurface.width = columns;
+                waterSurface.height = rows;
+                previous = new Float32Array(columns * rows);
+                current = new Float32Array(columns * rows);
+                next = new Float32Array(columns * rows);
+                pixels = context?.createImageData(columns, rows) || null;
+                lastPointer = null;
+                activeEnergy = 0;
+            }
+        };
+
+        const disturb = (clientX, clientY, strength) => {
+            if (!context) return;
+            const x = Math.round(clientX / cellSize) + 1;
+            const y = Math.round(clientY / cellSize) + 1;
+            const radius = 3;
+
+            for (let dy = -radius; dy <= radius; dy += 1) {
+                for (let dx = -radius; dx <= radius; dx += 1) {
+                    const xx = x + dx;
+                    const yy = y + dy;
+                    if (xx <= 0 || xx >= columns - 1 || yy <= 0 || yy >= rows - 1) continue;
+                    const distance = Math.hypot(dx, dy) / radius;
+                    if (distance > 1) continue;
+                    const impulse = Math.cos(distance * Math.PI * 0.5) * strength;
+                    const index = yy * columns + xx;
+                    previous[index] -= impulse;
+                    current[index] += impulse * 0.28;
+                }
+            }
+
+            activeEnergy = Math.max(activeEnergy, strength);
+            requestSurfaceFrame();
+        };
+
+        const isProtectedWaterZone = (event) => {
+            if (document.documentElement.classList.contains("intro-active")) return true;
+            return event.target instanceof Element && Boolean(
+                event.target.closest("#cinematic-intro")
+            );
+        };
+
+        const stepWaves = () => {
+            let energy = 0;
+            for (let y = 1; y < rows - 1; y += 1) {
+                for (let x = 1; x < columns - 1; x += 1) {
+                    const index = y * columns + x;
+                    let value = ((current[index - 1] + current[index + 1] + current[index - columns] + current[index + columns]) * 0.5 - previous[index]) * damping;
+                    const edgeDistance = Math.min(x, y, columns - 1 - x, rows - 1 - y);
+                    if (edgeDistance < 10) value *= edgeDistance / 10;
+                    next[index] = value;
+                    energy = Math.max(energy, Math.abs(value));
+                }
+            }
+            const oldPrevious = previous;
+            previous = current;
+            current = next;
+            next = oldPrevious;
+            activeEnergy = energy;
+        };
+
+        const renderSurface = () => {
+            if (!context || !pixels) return;
+            const data = pixels.data;
+            data.fill(0);
+
+            for (let y = 1; y < rows - 1; y += 1) {
+                for (let x = 1; x < columns - 1; x += 1) {
+                    const index = y * columns + x;
+                    const slopeX = current[index + 1] - current[index - 1];
+                    const slopeY = current[index + columns] - current[index - columns];
+                    const litSlope = Math.max(0, slopeX * 0.58 + slopeY * 0.82);
+                    const softSheen = Math.abs(slopeX * 0.58 + slopeY * 0.82) * 0.018;
+                    const highlight = Math.min(0.32, Math.pow(litSlope * 2.5, 1.7) * 0.27 + softSheen);
+                    const pixel = index * 4;
+                    data[pixel] = 70;
+                    data[pixel + 1] = 183;
+                    data[pixel + 2] = 211;
+                    data[pixel + 3] = Math.round(highlight * 255);
+                }
+            }
+
+            context.putImageData(pixels, 0, 0);
+        };
+
+        const animateSurface = (time) => {
+            frameRequested = false;
+            if (!context || time - lastFrame < 30) {
+                if (activeEnergy > 0.001) requestSurfaceFrame();
+                return;
+            }
+            lastFrame = time;
+            stepWaves();
+            renderSurface();
+            if (activeEnergy > 0.001) requestSurfaceFrame();
+        };
+
+        function requestSurfaceFrame() {
+            if (frameRequested) return;
+            frameRequested = true;
+            window.requestAnimationFrame(animateSurface);
+        }
+
+        resizeSurface();
+        window.addEventListener("resize", resizeSurface, { passive: true });
+        document.addEventListener("pointermove", (event) => {
+            if (!event.isPrimary) return;
+            if (isProtectedWaterZone(event)) {
+                lastPointer = null;
+                return;
+            }
+            const point = { x: event.clientX, y: event.clientY };
+            if (!lastPointer) {
+                lastPointer = point;
+                disturb(point.x, point.y, 0.3);
+                return;
+            }
+            const dx = point.x - lastPointer.x;
+            const dy = point.y - lastPointer.y;
+            const distance = Math.hypot(dx, dy);
+            if (distance < 12) return;
+            const strength = Math.min(0.42, 0.16 + distance * 0.0035);
+            const steps = Math.min(64, Math.ceil(distance / 12));
+            for (let step = 1; step <= steps; step += 1) {
+                const progress = step / steps;
+                disturb(lastPointer.x + dx * progress, lastPointer.y + dy * progress, strength);
+            }
+            lastPointer = point;
+        }, { passive: true });
+
+        document.addEventListener("pointerdown", (event) => {
+            if (!event.isPrimary || event.button !== 0) return;
+            if (isProtectedWaterZone(event)) return;
+            disturb(event.clientX, event.clientY, 0.72);
+        }, { passive: true });
+
+        document.addEventListener("pointerout", (event) => {
+            if (!event.relatedTarget) {
+                lastPointer = null;
+            }
+        }, { passive: true });
+
+        document.addEventListener("scroll", () => {
+            lastPointer = null;
+        }, { passive: true, capture: true });
+    }
 
 
     /* ============================================================

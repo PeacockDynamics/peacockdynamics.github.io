@@ -16,18 +16,17 @@
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const timers = new Set();
     const capabilities = [
-        "Underwater Vehicle",
-        "Sonar Mapping",
         "UUV Simulation",
-        "Fleet Coordination",
+        "UUV Control",
+        "Sonar Mapping",
         "Survey Planning",
-        "UUV Control"
+        "Fleet Coordination"
     ];
     let finished = false;
     let flightLogo = null;
     let flightAnimation = null;
 
-    if (!overlay || !site || !skip || !caption || !captionIndex || !captionTitle || scenes.length !== 6) {
+    if (!overlay || !site || !skip || !caption || !captionIndex || !captionTitle || scenes.length !== 5) {
         root.classList.remove("intro-active");
         window.dispatchEvent(new Event("pd-intro-dismissed"));
         return;
@@ -107,42 +106,8 @@
         addEdge(graph, tip, wingB, kind);
     };
 
-    const addBowViewUuv = (graph, scale = 1) => {
-        const makeRing = (depth, width, height) => [
-            [0, height], [width * 0.86, height * 0.5],
-            [width * 0.86, -height * 0.5], [0, -height],
-            [-width * 0.86, -height * 0.5], [-width * 0.86, height * 0.5]
-        ].map(([x, y]) => addVertex(graph, x * scale, y * scale, depth * scale, { radius: 4.6 }));
-
-        const bow = makeRing(0.62, 0.42, 0.36);
-        const stern = makeRing(-0.78, 0.3, 0.26);
-        bow.forEach((vertex, index) => addEdge(graph, vertex, bow[(index + 1) % bow.length]));
-        stern.forEach((vertex, index) => addEdge(graph, vertex, stern[(index + 1) % stern.length]));
-        bow.forEach((vertex, index) => addEdge(graph, vertex, stern[index]));
-
-        const nose = addVertex(graph, 0, 0, 1.18 * scale, { radius: 6, accent: true });
-        const tail = addVertex(graph, 0, 0, -1.25 * scale, { radius: 5.2 });
-        bow.forEach((vertex) => addEdge(graph, vertex, nose));
-        stern.forEach((vertex) => addEdge(graph, vertex, tail));
-
-        // Two compact fins and a short propeller bar clarify the vehicle's stern.
-        [-1, 1].forEach((side) => {
-            const fin = addVertex(graph, side * 0.58 * scale, 0, -1.02 * scale, { radius: 4 });
-            addEdge(graph, stern[side < 0 ? 5 : 1], fin);
-            addEdge(graph, fin, tail);
-        });
-        const propA = addVertex(graph, -0.2 * scale, 0, -1.42 * scale, { radius: 3.8 });
-        const propB = addVertex(graph, 0.2 * scale, 0, -1.42 * scale, { radius: 3.8 });
-        addEdge(graph, tail, propA);
-        addEdge(graph, tail, propB);
-    };
-
     const shotGeometry = (() => {
-        // 1. Show the UUV's bow and tapered hull from a three-quarter view.
-        const vehicle = createGraph();
-        addBowViewUuv(vehicle, 2.65);
-
-        // 2. A small UUV maps a patch of seabed with a simple sonar fan.
+        // Sonar mapping: a UUV maps a patch of seabed with a simple sensor fan.
         const sonar = createGraph();
         addUuv(sonar, { y: 1.25, scale: 1.45 });
         const seabed = [
@@ -156,7 +121,7 @@
         const sensor = addVertex(sonar, 0.45, 0.85, 0, { radius: 4.8 });
         scanHits.forEach((hit) => addEdge(sonar, sensor, hit, "sonar"));
 
-        // 3. A vehicle inside a transparent, perspective simulation volume.
+        // Simulation foundation: a vehicle inside a transparent test volume.
         const simulation = createGraph();
         const box = [];
         for (const yy of [-1.4, 1.4]) {
@@ -169,7 +134,7 @@
         addUuv(simulation, { y: 0.05, z: 0.1, scale: 1.05, yaw: 0.16 });
         addChain(simulation, [[-1.2, -0.65, 0.15], [-0.25, -0.1, 0.25], [0.75, 0.25, 0.1]], "trajectory", { radius: 4.8, accent: true });
 
-        // 4. Three UUVs form a legible, connected team.
+        // Fleet coordination: three UUVs form a connected team.
         const fleet = createGraph();
         const fleetPositions = [
             { x: -1.9, y: 0.35, z: 0, yaw: 0.05 },
@@ -182,7 +147,7 @@
         addEdge(fleet, fleetCenters[2], fleetCenters[0], "network");
         fleetPositions.forEach((position) => addUuv(fleet, { ...position, scale: 0.68, simple: true }));
 
-        // 5. A sparse seabed grid and a single, readable lawnmower survey path.
+        // Survey planning: a sparse seabed grid and a readable survey route.
         const survey = createGraph();
         const gridX = [-2.4, 0, 2.4];
         const gridZ = [-1.5, 0, 1.5];
@@ -196,8 +161,7 @@
         addChain(survey, route, "route", { radius: 6.2, accent: true });
         addUuv(survey, { x: -2.15, y: -0.35, z: -1.05, scale: 0.72, simple: true });
 
-        // 6. A UUV follows a 3D course with a small stern-control vector,
-        // distinguishing active control from the standalone vehicle shot.
+        // UUV control: a vehicle follows a 3D course with a stern-control vector.
         const control = createGraph();
         addChain(control, [
             [-3.6, -0.38, 1.25], [-2.2, -0.05, 0.72],
@@ -206,7 +170,9 @@
         addUuv(control, { y: 0.18, z: 0.05, scale: 1.85, yaw: 0.4, hexagonal: true });
         addArrow(control, [-1.9, 0.12, 0.82], [-2.6, 0.68, 1.18]);
 
-        return [vehicle, sonar, simulation, fleet, survey, control];
+        // Move from the simulation foundation through control and perception,
+        // then mission planning and multi-vehicle coordination.
+        return [simulation, control, sonar, survey, fleet];
     })();
 
     const svgNS = "http://www.w3.org/2000/svg";
@@ -224,7 +190,7 @@
             top: Math.min(current.top, y),
             bottom: Math.max(current.bottom, y)
         }), { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity });
-        const frame = { x: 600, y: 338, width: 740, height: 460 };
+        const frame = { x: 600, y: 338, width: 620, height: 540 };
         const fitScale = Math.min(
             frame.width / Math.max(1, bounds.right - bounds.left),
             frame.height / Math.max(1, bounds.bottom - bounds.top)
@@ -408,10 +374,10 @@
             scene.classList.toggle("is-active", current === index);
             scene.dataset.direction = current % 2 === 0 ? "ltr" : "rtl";
         });
-        scenes[index].setAttribute("aria-label", `Scene ${index + 1} of 6`);
+        scenes[index].setAttribute("aria-label", `Scene ${index + 1} of 5`);
         caption.classList.remove("is-active");
         caption.dataset.shot = String(index + 1);
-        captionIndex.textContent = `${String(index + 1).padStart(2, "0")} / 06`;
+        captionIndex.textContent = `${String(index + 1).padStart(2, "0")} / 05`;
         captionTitle.textContent = capabilities[index];
         void caption.offsetWidth;
         caption.classList.add("is-active");
@@ -436,16 +402,16 @@
             if (!finished) release();
         }, 9800);
 
-        // The sequence runs at 1.25x; the final logo/tagline hold includes one
-        // extra second so the Sanskrit line has time to be read.
+        // Each domain shot holds for 800 ms. The final logo/tagline hold keeps
+        // its extra second so the Sanskrit line has time to be read.
         later(() => {
             let shot = 0;
             const advance = () => {
                 if (finished) return;
-                if (shot < 6) {
+                if (shot < 5) {
                     startScene(shot);
                     shot += 1;
-                    later(advance, 640);
+                    later(advance, 800);
                     return;
                 }
                 scenes.forEach((scene) => scene.classList.remove("is-active"));
